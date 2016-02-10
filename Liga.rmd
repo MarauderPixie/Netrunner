@@ -1,0 +1,173 @@
+---
+title: "Netrunnerliga"
+author: "Tobias Anton"
+date: "`r format(Sys.time(), '%F %H:%M')`"
+output:
+  html_document:
+    fig_width: 10
+    highlight: tango
+    theme: spacelab
+    toc: yes
+    toc_depth: 1
+---
+
+```{r, message=F, warning=FALSE, include=FALSE}
+source(paste0(Sys.getenv("PROJECT_HOME"), "./init.r"))
+knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
+```
+
+# Aktuelle Liga
+
+# "Ewige" Liga
+
+```{r, Punktestand, echo = F, warning = F, message = F}
+  liga %>% 
+    group_by(Spieler) %>% 
+    summarize(Spiele = n()/2,
+              Punkte = sum(Punkte)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Punkte)) %>% 
+    knitr::kable()
+```
+
+# Zur Statistik
+
+## Ein bisschen was deskriptives
+
+### Spielhäufigkeiten
+
+#### nach Fraktion
+
+```{r, IDs, echo = F}
+  ggplot(liga, aes(x = Fraktion, fill = Fraktion)) +
+    geom_bar(color = "black") +
+    labs(x = "", y = "Spiele") +
+    facet_grid(. ~ Seite, scales = "free_x") +
+    scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", "gold1", 
+                                 "darkgray", "chartreuse3", "darkolivegreen")) +
+    theme_bw() +
+    theme(legend.position = "none")
+```
+  
+#### nach ID
+
+```{r, IDs_Konzern, echo = F}
+  liga %>% 
+    filter(Seite == "Konzern") %>% 
+    ggplot(aes(x = ID, fill = Fraktion)) +
+      geom_bar(color = "black") +
+      labs(x = "", y = "Spiele", legend = "") +
+      facet_grid(. ~ Fraktion, scales = "free") +
+      scale_fill_manual(values = c("darkorchid4", "red", "gold1", "darkolivegreen")) +
+      theme_bw() +
+      theme(axis.text.x = element_text(angle = -30, hjust = 0, vjust = 1),
+            legend.position = "none")
+```
+
+```{r, IDs_Runner, echo = F}
+  liga %>% 
+    filter(Seite == "Runner") %>% 
+    ggplot(aes(x = ID, fill = Fraktion)) +
+      geom_bar(color = "black") +
+      labs(x = "", y = "Spiele") +
+      facet_grid(. ~ Fraktion, scales = "free") +
+      scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
+      theme_bw() +
+      theme(axis.text.x = element_text(angle = -30, hjust = 0, vjust = 1),
+            legend.position = "none")
+```
+  
+## Runs
+
+### Runs pro Spieler
+
+Der graue Balken ist die durchschnittliche Anzahl Runs über alle Spieler hinweg und die schwarzen Balken sind entsprechend der Durchschnitt der jeweiligen Person.
+
+```{r, Runs_Spieler, warning = F, echo = F}
+ggplot(liga, aes(x = Spieler, y = Runs, color = Spieler)) +
+  geom_point(position = "jitter") +
+  stat_summary(fun.y = "mean", fun.ymax = "mean", fun.ymin = "mean", 
+               colour = "black", size = 0.5, geom = "errorbar") +
+  geom_hline(yintercept = mean(liga$Runs, na.rm = T), size = 1, color = "gray") +
+  labs(x = "Spieler", y = "Runs") + 
+  scale_color_brewer(palette = "Set1") +
+  theme_bw() + theme(legend.position = "none")
+```
+
+### Runs pro Fraktion
+
+Das ergibt einen seltsamen Dichteplot, der erst sinnvoll ist, sobald einiges an Daten angefallen ist.
+
+```{r, Runs_Fraktion, warning = F, echo = F}
+  liga %>%
+    filter(Seite == "Runner") %>%
+    ggplot(aes(x = Runs, fill = Fraktion)) +
+      geom_density(aes(y = ..count..), alpha = 0.7) +
+      labs(x = "Runs",
+           y = "") +
+      scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
+      theme_bw()
+```
+
+### Runs pro ID
+
+Ganz schön unübersichtlich, ich überleg mir mal was neues...
+
+```{r, Runs_ID, warning = F, echo = F}
+  liga %>%
+    filter(Seite == "Runner") %>%
+    ggplot(aes(x = Fraktion, y = Runs, color = ID)) +
+      geom_point(size = 4, color = "black") +
+      geom_point(size = 3) +
+      labs(x = "",
+           y = "Runs") +
+      theme_bw()
+```
+
+### Runs auf Systeme
+
+```{r, runs_server, warning = F, echo = F}
+  liga %>%
+    filter(Seite == "Runner") %>%
+    gather(Server, Anzahl, `R&D`, HQ, Archiv, Remote) %>%
+    ggplot(aes(x = Server, y = Anzahl, fill = Spieler)) +
+      geom_bar(stat = "identity", position = "dodge", color = "black") +
+      scale_fill_brewer(palette = "Set1") +
+      labs(x = "",
+           y = "Runs") +
+      theme_bw()
+```
+
+## Korrelationen
+
+### Runden und Spieldauer
+
+Ist noch eher suboptimal; da halt immre zwei Leute ein Spiel spielen liegen jeweils zwei Leute auf einem Punkt. Vielleicht in zwei Plots teilen: 
+1. Runden/Dauer nach Spieler (**Konzern**)
+2. Runden/Dauer nach Spieler (**Runner**)
+
+```{r, Runden_Dauer, echo = F}
+  liga %>% 
+    filter(is.na(Runs)) %>% 
+    ggplot(aes(x = Dauer, y = Runden, color = Spieler)) +
+      geom_point(size = 4, color = "black") +
+      geom_point(size = 3) +
+      # geom_smooth(method = "lm", se = F) +
+      labs(x = "Spieldauer (Minuten)",
+           y = "Runden") +
+      theme_bw()
+```
+
+### Runden und Runs
+```{r, Runden_Runs, echo = F}
+  liga %>%
+    filter(Seite == "Runner") %>%
+    ggplot(aes(x = Runden, y = Runs, color = Fraktion)) +
+      geom_point(size = 4, color = "black") +
+      geom_point(size = 3) +
+      geom_smooth(method = "lm", se = F) +
+      scale_color_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
+      labs(x = "Runden",
+           y = "Runs") +
+      theme_bw()
+```

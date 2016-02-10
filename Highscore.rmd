@@ -1,0 +1,369 @@
+---
+title: "Highscoreliste"
+author: "Tobias Anton"
+date: "`r format(Sys.time(), '%F %H:%M')`"
+output:
+  html_document:
+    fig_width: 10
+    highlight: tango
+    theme: spacelab
+    toc: yes
+    toc_depth: 1
+---
+
+```{r, message=F, warning=FALSE, include=FALSE}
+source(paste0(Sys.getenv("PROJECT_HOME"), "./init.r"))
+knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
+```
+
+# Arena Highscore-Liste
+
+Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon **und** Runner) wird hier eine Runde bereits als ganzes Spiel gezählt (entweder Kon **oder** Runner).
+
+```{r, Die_Liste}
+  score %>% 
+    group_by(Spieler) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+## Siege nach Seite
+
+```{r, Seitenliste}
+  score %>% 
+    group_by(Seite) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+## Siege nach Fraktion
+
+### Konzerne
+
+```{r, Fraktionsliste_Konzerne}
+  score %>% 
+    filter(Seite == "Konzern") %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+### Runner
+
+```{r, Fraktionsliste_Runner}
+  score %>% 
+    filter(Seite == "Runner") %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+## Spielhäufigkeiten
+
+### nach Fraktion
+
+```{r, IDs, echo = F}
+  ggplot(score, aes(x = Fraktion, fill = Fraktion)) +
+    geom_bar(color = "black") +
+    labs(x = "", y = "Spiele") +
+    facet_grid(. ~ Seite, scales = "free_x") +
+    faction_fill +
+    theme_bw() +
+    theme(legend.position = "none")
+```
+  
+### nach ID
+
+```{r, IDs_Konzern, echo = F}
+  score %>% 
+    filter(Seite == "Konzern") %>% 
+    ggplot(aes(x = ID, fill = Fraktion)) +
+      geom_bar(color = "black") +
+      labs(x = "", y = "Spiele", legend = "") +
+      facet_grid(. ~ Fraktion, scales = "free") +
+      kon_fill +
+      theme_bw() +
+      theme(axis.text.x = element_text(angle = -30, hjust = 0, vjust = 1),
+            legend.position = "none")
+```
+
+```{r, IDs_Runner, echo = F}
+  score %>% 
+    filter(Seite == "Runner") %>% 
+    ggplot(aes(x = ID, fill = Fraktion)) +
+      geom_bar(color = "black") +
+      labs(x = "", y = "Spiele") +
+      facet_grid(. ~ Fraktion, scales = "free") +
+      run_fill +
+      theme_bw() +
+      theme(axis.text.x = element_text(angle = -30, hjust = 0, vjust = 1),
+            legend.position = "none")
+```
+
+# Kalenderwoche 2
+
+```{r, KW2}
+  score %>% 
+    filter(Kalenderwoche == 2) %>% 
+    group_by(Spieler) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+## Siege nach Seite
+
+```{r, Seitenliste_kw2}
+  score %>% 
+    filter(Kalenderwoche == 2) %>% 
+    group_by(Seite) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+## Siege nach Fraktion
+
+### Konzerne
+
+```{r, Fraktionsliste_Konzerne_kw2}
+  score %>% 
+    filter(Kalenderwoche == 2, Seite == "Konzern") %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+### Runner
+
+```{r, Fraktionsliste_Runner_kw2}
+  score %>% 
+    filter(Seite == "Runner", Kalenderwoche == 2) %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+# Kalenderwoche 3
+
+```{r, kw3}
+  score %>% 
+    filter(Kalenderwoche == 3) %>% 
+    group_by(Spieler) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+## Siege nach Seite
+
+```{r, Seitenliste_kw3}
+  score %>% 
+    filter(Kalenderwoche == 3) %>% 
+    group_by(Seite) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+## Siege nach Fraktion
+
+### Konzerne
+
+```{r, Fraktionsliste_Konzerne_kw3}
+  score %>% 
+    filter(Kalenderwoche == 3, Seite == "Konzern") %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+### Runner
+
+```{r, Fraktionsliste_Runner_kw3}
+  score %>% 
+    filter(Kalenderwoche == 3, Seite == "Runner") %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+# Kalenderwoche 4
+
+```{r, kw4}
+  score %>% 
+    filter(Kalenderwoche == 4) %>% 
+    group_by(Spieler) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+## Siege nach Seite
+
+```{r, Seitenliste_kw4}
+  score %>% 
+    filter(Kalenderwoche == 4) %>% 
+    group_by(Seite) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+## Siege nach Fraktion
+
+### Konzerne
+
+```{r, Fraktionsliste_Konzerne_kw4}
+  score %>% 
+    filter(Kalenderwoche == 4, Seite == "Konzern") %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+### Runner
+
+```{r, Fraktionsliste_Runner_kw4}
+  score %>% 
+    filter(Kalenderwoche == 4, Seite == "Runner") %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+# Kalenderwoche 5
+
+```{r, kw5}
+  score %>% 
+    filter(Kalenderwoche == 5) %>% 
+    group_by(Spieler) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+## Siege nach Seite
+
+```{r, Seitenliste_kw5}
+  score %>% 
+    filter(Kalenderwoche == 5) %>% 
+    group_by(Seite) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+## Siege nach Fraktion
+
+### Konzerne
+
+```{r, Fraktionsliste_Konzerne_kw5}
+  score %>% 
+    filter(Kalenderwoche == 5, Seite == "Konzern") %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+### Runner
+
+```{r, Fraktionsliste_Runner_kw5}
+  score %>% 
+    filter(Kalenderwoche == 5, Seite == "Runner") %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
