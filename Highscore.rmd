@@ -3,7 +3,9 @@ title: "Highscoreliste"
 author: "Tobias Anton"
 date: "`r ddateR::poee()`"
 output:
-  rmdformats::readthedown:
+  rmdformats::html_clean:
+    fig_width: 10
+    dpi: 360
     highlight: tango
     theme: spacelab
 ---
@@ -85,7 +87,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     labs(x = "", y = "Spiele") +
     facet_grid(. ~ Seite, scales = "free_x") +
     faction_fill +
-    theme_bw() +
+    cosmetics +
     theme(legend.position = "none")
 ```
   
@@ -99,7 +101,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
       labs(x = "", y = "Spiele", legend = "") +
       facet_grid(. ~ Fraktion, scales = "free") +
       kon_fill +
-      theme_bw() +
+      cosmetics +
       theme(axis.text.x = element_text(angle = -30, hjust = 0, vjust = 1),
             legend.position = "none")
 ```
@@ -112,7 +114,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
       labs(x = "", y = "Spiele") +
       facet_grid(. ~ Fraktion, scales = "free") +
       run_fill +
-      theme_bw() +
+      cosmetics +
       theme(axis.text.x = element_text(angle = -30, hjust = 0, vjust = 1),
             legend.position = "none")
 ```
