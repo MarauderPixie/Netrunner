@@ -21,6 +21,7 @@
     runner  <- score %>% filter(Seite == "Runner")
     konzern <- score %>% filter(Seite == "Konzern")
     
+    
 # Farben definieren
     # mit APEX und Shapern
     # faction_color <- scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", 
@@ -29,3 +30,12 @@
                                                   "gold1", "chartreuse3", "darkolivegreen"))
     kon_fill     <- scale_fill_manual(values = c("darkorchid4", "red", "gold1", "darkolivegreen"))
     run_fill     <- scale_fill_manual(values = c("darkorange", "deepskyblue3", "chartreuse3"))
+    
+    
+# plot cosmetics
+cosmetics <- theme_few() +
+             theme(title = element_text(size = 14),
+                   axis.text    = element_text(size = 12),
+                   legend.title = element_text(size = 12),
+                   legend.text  = element_text(size = 10),
+                   strip.text   = element_text(size = 14))
