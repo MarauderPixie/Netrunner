@@ -1,7 +1,7 @@
 ---
 title: "Netrunnerliga"
 author: "Tobias Anton"
-date: "`r ddateR::ddate()"
+date: "`r ddateR::poee()`"
 output:
   html_document:
     fig_width: 10
@@ -18,17 +18,19 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
 
 # Aktuelle Liga
 
-# "Ewige" Liga
-
 ```{r, Punktestand, echo = F, warning = F, message = F}
   liga %>% 
+    filter(Saison == 2) %>% 
     group_by(Spieler) %>% 
-    summarize(Spiele = n()/2,
-              Punkte = sum(Punkte)) %>%
+    summarize(Spiele       = n()/2,
+              Agendapunkte = sum(Agendapunkte),
+              Punkte       = sum(Punkte)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Punkte)) %>% 
     knitr::kable()
 ```
+
+# "Ewige" Liga
 
 # Zur Statistik
 
@@ -126,7 +128,7 @@ Ganz schön unübersichtlich, ich überleg mir mal was neues...
 
 ### Runs auf Systeme
 
-```{r, runs_server, warning = F, echo = F}
+```{r, eval=FALSE, include=FALSE, runs_server_alt, warning=F}
   liga %>%
     filter(Seite == "Runner") %>%
     gather(Server, Anzahl, `R&D`, HQ, Archiv, Remote) %>%
@@ -136,6 +138,20 @@ Ganz schön unübersichtlich, ich überleg mir mal was neues...
       labs(x = "",
            y = "Runs") +
       theme_bw()
+```
+
+```{r runs_server}
+liga %>% 
+  filter(Seite == "Runner", Spieler != "Jannis") %>% 
+  gather(Systeme, Runzahl, Archiv, `R&D`, HQ, Remote) %>% 
+  ggplot(., aes(x = Spieler, y = Systeme, fill = Runzahl)) + 
+    geom_tile(color = "white", size = 0.4) +
+    labs(title = "Runs pro Spieler und System",
+         x = "",
+         y = "") +
+    scale_fill_viridis(option = "B") +
+    theme_tufte() + 
+    theme(legend.position = "bottom")
 ```
 
 ## Korrelationen
