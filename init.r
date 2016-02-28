@@ -8,6 +8,8 @@
     library(pixiedust)    # sprinkle() ALL the tables!
     library(UpSetR)       # Kombinationscounts
     library(googlesheets) # importing ALL the sheets!
+    library(ggthemes)     # making them pretty plots even prettier
+    library(viridis)      # best color palette, hands down
 
 # Daten einlesen
     liga  <- gs_title("Netrunner Liga") %>% gs_read()
