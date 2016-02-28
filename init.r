@@ -6,10 +6,10 @@
     library(broom)        # macht mit tidy() sowas wie lm() und t.test() lesbarer
     library(RColorBrewer) # hübsche Daten noch hübscher machen
     library(pixiedust)    # sprinkle() ALL the tables!
-    library(UpSetR)       # Kombinationscounts
     library(googlesheets) # importing ALL the sheets!
     library(ggthemes)     # making them pretty plots even prettier
     library(viridis)      # best color palette, hands down
+    library(rmdformats)   # look at them beautiful templates!
 
 # Daten einlesen
     liga  <- gs_title("Netrunner Liga") %>% gs_read()
