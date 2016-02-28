@@ -1,7 +1,7 @@
 ---
 title: "Highscoreliste"
 author: "Tobias Anton"
-date: "`r format(Sys.time(), '%F %H:%M')`"
+date: "`r ddateR::ddate()"
 output:
   html_document:
     fig_width: 10
@@ -358,6 +358,69 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
 ```{r, Fraktionsliste_Runner_kw5}
   score %>% 
     filter(Kalenderwoche == 5, Seite == "Runner") %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+
+# Kalenderwoche 7
+
+```{r, kw7}
+  score %>% 
+    filter(Kalenderwoche == 7) %>% 
+    group_by(Spieler) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+## Siege nach Seite
+
+```{r, Seitenliste_kw7}
+  score %>% 
+    filter(Kalenderwoche == 7) %>% 
+    group_by(Seite) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+## Siege nach Fraktion
+
+### Konzerne
+
+```{r, Fraktionsliste_Konzerne_kw7}
+  score %>% 
+    filter(Kalenderwoche == 7, Seite == "Konzern") %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+
+### Runner
+
+```{r, Fraktionsliste_Runner_kw7}
+  score %>% 
+    filter(Kalenderwoche == 7, Seite == "Runner") %>% 
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
