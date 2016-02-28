@@ -3,12 +3,11 @@ title: "Netrunnerliga"
 author: "Tobias Anton"
 date: "`r ddateR::poee()`"
 output:
-  html_document:
+  rmdformats::html_clean:
     fig_width: 10
+    dpi: 360
     highlight: tango
     theme: spacelab
-    toc: yes
-    toc_depth: 1
 ---
 
 ```{r, message=F, warning=FALSE, include=FALSE}
@@ -34,11 +33,9 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
 
 # Zur Statistik
 
-## Ein bisschen was deskriptives
+## Spielhäufigkeiten
 
-### Spielhäufigkeiten
-
-#### nach Fraktion
+### nach Fraktion
 
 ```{r, IDs, echo = F}
   ggplot(liga, aes(x = Fraktion, fill = Fraktion)) +
@@ -47,11 +44,11 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
     facet_grid(. ~ Seite, scales = "free_x") +
     scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", "gold1", 
                                  "darkgray", "chartreuse3", "darkolivegreen")) +
-    theme_bw() +
+    cosmetics +
     theme(legend.position = "none")
 ```
   
-#### nach ID
+### nach ID
 
 ```{r, IDs_Konzern, echo = F}
   liga %>% 
@@ -61,7 +58,7 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
       labs(x = "", y = "Spiele", legend = "") +
       facet_grid(. ~ Fraktion, scales = "free") +
       scale_fill_manual(values = c("darkorchid4", "red", "gold1", "darkolivegreen")) +
-      theme_bw() +
+      cosmetics +
       theme(axis.text.x = element_text(angle = -30, hjust = 0, vjust = 1),
             legend.position = "none")
 ```
@@ -74,7 +71,7 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
       labs(x = "", y = "Spiele") +
       facet_grid(. ~ Fraktion, scales = "free") +
       scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
-      theme_bw() +
+      cosmetics +
       theme(axis.text.x = element_text(angle = -30, hjust = 0, vjust = 1),
             legend.position = "none")
 ```
@@ -91,9 +88,9 @@ ggplot(liga, aes(x = Spieler, y = Runs, color = Spieler)) +
   stat_summary(fun.y = "mean", fun.ymax = "mean", fun.ymin = "mean", 
                colour = "black", size = 0.5, geom = "errorbar") +
   geom_hline(yintercept = mean(liga$Runs, na.rm = T), size = 1, color = "gray") +
-  labs(x = "Spieler", y = "Runs") + 
+  labs(x = NULL, y = "Runs") + 
   scale_color_brewer(palette = "Set1") +
-  theme_bw() + theme(legend.position = "none")
+  cosmetics + theme(legend.position = "none")
 ```
 
 ### Runs pro Fraktion
@@ -108,7 +105,7 @@ Das ergibt einen seltsamen Dichteplot, der erst sinnvoll ist, sobald einiges an 
       labs(x = "Runs",
            y = "") +
       scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
-      theme_bw()
+      cosmetics
 ```
 
 ### Runs pro ID
@@ -121,9 +118,9 @@ Ganz schön unübersichtlich, ich überleg mir mal was neues...
     ggplot(aes(x = Fraktion, y = Runs, color = ID)) +
       geom_point(size = 4, color = "black") +
       geom_point(size = 3) +
-      labs(x = "",
-           y = "Runs") +
-      theme_bw()
+      labs(x = NULL, y = "Runs") +
+      scale_colour_few() +
+      cosmetics
 ```
 
 ### Runs auf Systeme
@@ -137,7 +134,7 @@ Ganz schön unübersichtlich, ich überleg mir mal was neues...
       scale_fill_brewer(palette = "Set1") +
       labs(x = "",
            y = "Runs") +
-      theme_bw()
+      cosmetics
 ```
 
 ```{r runs_server}
@@ -147,10 +144,9 @@ liga %>%
   ggplot(., aes(x = Spieler, y = Systeme, fill = Runzahl)) + 
     geom_tile(color = "white", size = 0.4) +
     labs(title = "Runs pro Spieler und System",
-         x = "",
-         y = "") +
+         x = NULL, y = NULL) +
     scale_fill_viridis(option = "B") +
-    theme_tufte() + 
+    cosmetics + 
     theme(legend.position = "bottom")
 ```
 
@@ -171,7 +167,7 @@ Ist noch eher suboptimal; da halt immre zwei Leute ein Spiel spielen liegen jewe
       # geom_smooth(method = "lm", se = F) +
       labs(x = "Spieldauer (Minuten)",
            y = "Runden") +
-      theme_bw()
+      cosmetics
 ```
 
 ### Runden und Runs
@@ -185,5 +181,5 @@ Ist noch eher suboptimal; da halt immre zwei Leute ein Spiel spielen liegen jewe
       scale_color_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
       labs(x = "Runden",
            y = "Runs") +
-      theme_bw()
+      cosmetics
 ```
