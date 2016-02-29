@@ -10,6 +10,7 @@
     library(ggthemes)     # making them pretty plots even prettier
     library(viridis)      # best color palette, hands down
     library(rmdformats)   # look at them beautiful templates!
+    library(formattable)  # lots of tables here, might as well make 'm pretty
 
 # Daten einlesen
     liga  <- gs_title("Netrunner Liga") %>% gs_read()
