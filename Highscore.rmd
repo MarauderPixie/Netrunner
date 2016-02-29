@@ -28,7 +28,12 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
-    knitr::kable()
+    format_table(list(
+      Ratio  = color_bar("pink", 0.33, 1),
+      Spiele = color_tile("white", "lightgreen"),
+      Siege  = formatter("span",
+                          style = x ~ ifelse(x >= 10, style(color = "blue"), NA))
+                      ), check.rows = F, format = "pandoc")
 ```
 
 ## Siege nach Seite
