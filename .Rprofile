@@ -2,20 +2,6 @@
 ## cat("Loading custom .Rprofile")  
 
 
-## A little gem from Hadley Wickam that will set your CRAN mirror and 
-## automatically load devtools in interactive sessions.
-.First <- function() {
-  options(
-    repos = c(CRAN = "https://cran.rstudio.com/"),
-    setwd("~/Dropbox/Dokumente/tadaa-data/sugr"),
-    deparse.max.lines = 2)
-}
-
-if (interactive()) {
-  suppressMessages(require(devtools))
-}
-
-
 ### Startup
 startup <- function(){
   version     <- R.Version()
