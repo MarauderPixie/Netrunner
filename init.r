@@ -1,5 +1,5 @@
 # Packages
-    library(readr)        # txt-Dateien einlesen
+    # library(readr)        # txt-Dateien einlesen
     library(dplyr)        # für einfacheren Umgang mit Dataframes (wie z.B. ngo)
     library(ggplot2)      # auch Daten wollen hübsch sein
     library(tidyr)        # schnell und einfach Dataframes manipulieren; kann gather()
