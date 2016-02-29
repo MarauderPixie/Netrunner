@@ -59,7 +59,7 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
       facet_grid(. ~ Fraktion, scales = "free") +
       scale_fill_manual(values = c("darkorchid4", "red", "gold1", "darkolivegreen")) +
       cosmetics +
-      theme(axis.text.x = element_text(angle = -30, hjust = 0, vjust = 1),
+      theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
 ```
 
@@ -72,7 +72,7 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
       facet_grid(. ~ Fraktion, scales = "free") +
       scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
       cosmetics +
-      theme(axis.text.x = element_text(angle = -30, hjust = 0, vjust = 1),
+      theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
 ```
   

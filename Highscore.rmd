@@ -24,7 +24,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Spieler) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -43,7 +43,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Seite) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -60,7 +60,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -75,7 +75,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -107,7 +107,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
       facet_grid(. ~ Fraktion, scales = "free") +
       kon_fill +
       cosmetics +
-      theme(axis.text.x = element_text(angle = -30, hjust = 0, vjust = 1),
+      theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
 ```
 
@@ -120,7 +120,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
       facet_grid(. ~ Fraktion, scales = "free") +
       run_fill +
       cosmetics +
-      theme(axis.text.x = element_text(angle = -30, hjust = 0, vjust = 1),
+      theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
 ```
 
@@ -132,7 +132,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Spieler) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -147,7 +147,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Seite) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -164,7 +164,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -179,7 +179,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -194,7 +194,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Spieler) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -209,7 +209,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Seite) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -226,7 +226,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -241,7 +241,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -256,7 +256,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Spieler) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -271,7 +271,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Seite) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -288,7 +288,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -303,7 +303,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -318,7 +318,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Spieler) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -333,7 +333,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Seite) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -350,7 +350,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -365,7 +365,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -381,7 +381,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Spieler) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -396,7 +396,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Seite) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -413,7 +413,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -428,7 +428,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -444,7 +444,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Spieler) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -459,7 +459,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Seite) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -476,7 +476,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -491,7 +491,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -507,7 +507,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Spieler) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -522,7 +522,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Seite) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -539,7 +539,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
@@ -554,7 +554,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     group_by(Fraktion) %>% 
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
-              "Ratio" = round((sum(Punkte)/2)/Spiele*100, 1)) %>%
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(Spiele) %>% 
     arrange(desc(Siege)) %>%
     arrange(desc(Ratio)) %>% 
