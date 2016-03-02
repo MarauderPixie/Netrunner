@@ -25,9 +25,7 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
     summarize("Spiele" = n(),
               "Siege" = sum(Punkte)/2,
               "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
-    arrange(Spiele) %>% 
-    arrange(desc(Siege)) %>%
-    arrange(desc(Ratio)) %>% 
+    arrange(desc(Ratio), desc(Siege), Spiele) %>% 
     format_table(list(
       Ratio  = color_bar("pink", 0.33, 1),
       Spiele = color_tile("white", "lightgreen"),
