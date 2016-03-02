@@ -45,6 +45,7 @@ score %>%
     summarize("Wins" = sum(Punkte)/2,
               "IDs"  = paste(unique(ID), collapse = ",")) %>%
     plot_ly(., x = Kalenderwoche, y = Wins, line = list(shape = "spline"),
-            color = Spieler, text = str_replace_all(IDs, ",", "<br />"))
+            color = Spieler, text = str_replace_all(IDs, ",", "<br />")) %>% 
+      layout(., yaxis = list(rangemode = "tozero", fixedrange = T, range = 0:7))
 
   
