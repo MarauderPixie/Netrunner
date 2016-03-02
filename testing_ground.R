@@ -15,13 +15,14 @@ ggplotly(plot)
 
 
 ## the real plotly testing
+library(plotly)
 
 ### kurvige graphen <3 (Seite)
 score %>% 
   group_by(Kalenderwoche, Seite) %>% 
   summarize("Wins" = sum(Punkte)/2) %>% 
   plot_ly(., x = Kalenderwoche, y = Wins, line = list(shape = "spline"),
-          color = Seite, colors = c("blue", "red"), text = rownames(unique(Spieler)))
+          color = Seite, colors = c("blue", "red"), text = unique(Spieler))
 
 ### kurvige graphen <3 (Spieler)
 score %>% 
@@ -39,12 +40,11 @@ score %>%
           color = Spieler, text = rownames(IDs))
   
   #### stellt sich raus: gar nicht so einfach
-  hover <- score %>% 
-            group_by(Kalenderwoche, Spieler) %>% 
-            summarize("Wins" = sum(Punkte)/2,
-                      "IDs"  = paste(unique(ID), sep = ",")) %>%
-            plot_ly(., x = Kalenderwoche, y = Wins, line = list(shape = "spline"),
-                    color = Spieler, text = str_replace_all(IDs, ",", "<br />"))
-    
-  str_replace_all(hover$IDs, ",", "\\n")
+  score %>%
+    group_by(Kalenderwoche, Spieler) %>% 
+    summarize("Wins" = sum(Punkte)/2,
+              "IDs"  = paste(unique(ID), collapse = ",")) %>%
+    plot_ly(., x = Kalenderwoche, y = Wins, line = list(shape = "spline"),
+            color = Spieler, text = str_replace_all(IDs, ",", "<br />"))
+
   
