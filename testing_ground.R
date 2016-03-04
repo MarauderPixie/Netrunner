@@ -16,6 +16,7 @@ ggplotly(plot)
 
 ## the real plotly testing
 library(plotly)
+library(stringr)
 
 ### kurvige graphen <3 (Seite)
 score %>% 
@@ -46,6 +47,19 @@ score %>%
               "IDs"  = paste(unique(ID), collapse = ",")) %>%
     plot_ly(., x = Kalenderwoche, y = Wins, line = list(shape = "spline"),
             color = Spieler, text = str_replace_all(IDs, ",", "<br />")) %>% 
-      layout(., yaxis = list(rangemode = "tozero", fixedrange = T, range = 0:7))
+      layout(., yaxis = list(rangemode = "tozero"))
 
+  #### heatmap // geht so...
+  liga %>% 
+    filter(Seite == "Runner", Spieler != "Jannis") %>% 
+    gather(Systeme, Runzahl, Archiv, `R&D`, HQ, Remote) %>% 
+    plot_ly(., x = Spieler, y = Systeme, z = Runzahl, 
+            type = "heatmap", colors = viridis(512))
+  
+  #### bars, just bars
+  konzern %>% 
+    group_by(Fraktion) %>% 
+    summarize("n" = n()) %>% 
+    plot_ly(., x = Fraktion, y = n, name = "Fraktionen", type = "bar",
+            marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen")))
   
