@@ -59,7 +59,30 @@ score %>%
   #### bars, just bars
   konzern %>% 
     group_by(Fraktion) %>% 
+    summarize("n" = n(),
+              "IDs"  = paste(unique(ID), collapse = ",")) %>% 
+    plot_ly(., x = Fraktion, y = n, name = "Fraktionen", type = "bar",
+            marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen")),
+            text   = str_replace_all(IDs, ",", "<br />"))
+  
+  #### fancy mit counts
+  hover <- konzern %>% 
+    group_by(Fraktion, ID) %>% 
+    summarize("n" = n())
+  
+  konzern %>% 
+    group_by(Fraktion, ID) %>% 
     summarize("n" = n()) %>% 
     plot_ly(., x = Fraktion, y = n, name = "Fraktionen", type = "bar",
-            marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen")))
-  
+            marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen")),
+            hoverinfo = "text",
+            text   = list(group = Fraktion, paste(paste0(n, "x"), ID)))
+    
+    #### zweiter ansatz:
+    konzern %>% 
+      group_by(Fraktion) %>% 
+      summarize("n" = n(),
+                "IDs"  = paste(paste0(n, "x"), unique(ID), collapse = ",")) %>% 
+      plot_ly(., x = Fraktion, y = n, name = "Fraktionen", type = "bar",
+              marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen")),
+              text   = str_replace_all(IDs, ",", "<br />"))
