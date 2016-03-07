@@ -27,11 +27,24 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
               "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(desc(Ratio), desc(Siege), Spiele) %>% 
     format_table(list(
-      Ratio  = color_bar("pink", 0.33, 1),
+      Ratio  = proportion_bar("pink"),
       Spiele = color_tile("white", "lightgreen"),
       Siege  = formatter("span",
                           style = x ~ ifelse(x >= 10, style(color = "blue"), NA))
                       ), check.rows = F, format = "pandoc")
+```
+
+## Siege pro Woche pro Spieler (pro ID)
+
+Durch klicken auf die Namen in der Legende und in der oberen Leiste bekommt man das etwas übersichtlicher; an brauchbaren Defaults arbeite ich noch...
+
+```{r WochenspielerIDsiege}
+  score %>%
+    group_by(Kalenderwoche, Spieler) %>% 
+    summarize("Wins" = sum(Punkte)/2,
+              "IDs"  = paste(unique(ID), collapse = ",")) %>%
+    plot_ly(., x = Kalenderwoche, y = Wins, line = list(shape = "spline"),
+            color = Spieler, text = str_replace_all(IDs, ",", "<br />"))
 ```
 
 ## Siege nach Seite
