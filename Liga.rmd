@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
 
 # Aktuelle Liga
 
+Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Bei weniger als 50%, erscheint ne rote.
+
 ```{r, Punktestand, echo = F, warning = F, message = F}
   liga %>% 
     filter(Saison == 2) %>% 
@@ -29,13 +31,13 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
                   Punkte = color_tile("white", "lightblue"),
                   Agendapunkte = color_tile("white", "lightgray"),
                   Spiele = formatter("span",
-                        style = x ~ style(color = ifelse(x <= 4, "red", "gray")))),
+                        style = x ~ style(color = ifelse(x <= 4, "red", 
+                                                         ifelse(x >= 7, "green", "gray")))
+                        )),
       check.rows = F, format = "pandoc")
 ```
 
 # "Ewige" Liga
-
-# Zur Statistik
 
 ## Spielhäufigkeiten
 
@@ -99,17 +101,16 @@ ggplot(liga, aes(x = Spieler, y = Runs, color = Spieler)) +
 
 ### Runs pro Fraktion
 
-Das ergibt einen seltsamen Dichteplot, der erst sinnvoll ist, sobald einiges an Daten angefallen ist.
+Das ergibt einen seltsamen Dichteplot, der erst sinnvoll ist, sobald einiges an Daten angefallen ist (Nachtrag mitten in Season 2: so jetzt halt in etwa).
 
 ```{r, Runs_Fraktion, warning = F, echo = F}
   liga %>%
-    filter(Seite == "Runner") %>%
+    filter(Seite == "Runner", Fraktion != "Neutral") %>%
     ggplot(aes(x = Runs, fill = Fraktion)) +
       geom_density(aes(y = ..count..), alpha = 0.7) +
       labs(x = "Runs",
            y = "") +
-      scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
-      cosmetics
+      run_fill + cosmetics
 ```
 
 ### Runs pro ID
@@ -123,7 +124,7 @@ Ganz schön unübersichtlich, ich überleg mir mal was neues...
       geom_point(size = 4, color = "black") +
       geom_point(size = 3) +
       labs(x = NULL, y = "Runs") +
-      scale_colour_few() +
+      scale_color_viridis(discrete = T) +
       cosmetics
 ```
 
@@ -154,13 +155,76 @@ liga %>%
     theme(legend.position = "bottom")
 ```
 
+# Analyse
+#### Willkommen bei Methodisch Inkorrekt
+
+Hier beginnt der eigentliche Spaß. Also für mich zumindest. To the science! /o/
+
+
+## Siegbedingung
+
+#### Brauchen wir eine bedingungslose Plascreteversorgung?
+
+```{r Siegbedingung}
+sieg_tbl <- liga %>% filter(Seite == "Konzern", Punkte == 2)
+
+  ggplot(sieg_tbl, aes(x = Siegbedingung, fill = Siegbedingung)) +
+    geom_bar(color = "black") +
+    labs(y = "Siege") +
+    scale_fill_brewer(palette = "Set1") +
+    cosmetics + theme(legend.position = "none")
+
+chisq_sieg <- sjt.xtab(sieg_tbl$Siegbedingung, sieg_tbl$Fraktion,
+                       no.output = T, useViewer = F)
+```
+
+Sieht eigentlich ganz gesund aus; Konzerne gewinnen öfter durch Punkte. Schauen wr uns das mal genauer an:
+
+```{r chisq_sieg_plot}
+ggplot(sieg_tbl, aes(x = Siegbedingung, fill = Fraktion)) +
+  geom_bar(aes(y = (..count..)/sum(..count..)), position = "dodge", color = "black") +
+  labs(y = "Siege (%)") +
+  scale_y_continuous(labels = percent) +
+  kon_fill + cosmetics
+```
+  
+`r chisq_sieg$knitr`  
+
+Nunja. Weyland tut, was Weyland tut, aber ansonsten scheint es nur den ein oder anderen Butchershop o.ä. zu geben. Unser p liegt bei etwa `r round(fisher.test(sieg_tbl$Siegbedingung, sieg_tbl$Fraktion)$p.value, 3)` (mit durchaus nennenswerter Effektgröße), d.h. in diesem Fall sogar, dass wir ne relativ kuschelige Liga haben. Abgesehen, wie gesagt, von Weyland. Bei Weyland wird nicht gekuschelt.
+
+
+## Spieldauer
+
+#### thinking hard, then drawing a card, then thinking hard for another 5 minutes
+
+Geht wieder los mit Daten angucken:
+
+```{r Spieldauer}
+dauer <- liga %>% 
+  filter(Spieler != "Jannis") %>% 
+  group_by(Spieler) %>% 
+  summarize("Min / Runde"  = round(mean(Dauer / Runden, na.rm = T), 2), 
+            "Dauer (Min.)" = round(mean(Dauer, na.rm = T), 0))
+ 
+  formattable(dauer, list(
+    `Min / Runde`  = color_tile("white", "orange"),
+    `Dauer (Min.)` = color_tile("white", "lightblue")
+  ))
+```
+
+Das Volk staunt! Verhalten. Aber gucken wir doch mal, ob das auch ein nennenswerter Unterschied ist:
+
+
+
 ## Korrelationen
+
+Ist natürlich Quatsch, aber vllt. fällt mir da nochmal was interessantes ein... m)
 
 ### Runden und Spieldauer
 
-Ist noch eher suboptimal; da halt immre zwei Leute ein Spiel spielen liegen jeweils zwei Leute auf einem Punkt. Vielleicht in zwei Plots teilen: 
-1. Runden/Dauer nach Spieler (**Konzern**)
-2. Runden/Dauer nach Spieler (**Runner**)
+Ist noch eher suboptimal; da halt immer zwei Leute ein Spiel spielen liegen jeweils zwei Leute auf einem Punkt. Vielleicht in zwei Plots teilen:  
+1. Runden/Dauer nach Spieler (**Konzern**)  
+2. Runden/Dauer nach Spieler (**Runner**)  
 
 ```{r, Runden_Dauer, echo = F}
   liga %>% 
@@ -175,6 +239,7 @@ Ist noch eher suboptimal; da halt immre zwei Leute ein Spiel spielen liegen jewe
 ```
 
 ### Runden und Runs
+
 ```{r, Runden_Runs, echo = F}
   liga %>%
     filter(Seite == "Runner") %>%
