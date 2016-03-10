@@ -91,5 +91,15 @@ score %>%
 # Why ploty when you can highcharter?
   library(highcharter)
     
-    hchart(score$Fraktion, color = c("#FF8C00", "#009ACD", "#68228B", "#FF0000", 
-                                     "#FFD700", "#66CD00", "#556B2F"))
+    faction_fill_hex <- c("#FF8C00", "#009ACD", "#68228B", "#FF0000", 
+                          "#FFD700", "#66CD00", "#556B2F")
+    
+    hfg <- score %>% group_by(Fraktion) %>% summarize(n = n())
+    
+    highchart() %>% 
+      hc_chart(type = "column") %>% 
+      hc_title(text = "Fraktionen") %>% 
+      hc_xAxis(categories = hfg$Fraktion) %>% 
+      hc_add_series(data = hfg$n, name = "Spiele") %>% 
+      hc_add_theme(hc_theme(colors = c("#FF8C00", "#009ACD", "#68228B", "#FF0000", 
+                                       "#FFD700", "#66CD00", "#556B2F")))
