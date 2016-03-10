@@ -86,3 +86,10 @@ score %>%
       plot_ly(., x = Fraktion, y = n, name = "Fraktionen", type = "bar",
               marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen")),
               text   = str_replace_all(IDs, ",", "<br />"))
+    
+    
+# Why ploty when you can highcharter?
+  library(highcharter)
+    
+    hchart(score$Fraktion, color = c("#FF8C00", "#009ACD", "#68228B", "#FF0000", 
+                                     "#FFD700", "#66CD00", "#556B2F"))
