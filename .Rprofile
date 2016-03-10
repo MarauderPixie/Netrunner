@@ -6,12 +6,11 @@
 startup <- function(){
   version     <- R.Version()
   date_string <- Sys.Date()
-  ddate       <- ddateR::ddate()
+  ddate       <- ddateR::poee()
 
-  msg1 <- sprintf("Oh, it's you again. Let's crunch some numbers! \nThis is %s.\nToday is %s, %s.\nOr like the Discordians like to say:\n%s",
+  msg1 <- sprintf("Oh, it's you again. Hi! \nThis is %s.
+                  \n%s \nLet's crunch some numbers!",
                   version$version.string,
-                  format(date_string, "%A"),
-                  date_string,
                   ddate)
   cat(msg1, "\n")
 }
