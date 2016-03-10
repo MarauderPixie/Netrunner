@@ -199,7 +199,7 @@ Nunja. Weyland tut, was Weyland tut, aber ansonsten scheint es nur den ein oder 
 
 Geht wieder los mit Daten angucken:
 
-```{r Spieldauer}
+```{r Spieldauer_tbl}
 dauer <- liga %>% 
   filter(Spieler != "Jannis") %>% 
   group_by(Spieler) %>% 
@@ -212,11 +212,21 @@ dauer <- liga %>%
   ))
 ```
 
-Das Volk staunt! Verhalten. Aber gucken wir doch mal, ob das auch ein nennenswerter Unterschied ist:
+Das Volk staunt! Mehr oder weniger. Vermutlich weniger... Aber gucken wir doch mal, ob das auch ein nennenswerter Unterschied ist. Der geneigte Humanwissenschaftler käme jetzt eventuell auf die Idee, da eine ANOVA zu machen:
+
+```{r Spieldauer_aov}
+library(tadaatoolbox)
+
+model <- aov(Dauer ~ Spieler, liga)
+tadaa_aov(model, liga, print = "markdown")
+```
+
+Stellt sich raus: es gibt nichts zu sehen.  
+
+*Fortsetzung folgt*
 
 
-
-## Korrelationen
+## Korrelationen (here be dragons)
 
 Ist natürlich Quatsch, aber vllt. fällt mir da nochmal was interessantes ein... m)
 
