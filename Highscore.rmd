@@ -4,6 +4,7 @@ author: "Tobias Anton"
 date: "`r ddateR::poee()`"
 output:
   rmdformats::html_clean:
+    css: style.css
     fig_width: 10
     dpi: 360
     highlight: tango
