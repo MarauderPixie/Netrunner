@@ -150,7 +150,7 @@ liga %>%
     geom_tile(color = "white", size = 0.4) +
     labs(title = "Runs pro Spieler und System",
          x = NULL, y = NULL) +
-    scale_fill_viridis(option = "B") +
+    scale_fill_viridis(option = "D") +
     cosmetics + 
     theme(legend.position = "bottom")
 ```
