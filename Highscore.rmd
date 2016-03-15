@@ -9,6 +9,8 @@ output:
     dpi: 360
     highlight: tango
     theme: spacelab
+    self_contained: no
+    lib_dir: "score_assets"
 ---
 
 ```{r, message=F, warning=FALSE, include=FALSE}

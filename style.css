@@ -1,8 +1,19 @@
-/* Whole document: */
-body{
-  font-family: Minion Pro;
+/* define */
+@font-face {
+  font-family: Minion;
+  src: url(fonts/minion_pro.otf);
 }
-/* Headers: */
+
+@font-face {
+  font-family: Trajan;
+  src: url(fonts/trajan_pro.ttf) format('truetype');
+}
+
+/* use */
+body{
+  font-family: Minion;
+}
+
 h1,h2,h3,h4,h5,h6{
-  font-family: Trajan Pro;
+  font-family: Trajan;
 }
