@@ -1,19 +1,3 @@
-## ggplotly testing
-
-plot <- score %>%
-  group_by(Kalenderwoche, Seite) %>% 
-  summarize("Wins" = sum(Punkte)/2) %>% 
-  ggplot(., aes(x = Kalenderwoche, y = Wins, group = Seite, color = Seite)) +
-    geom_smooth(se = F) +
-    geom_point() +
-    scale_color_brewer(palette = "Set1") +
-    scale_x_continuous(breaks = 1:max(score$Kalenderwoche)) +
-    scale_y_continuous(breaks = 1:13) +
-    cosmetics
-
-ggplotly(plot)
-
-
 ## the real plotly testing
 library(plotly)
 library(stringr)
@@ -22,25 +6,11 @@ library(stringr)
 score %>% 
   group_by(Kalenderwoche, Seite) %>% 
   summarize("Wins" = sum(Punkte)/2) %>% 
-  plot_ly(., x = Kalenderwoche, y = Wins, line = list(shape = "spline"),
-          color = Seite, colors = c("blue", "red"), text = unique(Spieler))
+  plot_ly(., x = Kalenderwoche, y = Wins, type = "bar",
+          color = Seite, colors = c("blue", "gray", "red"), text = unique(.$Spieler))
 
-### kurvige graphen <3 (Spieler)
-score %>% 
-  group_by(Kalenderwoche, Spieler) %>% 
-  summarize("Wins" = sum(Punkte)/2) %>% 
-  plot_ly(., x = Kalenderwoche, y = Wins, line = list(shape = "spline"),
-          color = Spieler, text = rownames(unique(Spieler)))
 
 ### kurvige graphen mit ID-Hovertext <3 (Spieler)
-score %>% 
-  group_by(Kalenderwoche, Spieler) %>% 
-  summarize("Wins" = sum(Punkte)/2,
-            "IDs"   = list(unique(ID))) %>% 
-  plot_ly(., x = Kalenderwoche, y = Wins, line = list(shape = "spline"),
-          color = Spieler, text = rownames(IDs))
-  
-  #### stellt sich raus: gar nicht so einfach
   score %>%
     group_by(Kalenderwoche, Spieler) %>% 
     summarize("Wins" = sum(Punkte)/2,
@@ -59,9 +29,9 @@ score %>%
   #### bars, just bars
   konzern %>% 
     group_by(Fraktion) %>% 
-    summarize("n" = n(),
+    summarize("Spiele" = n(),
               "IDs"  = paste(unique(ID), collapse = ",")) %>% 
-    plot_ly(., x = Fraktion, y = n, name = "Fraktionen", type = "bar",
+    plot_ly(., x = Fraktion, y = Spiele, name = "Fraktionen", type = "bar",
             marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen")),
             text   = str_replace_all(IDs, ",", "<br />"))
   
@@ -91,15 +61,33 @@ score %>%
 # Why ploty when you can highcharter?
   library(highcharter)
     
+    # Reihenfolge:
+    # Anarch, Criminals, Haas, Jinteki, NBN(, Neutral), Shaper, Weyland
     faction_fill_hex <- c("#FF8C00", "#009ACD", "#68228B", "#FF0000", 
                           "#FFD700", "#66CD00", "#556B2F")
     
-    hfg <- score %>% group_by(Fraktion) %>% summarize(n = n())
+    kon_cols <- c('#68228B', '#FF0000', '#FFD700', '#556B2F')
+    run_cols <- c("#FF8C00", "#009ACD", "gray", "#66CD00")
+    
+    konzerne <- score %>% filter(Seite == "Konzern") %>% group_by(Fraktion) %>% summarize(n = n())
+    kon_ids  <- score %>% filter(Seite == "Konzern") %>% group_by(Fraktion, ID) %>% summarize(n = n())
+    runner   <- score %>% filter(Seite == "Runner") %>% group_by(Fraktion) %>% summarize(n = n())
+    run_ids  <- score %>% filter(Seite == "Runner") %>% group_by(Fraktion, ID) %>% summarize(n = n())
     
     highchart() %>% 
       hc_chart(type = "column") %>% 
       hc_title(text = "Fraktionen") %>% 
-      hc_xAxis(categories = hfg$Fraktion) %>% 
-      hc_add_series(data = hfg$n, name = "Spiele") %>% 
-      hc_add_theme(hc_theme(colors = c("#FF8C00", "#009ACD", "#68228B", "#FF0000", 
-                                       "#FFD700", "#66CD00", "#556B2F")))
+      hc_xAxis(categories = konzerne$Fraktion) %>%
+      hc_yAxis(title = list(text = "Spiele")) %>% 
+      hc_add_series(data = konzerne$n, name = "Spiele", colorByPoint = TRUE) %>% 
+      hc_legend(enabled = FALSE) %>% 
+      hc_colors(colors = kon_cols)
+    
+    highchart() %>% 
+      hc_chart(type = "column") %>% 
+      hc_title(text = "Fraktionen") %>% 
+      hc_xAxis(categories = runner$Fraktion) %>%
+      hc_yAxis(title = list(text = "Spiele")) %>% 
+      hc_add_series(data = runner$n, name = "Spiele", colorByPoint = TRUE) %>% 
+      hc_legend(enabled = FALSE) %>% 
+      hc_colors(colors = run_cols)
