@@ -69,10 +69,25 @@ score %>%
     kon_cols <- c('#68228B', '#FF0000', '#FFD700', '#556B2F')
     run_cols <- c("#FF8C00", "#009ACD", "gray", "#66CD00")
     
-    konzerne <- score %>% filter(Seite == "Konzern") %>% group_by(Fraktion) %>% summarize(n = n())
-    kon_ids  <- score %>% filter(Seite == "Konzern") %>% group_by(Fraktion, ID) %>% summarize(n = n())
-    runner   <- score %>% filter(Seite == "Runner") %>% group_by(Fraktion) %>% summarize(n = n(), p = n()/sum(n)*100)
-    run_ids  <- score %>% filter(Seite == "Runner") %>% group_by(Fraktion, ID) %>% summarize(n = n())
+    konzerne <- score %>% 
+      filter(Seite == "Konzern") %>% 
+      group_by(Fraktion) %>% 
+      summarize(n = n())
+    
+    kon_ids  <- score %>% 
+      filter(Seite == "Konzern") %>% 
+      group_by(Fraktion, ID) %>% 
+      summarize(n = n())
+    
+    runner   <- score %>% 
+      filter(Seite == "Runner") %>% 
+      group_by(Fraktion) %>% 
+      summarize(n = n())
+    
+    run_ids  <- score %>% 
+      filter(Seite == "Runner") %>% 
+      group_by(Fraktion, ID) %>% 
+      summarize(n = n())
     
     highchart() %>% 
       hc_chart(type = "column") %>% 
@@ -88,7 +103,8 @@ score %>%
       hc_title(text = "Runner Fraktionen") %>% 
       hc_xAxis(categories = runner$Fraktion) %>%
       hc_yAxis(title = list(text = "Spiele")) %>% 
-      hc_add_series(data = runner$p, name = "Spiele", colorByPoint = TRUE) %>% 
-      hc_tooltip(pointFormat = "{point.y}%") %>% 
+      hc_add_series(data = runner$n, name = "Spiele", colorByPoint = TRUE) %>% 
+      hc_add_series(data = run_ids$n) %>%
+      hc_tooltip(pointFormat = "{point.y} {series.name}:") %>% 
       hc_legend(enabled = FALSE) %>% 
       hc_colors(colors = run_cols)
