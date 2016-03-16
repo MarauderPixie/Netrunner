@@ -57,6 +57,14 @@ score %>%
               marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen")),
               text   = str_replace_all(IDs, ",", "<br />"))
     
+      #### dritter Ansatz:
+    konzern %>% 
+      group_by(Fraktion) %>% 
+      summarize("n" = n()) %>% 
+      plot_ly(., x = Fraktion, y = n, name = "Fraktionen", type = "bar",
+              marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen"))),
+              text   = str_replace_all(IDs, ",", "<br />"))
+    
     
 # Why ploty when you can highcharter?
   library(highcharter)
@@ -104,7 +112,9 @@ score %>%
       hc_xAxis(categories = runner$Fraktion) %>%
       hc_yAxis(title = list(text = "Spiele")) %>% 
       hc_add_series(data = runner$n, name = "Spiele", colorByPoint = TRUE) %>% 
-      hc_add_series(data = run_ids$n) %>%
+      # hc_add_series(data = run_ids$n) %>%
       hc_tooltip(pointFormat = "{point.y} {series.name}:") %>% 
       hc_legend(enabled = FALSE) %>% 
       hc_colors(colors = run_cols)
+    
+    
