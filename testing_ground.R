@@ -1,6 +1,4 @@
 ## the real plotly testing
-library(plotly)
-library(stringr)
 
 ### kurvige graphen <3 (Seite)
 score %>% 
@@ -52,8 +50,8 @@ score %>%
     konzern %>% 
       group_by(Fraktion) %>% 
       summarize("n" = n(),
-                "IDs"  = paste(paste0(n, "x"), unique(ID), collapse = ",")) %>% 
-      plot_ly(., x = Fraktion, y = n, name = "Fraktionen", type = "bar",
+                "IDs"  = paste(paste0(kon_ids$n, "x"), kon_ids$ID, collapse = ",")) %>% 
+      plot_ly(test, x = Fraktion, y = n, name = "Fraktionen", type = "bar",
               marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen")),
               text   = str_replace_all(IDs, ",", "<br />"))
     
@@ -103,6 +101,7 @@ score %>%
       hc_xAxis(categories = konzerne$Fraktion) %>%
       hc_yAxis(title = list(text = "Spiele")) %>% 
       hc_add_series(data = konzerne$n, name = "Spiele", colorByPoint = TRUE) %>% 
+      # hc_tooltip(pointFormat = "{point.y} {series.name}:") %>% 
       hc_legend(enabled = FALSE) %>% 
       hc_colors(colors = kon_cols)
     
