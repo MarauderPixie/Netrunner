@@ -10,7 +10,7 @@ output:
     highlight: tango
     theme: spacelab
     self_contained: no
-    lib_dir: "score_assets"
+    lib_dir: "assets"
 ---
 
 ```{r, message=F, warning=FALSE, include=FALSE}
