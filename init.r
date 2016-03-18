@@ -11,7 +11,7 @@
     library(viridis)      # best color palette, hands down
     library(rmdformats)   # look at them beautiful templates!
     library(sjPlot)       # a little bit analysis
-    # library(plotly)       # them interactive plots!
+    library(plotly)       # them interactive plots!
     library(stringr)      # just because
     library(formattable)  # lots of tables here, might as well make 'm pretty
 

@@ -18,15 +18,22 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
 # Spielwiese
 
 ```{r, fig.height=18, message=F, warning=F, chunky-chunk, echo=F}
-  score %>% 
-    filter(Seite == "Runner") %>% 
-    ggplot(aes(x = ID, fill = Fraktion)) +
-      geom_bar(color = "black") +
-      labs(x = "", y = "Spiele", legend = "") +
-      facet_grid(Spieler ~ Fraktion, scales = "free") +
-      run_fill +
-      cosmetics +
-      theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
-            legend.position = "none")
+games <- liga %>% 
+  filter(Saison == 2, Runde == 1) %>% 
+  select(Spiel, Spieler)
+
+games <- data.frame(P1 = games[c(T, F), ],
+                    P2 = games[c(F, T), ]) %>% 
+  select(P1.Spieler, P2.Spieler)
+
+games <- table(games$P1.Spieler, games$P2.Spieler)
+
+games <- as.data.frame.matrix(games)
+
+    format_table(games, list(
+      Bjarne = formatter("span", 
+            style = x ~ ifelse(x == 0, style(color = "green", font.weight = "bold"), NA))
+    ),
+      check.rows = F, format = "pandoc")
 ```
 
