@@ -34,10 +34,16 @@ plotify <- function(data, var) {
 
 
 
-wenn highcharts arrays benutzt:
+# wenn highcharts arrays benutzt:
   hb <- score %>% filter(Fraktion == "Haas Bioroid")
 
-hicharter(blablubb) %>% 
-  tooltip(hb$ID)
+# hicharter(blablubb) %>% 
+#   tooltip(hb$ID)
+# ...oder so
 
-...oder so
+
+
+# tooltip dataframe
+score %>% 
+  filter(Seite == "Konzern") %>% 
+  transmute(HB = filter(., Fraktion == "Haas"))
