@@ -4,6 +4,7 @@ author: "Tobias Anton"
 date: "11-11-11"
 output:
   rmdformats::html_clean:
+  # html_document:
     fig_width: 10
     dpi: 360
     highlight: tango
@@ -26,10 +27,21 @@ tbl <- table(games$Spiel, games$Spieler)
 
 games <- as.data.frame.matrix(!!crossprod(tbl))
 
-    format_table(games, list(
-      Bjarne = formatter("span", 
-            style = x ~ ifelse(x == 0, style(color = "green", font.weight = "bold"), NA))
-    ),
-      check.rows = F, format = "pandoc")
+# games <- games %>% mutate(vs = rownames(.))
+
+yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
+                                   x ~ icontext(ifelse(x, "ok", "remove")))
+
+    format_table(games, 
+      list(Bjarne = yesno,
+           Bodo = yesno,
+           Falk = yesno,
+           Jan = yesno,
+           Johannes = yesno,
+           Josh = yesno,
+           Kai = yesno,
+           Paul = yesno,
+           Tobias = yesno
+           ), check.rows = T, align = "c", format = "markdown")
 ```
 
