@@ -28,3 +28,16 @@ plotify <- function(data, var) {
     mutate(times = paste0(n, "x")) %>% 
     summarize()
 }
+
+
+
+
+
+
+wenn highcharts arrays benutzt:
+  hb <- score %>% filter(Fraktion == "Haas Bioroid")
+
+hicharter(blablubb) %>% 
+  tooltip(hb$ID)
+
+...oder so
