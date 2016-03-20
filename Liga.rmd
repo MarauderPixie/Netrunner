@@ -20,6 +20,8 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
 
 # Aktuelle Liga
 
+## Punktestand
+
 Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Bei weniger als 50%, erscheint ne rote.
 
 ```{r, Punktestand, echo = F, warning = F, message = F}
@@ -38,6 +40,31 @@ Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Be
                                                                ifelse(x >= 7, "green", "gray")))
                       )),
       check.rows = F, format = "pandoc")
+```
+
+## Spiel"übersicht"
+
+Sieht zur Zeit *(Prickle-Prickle, 6th Day of Discord)* reichlich schräg aus...
+
+```{r Spiele}
+games <- liga %>% 
+  filter(Saison == 2, Runde == 1) %>% 
+  select(Spiel, Spieler)
+
+games <- table(games$Spiel, games$Spieler)
+
+games <- as.data.frame.matrix(!!crossprod(games))
+
+# games <- games %>% mutate(vs = rownames(.))
+
+yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
+                                   x ~ icontext(ifelse(x, "ok", "remove")))
+
+    format_table(games, 
+      list(Bjarne = yesno, Bodo = yesno, Falk = yesno,
+           Jan = yesno, Johannes = yesno, Josh = yesno,
+           Kai = yesno, Paul = yesno, Tobias = yesno), 
+      check.rows = T, align = "c", format = "markdown")
 ```
 
 # "Ewige" Liga
