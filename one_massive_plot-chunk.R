@@ -28,6 +28,6 @@ konzerne %>%
   mutate(p = n/sum(n)*100,
          "IDs" = c(hb, jt, nbn, wl)) %>% 
 
-plot_ly(., x = Fraktion, y = p, name = "Fraktionen", type = "bar",
+plot_ly(., x = Fraktion, y = n, name = "Fraktionen", type = "bar",
         marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen")),
         text   = str_replace_all(IDs, ",", "<br />"))

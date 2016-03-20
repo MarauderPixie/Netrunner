@@ -16,7 +16,9 @@ highchart() %>%
   hc_xAxis(categories = konzerne$Fraktion) %>%
   hc_yAxis(title = list(text = "Spiele")) %>% 
   hc_add_series(data = konzerne$n, name = "Spiele", colorByPoint = TRUE) %>% 
-  # hc_tooltip(headerFormat = list(hb, jt, nbn, wl)) %>% 
+  hc_tooltip(headerFormat = "<b>{point.key}:<b /> <br /> <table>",
+             pointFormat = "list(plays$`Haas Bioroid`, plays$Jinteki, plays$NBN, plays$`Weyland Consortium`)",
+             footerFormat = "<table />") %>% 
   hc_legend(enabled = FALSE) %>% 
   hc_colors(colors = kon_cols)
 
@@ -26,5 +28,9 @@ konzern %>%
   count(Fraktion) %>% 
   plot_ly(., x = Fraktion, y = n, name = "Fraktionen", type = "bar",
           marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen")),
-          text   = list(plays$`Haas Bioroid`, plays$Jinteki, plays$NBN, plays$`Weyland Consortium`))
+          text   = list(paste(plays$`Haas Bioroid`, "<br />"), 
+                        paste(plays$Jinteki, "<br />"), 
+                        paste(plays$NBN, "<br />"), 
+                        paste(plays$`Weyland Consortium`)))
 
+text   = str_replace_all(IDs, ",", "<br />"))
