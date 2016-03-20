@@ -34,9 +34,9 @@ Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Be
                   Punkte = color_tile("white", "lightblue"),
                   Agendapunkte = color_tile("white", "lightgray"),
                   Spiele = formatter("span",
-                        style = x ~ style(color = ifelse(x <= 4, "red", 
-                                                         ifelse(x >= 7, "green", "gray")))
-                        )),
+                                     style = x ~ style(color = ifelse(x <= 4, "red", 
+                                                               ifelse(x >= 7, "green", "gray")))
+                      )),
       check.rows = F, format = "pandoc")
 ```
 
