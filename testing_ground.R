@@ -31,7 +31,7 @@ score %>%
               "IDs"  = paste(unique(ID), collapse = ",")) %>% 
     plot_ly(., x = Fraktion, y = Spiele, name = "Fraktionen", type = "bar",
             marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen")),
-            text   = str_replace_all(IDs, ",", "<br />"))
+            text   = str_replace_all(IDs, ",", "<br />"), bgcolor = "#FFFFFF")
   
     
 # Why ploty when you can highcharter?
@@ -86,4 +86,30 @@ score %>%
       hc_legend(enabled = FALSE) %>% 
       hc_colors(colors = run_cols)
     
+    ## heatmap maybe
+    highchart() %>% 
+      hc_chart(type = "heatmap") %>% 
+      hc_add_series(data = big) %>% 
+      hc_xAxis(categories = colnames(big))
     
+# MOAR heatmaps!
+      big <- as.data.frame(crossprod(table(score$Spiel, score$Spieler)))
+    
+    
+    cnt <- as.data.frame.matrix(table(score$Spiel, score$Spieler))
+    cnt %>% gather(Spieler, Matches, Bjarne, Bodo, Falk, Jan,
+                   Johannes, Josh, Kai, Paul, Tobias)
+    
+    test <- score %>% 
+      select(Runde, Spieler, Spiel) %>% 
+      spread(Runde, Spieler)
+    
+    result <- test %>% count(`1`, `2`)
+    
+    ggplot(result, aes(x = `1`, y = `2`, fill = n)) + 
+      geom_tile(color = "white", size = 0.4) +
+      labs(title = "Wer hat wie oft gegen wen gespielt?",
+           x = NULL, y = NULL) +
+      scale_fill_viridis(option = "D") +
+      cosmetics + 
+      theme(legend.position = "bottom")
