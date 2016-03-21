@@ -28,9 +28,9 @@ konzern %>%
   count(Fraktion) %>% 
   plot_ly(., x = Fraktion, y = n, name = "Fraktionen", type = "bar",
           marker = list(color = c("darkorchid", "red", "gold", "darkolivegreen")),
-          text   = list(paste(plays$`Haas Bioroid`, "<br />"), 
-                        paste(plays$Jinteki, "<br />"), 
-                        paste(plays$NBN, "<br />"), 
-                        paste(plays$`Weyland Consortium`)))
+          text   = list(paste(plays$`Haas Bioroid`, collapse = "<br />"), 
+                        paste(plays$Jinteki, collapse = "<br />"), 
+                        paste(plays$NBN, collapse = "<br />"), 
+                        paste(plays$`Weyland Consortium`, collapse = "<br />")))
 
 text   = str_replace_all(IDs, ",", "<br />"))
