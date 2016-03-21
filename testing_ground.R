@@ -93,12 +93,12 @@ score %>%
       hc_xAxis(categories = colnames(big))
     
 # MOAR heatmaps!
-      big <- as.data.frame(crossprod(table(score$Spiel, score$Spieler)))
+    big <- as.data.frame(crossprod(table(score$Spiel, score$Spieler)))
     
     
     cnt <- as.data.frame.matrix(table(score$Spiel, score$Spieler))
-    cnt %>% gather(Spieler, Matches, Bjarne, Bodo, Falk, Jan,
-                   Johannes, Josh, Kai, Paul, Tobias)
+    cnt %>% gather(Spieler, Matches, Bjarne, Bodo, Falk,
+                   Jan, Johannes, Josh, Kai, Paul, Tobias)
     
     test <- score %>% 
       select(Runde, Spieler, Spiel) %>% 
