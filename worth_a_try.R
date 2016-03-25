@@ -44,6 +44,23 @@ plotify <- function(data, var) {
 
 
 # tooltip dataframe
-score %>% 
+bla <- score %>% 
   filter(Seite == "Konzern") %>% 
-  transmute(HB = filter(., Fraktion == "Haas"))
+  count(Fraktion, ID) %>% 
+  mutate(plays = paste(paste0(n, "x"), ID),
+         Reihe = 1:length(plays)) %>% 
+  summarize(n   = sum(n),
+            bla = paste(plays, collapse = "<br>"))
+
+# und dit nu in highcharter:
+highchart() %>% 
+  hc_chart(type = "column") %>% 
+  hc_title(text = "Konzern Fraktionen") %>% 
+  hc_xAxis(categories = bla$Fraktion) %>%
+  hc_yAxis(title = list(text = "Spiele")) %>% 
+  hc_add_series(data = bla$n, name = "Spiele", colorByPoint = TRUE) %>% 
+  hc_tooltip(headerFormat = "<b>{point.key}:</b> <br> <table>",
+             pointFormat = "{this.point.key}",
+             footerFormat = "<b>Gesamt:</b> {point.y} Spiele <table />") %>% 
+  hc_legend(enabled = FALSE) %>% 
+  hc_colors(colors = kon_cols)
