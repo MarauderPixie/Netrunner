@@ -67,6 +67,18 @@ yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
       check.rows = T, align = "c", format = "markdown")
 ```
 
+### Moar (irrelevante) Tabellen!
+
+```{r sidestat}
+liga %>% 
+  filter(Saison == 2) %>% 
+  group_by(Spieler) %>% 
+  summarize(Spiele = n()/2,
+            "Agendapunkte / Spiel" = sum(Agendapunkte, na.rm = T) / (n()/2),
+            "Punkte pro Spiel"     = sum(Punkte, na.rm = T) / (n()/2))
+            # Kills  = filter(Seite == "Konzern", Siegbedingung == "Flatline") %>% count(Spieler))
+```
+
 # "Ewige" Liga
 
 ## Spielhäufigkeiten
@@ -251,7 +263,7 @@ model <- aov(Dauer ~ Spieler, liga)
 tadaa_aov(model, liga, print = "markdown")
 ```
 
-Stellt sich raus: es gibt nichts zu sehen.  
+Stellt sich raus: scrollen Sie weiter, es gibt nichts zu sehen.  
 
 *Fortsetzung folgt*
 
