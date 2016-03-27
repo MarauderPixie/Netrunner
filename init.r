@@ -35,6 +35,9 @@
     kon_fill     <- scale_fill_manual(values = c("darkorchid4", "red", "gold1", "darkolivegreen"))
     run_fill     <- scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3"))
     
+    kon_cols <- c('#68228B', '#FF0000', '#FFD700', '#556B2F')
+    run_cols <- c("#FF8C00", "#009ACD", "gray", "#66CD00")
+    
     
 # plot cosmetics
 cosmetics <- theme_few() +
