@@ -113,3 +113,22 @@ score %>%
       scale_fill_viridis(option = "D") +
       cosmetics + 
       theme(legend.position = "bottom")
+    
+    
+    
+    
+    
+    highchart() %>% 
+      # hc_chart(type = "column") %>% 
+      hc_title(text = "Konzern Fraktionen") %>% 
+      hc_xAxis(categories = plays$Fraktion) %>%
+      hc_yAxis(title = list(text = "Spiele")) %>% 
+      hc_add_series(data = plays$n, name = "Spiele", colorByPoint = TRUE, type = "column") %>% 
+      hc_add_series(data = plays$plays, name = "IDs") %>% 
+      hc_tooltip(headerFormat = "<b>{point.key}:</b> <br> <table>",
+                 pointFormat  = "{series.name}: {point.y}<br> ",
+                 footerFormat = "<br><b>Gesamt:</b> {point.y} Spiele </table>",
+                 #valueSuffix = plays$plays, 
+                 shared = T) %>% 
+      hc_legend(enabled = FALSE) %>% 
+      hc_colors(colors = kon_cols)    
