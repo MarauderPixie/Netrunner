@@ -19,29 +19,29 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
 # Spielwiese
 
 ```{r, fig.height=18, message=F, warning=F, chunky-chunk, echo=F}
-games <- liga %>% 
-  filter(Saison == 2, Runde == 1) %>% 
-  select(Spiel, Spieler)
+  library(viridisLite)
 
-tbl <- table(games$Spiel, games$Spieler)
-
-games <- as.data.frame.matrix(!!crossprod(tbl))
-
-# games <- games %>% mutate(vs = rownames(.))
-
-yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
-                                   x ~ icontext(ifelse(x, "ok", "remove")))
-
-    format_table(games, 
-      list(Bjarne = yesno,
-           Bodo = yesno,
-           Falk = yesno,
-           Jan = yesno,
-           Johannes = yesno,
-           Josh = yesno,
-           Kai = yesno,
-           Paul = yesno,
-           Tobias = yesno
-           ), check.rows = T, align = "c", format = "markdown")
+    highscore <- score %>% select(Spiel, Spieler)
+    
+    highscore <- table(highscore$Spiel, highscore$Spieler)
+    
+    highscore <- as.data.frame.matrix(crossprod(highscore))
+  
+    
+    gradient <- color_tile("white", "red")
+    
+    format_table(highscore, 
+                 list(Bjarne = gradient, Bodo = gradient, Falk = gradient,
+                      Jan = gradient, Johannes = gradient, Josh = gradient,
+                      Kai = gradient, Paul = gradient, Tobias = gradient), 
+                 check.rows = F, align = "c", format = "markdown")
+    
+    
+    liga %>% 
+  group_by(Spieler) %>% 
+  summarize(Spiele = n()/2,
+            "Agendapunkte / Spiel" = sum(Agendapunkte) / (n()/2),
+            "Punkte pro Spiel"     = sum(Punkte) / (n()/2),
+            Kills  = filter(Seite == "Konzern", Siegbedingung == "Flatline") %>% count(Spieler)$n)
 ```
 

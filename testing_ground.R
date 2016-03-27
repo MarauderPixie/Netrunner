@@ -132,3 +132,22 @@ score %>%
                  shared = T) %>% 
       hc_legend(enabled = FALSE) %>% 
       hc_colors(colors = kon_cols)    
+    
+    
+    
+    
+    highscore <- score %>% select(Spiel, Spieler)
+    
+    highscore <- table(highscore$Spiel, highscore$Spieler)
+    
+    highscore <- as.data.frame.matrix(crossprod(highscore))
+  
+    
+    gradient <- color_tile(viridis(1), viridis(max(highscore)))
+    # substr(viridis(max(highscore)), 0, 7)
+    
+    format_table(highscore, 
+                 list(Bjarne = gradient, Bodo = gradient, Falk = gradient,
+                      Jan = gradient, Johannes = gradient, Josh = gradient,
+                      Kai = gradient, Paul = gradient, Tobias = gradient), 
+                 check.rows = T, align = "c", format = "markdown")
