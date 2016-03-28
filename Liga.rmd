@@ -76,7 +76,7 @@ liga %>%
   summarize(Spiele = n()/2,
             "Agendapunkte / Spiel" = sum(Agendapunkte, na.rm = T) / (n()/2),
             "Punkte pro Spiel"     = sum(Punkte, na.rm = T) / (n()/2))
-            # Kills  = filter(Seite == "Konzern", Siegbedingung == "Flatline") %>% count(Spieler))
+            # Kills  = count(filter(Saison == 2, Siegbedingung == "Flatline"), Spieler))
 ```
 
 # "Ewige" Liga
@@ -203,7 +203,14 @@ liga %>%
 Hier beginnt der eigentliche Spaß. Also für mich zumindest. To the research! /o/
 
 
-## Siegbedingung
+## Siege
+
+#### Welcome to Corp Town
+
+```{r Corp_vs_Runner}
+liga %>% 
+  group_by(Seite) %>% 
+  summarize(Siege = sum(Punkte)/2)
 
 #### Brauchen wir eine bedingungslose Plascreteversorgung?
 
