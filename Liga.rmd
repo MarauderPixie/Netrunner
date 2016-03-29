@@ -211,6 +211,7 @@ Hier beginnt der eigentliche Spaß. Also für mich zumindest. To the research! /
 liga %>% 
   group_by(Seite) %>% 
   summarize(Siege = sum(Punkte)/2)
+```
 
 #### Brauchen wir eine bedingungslose Plascreteversorgung?
 
@@ -227,7 +228,7 @@ chisq_sieg <- sjt.xtab(sieg_tbl$Siegbedingung, sieg_tbl$Fraktion,
                        no.output = T, useViewer = F)
 ```
 
-Sieht eigentlich ganz gesund aus; Konzerne gewinnen öfter durch Punkte. Schauen wr uns das mal genauer an:
+Sieht eigentlich ganz gesund aus; Konzerne gewinnen öfter durch Punkte. Schauen wir uns das mal genauer an:
 
 ```{r chisq_sieg_plot}
 ggplot(sieg_tbl, aes(x = Siegbedingung, fill = Fraktion)) +
