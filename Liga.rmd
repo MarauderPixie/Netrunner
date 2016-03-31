@@ -200,7 +200,8 @@ liga %>%
 # Analyse
 #### Willkommen bei Methodisch Inkorrekt
 
-Hier beginnt der eigentliche Spaß. Also für mich zumindest. To the research! /o/
+Hier beginnt der eigentliche Spaß. Also für mich zumindest. To the research! /o/  
+Disclaimer: p-Werte! Sind sie nicht einfach herzallerliebst? Man muss unsere albernen, kleinen p-Werte einfach lieben. Will sagen: Die haben hier noch viel weniger Aussagekraft als sowieso schon, aber ich benutz sie hier trotzdem ganz regulär. For the lulz.
 
 
 ## Siege
