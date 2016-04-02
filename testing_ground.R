@@ -1,6 +1,30 @@
-## the real plotly testing
+# Heatmaps of games played against whom
 
-### kurvige graphen <3 (Seite)
+protoplays <- as.data.frame.matrix(crossprod(table(score$Spiel, score$Spieler)))
+
+hs_plays <- protoplays %>% 
+  gather(Spieler, Spiele, Bjarne, Bodo, Falk, Jan, 
+         Johannes, Josh, `Josh R.`, Kai, Paul, Tobias) %>% 
+  mutate(Gegner = rep(c("Bjarne", "Bodo", "Falk", "Jan",
+                        "Johannes", "Josh", "`Josh R.`", 
+                        "Kai", "Paul", "Tobias"), 10))
+
+
+## Test
+ggplot(hs_plays, aes(x = Spieler, y = Gegner, fill = Spiele)) + 
+  geom_tile(color = "white", size = 0.4)
+
+## filter player == Gegner
+
+if {Spieler == Gegner} {
+  
+}
+
+
+
+# the real plotly testing
+
+## kurvige graphen <3 (Seite)
 score %>% 
   group_by(Kalenderwoche, Seite) %>% 
   summarize("Wins" = sum(Punkte)/2) %>% 
@@ -8,7 +32,7 @@ score %>%
           color = Seite, colors = c("blue", "gray", "red"), text = unique(.$Spieler))
 
 
-### kurvige graphen mit ID-Hovertext <3 (Spieler)
+## kurvige graphen mit ID-Hovertext <3 (Spieler)
   score %>%
     group_by(Kalenderwoche, Spieler) %>% 
     summarize("Wins" = sum(Punkte)/2,
