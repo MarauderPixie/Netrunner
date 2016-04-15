@@ -7,7 +7,15 @@ hs_plays <- protoplays %>%
          Johannes, Josh, `Josh R.`, Kai, Paul, Tobias) %>% 
   mutate(Gegner = rep(c("Bjarne", "Bodo", "Falk", "Jan",
                         "Johannes", "Josh", "`Josh R.`", 
-                        "Kai", "Paul", "Tobias"), 10))
+                        "Kai", "Paul", "Tobias"), 10)),
+         logic  = (Spieler == Gegner),
+         test   = car::recode(.$Spiele[hs_plays$Spieler == hs_plays$Gegner], 
+                              "TRUE = NA; FALSE = 'bla'"))
+
+hs_plays$Spiele[hs_plays$Spieler == hs_plays$Gegner] <- TRUE
+  
+  car::recode(hs_plays$Spiele[hs_plays$Spieler == hs_plays$Gegner], 
+                    "TRUE = NA; FALSE = 'bla'")
 
 
 ## Test

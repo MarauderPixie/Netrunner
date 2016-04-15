@@ -70,13 +70,14 @@ yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
 ### Moar (irrelevante) Tabellen!
 
 ```{r sidestat}
-liga %>% 
-  filter(Saison == 2) %>% 
-  group_by(Spieler) %>% 
-  summarize(Spiele = n()/2,
-            "Agendapunkte / Spiel" = sum(Agendapunkte, na.rm = T) / (n()/2),
-            "Punkte pro Spiel"     = sum(Punkte, na.rm = T) / (n()/2))
-            # Kills  = count(filter(Saison == 2, Siegbedingung == "Flatline"), Spieler))
+# liga %>% 
+#   filter(Saison == 2) %>% 
+#   group_by(Spieler) %>% 
+#   summarize(Spiele = n()/2,
+#             "Agendapunkte / Spiel" = sum(Agendapunkte, na.rm = T) / (n()/2),
+#             "Punkte pro Spiel"     = sum(Punkte, na.rm = T) / (n()/2),
+#             "Flatlines"            = tally(Siegbedingung[Siegbedingung == "Flatline"]))
+#             "Geflatlined worden"   = 
 ```
 
 # "Ewige" Liga
