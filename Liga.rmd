@@ -15,7 +15,7 @@ output:
 
 ```{r, message=F, warning=FALSE, include=FALSE}
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.r"))
-knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
+knitr::opts_chunk$set(echo = F, fig.path = "liga-plots/", warning = F, message = F)
 ```
 
 # Aktuelle Liga
