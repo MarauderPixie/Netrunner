@@ -24,21 +24,23 @@
     
     
 # Runner / Konzern Aufteilung
-    runner  <- score %>% filter(Seite == "Runner")
-    konzern <- score %>% filter(Seite == "Konzern")
+    runner_score  <- score %>% filter(Seite == "Runner")
+    konzern_score <- score %>% filter(Seite == "Konzern")
     
+    runner_liga  <- liga %>% filter(Seite == "Runner")
+    konzern_liga <- liga %>% filter(Seite == "Konzern")
     
 # Farben definieren
     # mit APEX und Shapern
     # faction_color <- scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", 
     #                                               "gold1", "darkgray", "chartreuse3", "darkolivegreen"))
     faction_fill <- scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", 
-                                                  "gold1", "darkgray", "chartreuse3", "darkolivegreen"))
+                                                  "gold1", "chartreuse3", "darkolivegreen"))
     kon_fill     <- scale_fill_manual(values = c("darkorchid4", "red", "gold1", "darkolivegreen"))
-    run_fill     <- scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3"))
+    run_fill     <- scale_fill_manual(values = c("darkorange", "deepskyblue3", "chartreuse3"))
     
     kon_cols <- c('#68228B', '#FF0000', '#FFD700', '#556B2F')
-    run_cols <- c("#FF8C00", "#009ACD", "gray", "#66CD00")
+    run_cols <- c("#FF8C00", "#009ACD", "#66CD00")
     
     
 # plot cosmetics
