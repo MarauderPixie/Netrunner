@@ -17,7 +17,9 @@
 
 # Daten einlesen
     liga  <- gs_title("Netrunner Liga") %>% gs_read()
-    score <- gs_title("Netrunner Highscore") %>% gs_read()
+    score <- gs_title("Netrunner Highscore") %>% 
+              gs_read() %>% 
+              filter(Fraktion != "Neutral", Spieler != "Jan (TO)")
     # liga  <- read_csv("./Liga.csv")
     
     

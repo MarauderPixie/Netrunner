@@ -1,5 +1,5 @@
 ---
-title: "Netrunnerliga"
+title: "Netrunnerliga Bremen"
 author: "Tobias Anton"
 date: "`r ddateR::poee()`"
 output:
@@ -14,7 +14,7 @@ output:
 ---
 
 ```{r, message=F, warning=FALSE, include=FALSE}
-source(paste0(Sys.getenv("PROJECT_HOME"), "./init.r"))
+source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
 knitr::opts_chunk$set(echo = F, fig.path = "liga-plots/", warning = F, message = F)
 ```
 
@@ -22,7 +22,10 @@ knitr::opts_chunk$set(echo = F, fig.path = "liga-plots/", warning = F, message =
 
 ## Punktestand
 
-Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Bei weniger als 50%, erscheint ne rote.
+Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Bei weniger als 50%, erscheint ne rote.  
+
+**Anmerkung:**  
+Tobias hat als einziger ein Spiel gegen Jan gespielt, die Punkte aus dem Spiel wurden aus der Wertung genommen.
 
 ```{r, Punktestand, echo = F, warning = F, message = F}
   liga %>% 
@@ -33,7 +36,6 @@ Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Be
               Punkte       = sum(Punkte)) %>%
     arrange(desc(Punkte), desc(Agendapunkte)) %>% 
     format_table(list(
-                  Punkte = color_tile("white", "lightblue"),
                   Agendapunkte = color_tile("white", "lightgray"),
                   Spiele = formatter("span",
                                      style = x ~ style(color = ifelse(x <= 4, "red", 
