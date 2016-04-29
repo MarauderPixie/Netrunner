@@ -206,6 +206,25 @@ liga %>%
 Hier beginnt der eigentliche Spaß. Also für mich zumindest. To the research! /o/  
 Disclaimer: p-Werte! Sind sie nicht einfach herzallerliebst? Man muss unsere albernen, kleinen p-Werte einfach lieben. Will sagen: Die haben hier noch viel weniger Aussagekraft als sowieso schon, aber ich benutz sie hier trotzdem ganz regulär. For the lulz.
 
+## Präferenzen
+
+Haben wir in unserer Liga Leute, die bestimmte Fraktionen besonders gerne (nach Häufigkeit) spielen?
+
+```{r Spielerpräferenz}
+pref_runner  <- sjt.xtab(runner_liga$Spieler, runner_liga$Fraktion, 
+                         showExpected = T, showLegend = T, highlightTotal = T,
+                         no.output = T, useViewer = F)
+
+pref_konzern <- sjt.xtab(konzern_liga$Spieler, konzern_liga$Fraktion,
+                         showExpected = T, showLegend = T, highlightTotal = T,
+                         no.output = T, useViewer = F)
+```
+
+<div class = "col2">
+`r pref_runner$knitr`
+`r pref_konzern$knitr`
+</div>
+
 
 ## Siege
 
@@ -229,7 +248,7 @@ sieg_tbl <- liga %>% filter(Seite == "Konzern", Punkte == 2)
     cosmetics + theme(legend.position = "none")
 
 chisq_sieg <- sjt.xtab(sieg_tbl$Siegbedingung, sieg_tbl$Fraktion,
-                       no.output = T, useViewer = F)
+                       showExpected = T,  no.output = T, useViewer = F)
 ```
 
 Sieht eigentlich ganz gesund aus; Konzerne gewinnen öfter durch Punkte. Schauen wir uns das mal genauer an:
@@ -241,8 +260,10 @@ ggplot(sieg_tbl, aes(x = Siegbedingung, fill = Fraktion)) +
   scale_y_continuous(labels = percent) +
   kon_fill + cosmetics
 ```
-  
+ 
+<div align = "center">
 `r chisq_sieg$knitr`  
+</div>
 
 Nunja. Weyland tut, was Weyland tut, aber ansonsten scheint es nur den ein oder anderen Butchershop o.ä. zu geben. Unser p liegt bei etwa `r round(fisher.test(sieg_tbl$Siegbedingung, sieg_tbl$Fraktion)$p.value, 3)` (mit durchaus nennenswerter Effektgröße), d.h. in diesem Fall sogar, dass wir ne relativ kuschelige Liga haben. Abgesehen, wie gesagt, von Weyland. Bei Weyland wird nicht gekuschelt.
 
