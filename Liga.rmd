@@ -206,6 +206,14 @@ liga %>%
 Hier beginnt der eigentliche Spaß. Also für mich zumindest. To the research! /o/  
 Disclaimer: p-Werte! Sind sie nicht einfach herzallerliebst? Man muss unsere albernen, kleinen p-Werte einfach lieben. Will sagen: Die haben hier noch viel weniger Aussagekraft als sowieso schon, aber ich benutz sie hier trotzdem ganz regulär. For the lulz.
 
+Außerdem sei noch angemerkt, dass für die weitere Analyse Jan und Jannis aus der Analyse genommen sind, da beide nur jeweils ein Spiel gespielt haben.
+
+```{r filter}
+liga         <- filter(liga, Spieler != "Jannis")
+runner_liga  <-
+konzern_liga <- 
+```
+
 ## Präferenzen
 
 Haben wir in unserer Liga Leute, die bestimmte Fraktionen besonders gerne (nach Häufigkeit) spielen?
