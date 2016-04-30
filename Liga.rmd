@@ -230,7 +230,7 @@ cramer <- function(tbl) {
 ```
 
 <div class = "col2">
-`r pref_runner$knitr`
+`r pref_runner$knitr` <br />
 `r pref_konzern$knitr`
 </div>
 
@@ -256,8 +256,8 @@ siege <- ftable(table(as.character(liga$Punkte), liga$Seite))
 ```
 
 ...hat grad jemand *Brave New World* gesagt?  
-Gleiches Spiel wie bei den Präferenzen: Ein Chi-Square Test ergibt ein p von 
-`r if (chisq.test(siege)$p.value < 0.001) {"< 0.001"} else {round(chisq.test(siege)$p.value, 3)}` mit einer Effektgröße von `r cramer(siege)`. I, for one, welcome our new corporate overlords.
+Gleiches Spiel wie bei den Präferenzen: Ein Chi-Square Test ergibt *p 
+`r if (chisq.test(siege)$p.value < 0.001) {"< 0.001"} else {round(chisq.test(siege)$p.value, 3)}`* mit einer Effektgröße von `r cramer(siege)`. I, for one, welcome our new corporate overlords.
 
 #### Brauchen wir eine bedingungslose Plascreteversorgung?
 
