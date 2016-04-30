@@ -27,7 +27,7 @@ Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Be
 **Anmerkung:**  
 Tobias hat als einziger ein Spiel gegen Jan gespielt, die Punkte aus dem Spiel wurden aus der Wertung genommen.
 
-```{r, Punktestand, echo = F, warning = F, message = F}
+```{r, Punktestand}
   liga %>% 
     filter(Saison == 2) %>% 
     group_by(Spieler) %>% 
@@ -46,7 +46,7 @@ Tobias hat als einziger ein Spiel gegen Jan gespielt, die Punkte aus dem Spiel w
 
 ## Spiel"übersicht"
 
-Sieht zur Zeit *(Prickle-Prickle, 6th Day of Discord)* reichlich schräg aus...
+Sieht zur Zeit *(Prickle-Prickle, 6th Day of Discord)* noch etwas schräg aus...
 
 ```{r Spiele}
 games <- liga %>% 
@@ -71,15 +71,15 @@ yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
 
 ### Moar (irrelevante) Tabellen!
 
-```{r sidestat}
-# liga %>% 
-#   filter(Saison == 2) %>% 
-#   group_by(Spieler) %>% 
-#   summarize(Spiele = n()/2,
-#             "Agendapunkte / Spiel" = sum(Agendapunkte, na.rm = T) / (n()/2),
-#             "Punkte pro Spiel"     = sum(Punkte, na.rm = T) / (n()/2),
-#             "Flatlines"            = tally(Siegbedingung[Siegbedingung == "Flatline"]))
-#             "Geflatlined worden"   = 
+```{r eval = F, include = F, sidestat}
+liga %>% 
+ filter(Saison == 2) %>% 
+ group_by(Spieler) %>% 
+ summarize(Spiele = n()/2,
+           "Agendapunkte / Spiel" = sum(Agendapunkte, na.rm = T) / (n()/2),
+           "Punkte pro Spiel"     = sum(Punkte, na.rm = T) / (n()/2),
+           "Flatlines"            = tally(Siegbedingung[Siegbedingung == "Flatline"]))
+           "Geflatlined worden"   = 
 ```
 
 # "Ewige" Liga
@@ -88,7 +88,7 @@ yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
 
 ### nach Fraktion
 
-```{r, IDs, echo = F}
+```{r, IDs}
   ggplot(liga, aes(x = Fraktion, fill = Fraktion)) +
     geom_bar(color = "black") +
     labs(x = "", y = "Spiele") +
@@ -101,7 +101,7 @@ yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
   
 ### nach ID
 
-```{r, IDs_Konzern, echo = F}
+```{r, IDs_Konzern}
   liga %>% 
     filter(Seite == "Konzern") %>% 
     ggplot(aes(x = ID, fill = Fraktion)) +
@@ -114,7 +114,7 @@ yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
             legend.position = "none")
 ```
 
-```{r, IDs_Runner, echo = F}
+```{r, IDs_Runner}
   liga %>% 
     filter(Seite == "Runner") %>% 
     ggplot(aes(x = ID, fill = Fraktion)) +
@@ -126,6 +126,16 @@ yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
       theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
 ```
+
+#### Disclaimer
+
+Ab jetzt sei angemerkt, dass im Weiteren Jan und Jannis aus der Analyse genommen werden, da beide nur jeweils ein Spiel gespielt haben.
+
+```{r filter}
+liga         <- filter(liga, Spieler != "Jannis", Spieler != "Jan")
+runner_liga  <- filter(runner_liga, Spieler != "Jannis", Spieler != "Jan")
+konzern_liga <- filter(konzern_liga, Spieler != "Jannis", Spieler != "Jan")
+```
   
 ## Runs
 
@@ -133,8 +143,8 @@ yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
 
 Der graue Balken ist die durchschnittliche Anzahl Runs über alle Spieler hinweg und die schwarzen Balken sind entsprechend der Durchschnitt der jeweiligen Person.
 
-```{r, Runs_Spieler, warning = F, echo = F}
-ggplot(liga, aes(x = Spieler, y = Runs, color = Spieler)) +
+```{r, Runs_Spieler}
+ggplot(runner_liga, aes(x = Spieler, y = Runs, color = Spieler)) +
   geom_point(position = "jitter") +
   stat_summary(fun.y = "mean", fun.ymax = "mean", fun.ymin = "mean", 
                colour = "black", size = 0.5, geom = "errorbar") +
@@ -148,7 +158,7 @@ ggplot(liga, aes(x = Spieler, y = Runs, color = Spieler)) +
 
 Das ergibt einen seltsamen Dichteplot, der erst sinnvoll ist, sobald einiges an Daten angefallen ist (Nachtrag mitten in Season 2: so jetzt halt in etwa).
 
-```{r, Runs_Fraktion, warning = F, echo = F}
+```{r, Runs_Fraktion}
   liga %>%
     filter(Seite == "Runner", Fraktion != "Neutral") %>%
     ggplot(aes(x = Runs, fill = Fraktion)) +
@@ -158,26 +168,10 @@ Das ergibt einen seltsamen Dichteplot, der erst sinnvoll ist, sobald einiges an 
       run_fill + cosmetics
 ```
 
-### Runs pro ID
-
-Ganz schön unübersichtlich, ich überleg mir mal was neues...
-
-```{r, Runs_ID, warning = F, echo = F}
-  liga %>%
-    filter(Seite == "Runner") %>%
-    ggplot(aes(x = Fraktion, y = Runs, color = ID)) +
-      geom_point(size = 4, color = "black") +
-      geom_point(size = 3) +
-      labs(x = NULL, y = "Runs") +
-      scale_color_viridis(discrete = T) +
-      cosmetics
-```
-
 ### Runs auf Systeme
 
-```{r, eval=FALSE, include=FALSE, runs_server_alt, warning=F}
-  liga %>%
-    filter(Seite == "Runner") %>%
+```{r, eval=FALSE, include=FALSE, runs_server_alt}
+  runner_liga %>%
     gather(Server, Anzahl, `R&D`, HQ, Archiv, Remote) %>%
     ggplot(aes(x = Server, y = Anzahl, fill = Spieler)) +
       geom_bar(stat = "identity", position = "dodge", color = "black") +
@@ -188,8 +182,7 @@ Ganz schön unübersichtlich, ich überleg mir mal was neues...
 ```
 
 ```{r runs_server}
-liga %>% 
-  filter(Seite == "Runner", Spieler != "Jannis") %>% 
+runner_liga %>%
   gather(Systeme, Runzahl, Archiv, `R&D`, HQ, Remote) %>% 
   ggplot(., aes(x = Spieler, y = Systeme, fill = Runzahl)) + 
     geom_tile(color = "white", size = 0.4) +
@@ -206,13 +199,6 @@ liga %>%
 Hier beginnt der eigentliche Spaß. Also für mich zumindest. To the research! /o/  
 Disclaimer: p-Werte! Sind sie nicht einfach herzallerliebst? Man muss unsere albernen, kleinen p-Werte einfach lieben. Will sagen: Die haben hier noch viel weniger Aussagekraft als sowieso schon, aber ich benutz sie hier trotzdem ganz regulär. For the lulz.
 
-Außerdem sei noch angemerkt, dass für die weitere Analyse Jan und Jannis aus der Analyse genommen sind, da beide nur jeweils ein Spiel gespielt haben.
-
-```{r filter}
-liga         <- filter(liga, Spieler != "Jannis")
-runner_liga  <-
-konzern_liga <- 
-```
 
 ## Präferenzen
 
@@ -226,6 +212,21 @@ pref_runner  <- sjt.xtab(runner_liga$Spieler, runner_liga$Fraktion,
 pref_konzern <- sjt.xtab(konzern_liga$Spieler, konzern_liga$Fraktion,
                          showExpected = T, showLegend = T, highlightTotal = T,
                          no.output = T, useViewer = F)
+
+chisq_runner  <- table(runner_liga$Spieler, runner_liga$Fraktion)
+chisq_konzern <- table(konzern_liga$Spieler, konzern_liga$Fraktion)
+
+cramer <- function(tbl) {
+  chi <- chisq.test(tbl)
+  
+  cramer <- 
+    sqrt(
+      (chi$statistic / sum(chi$observed)) /
+        (min(c(ncol(tbl), nrow(tbl))) - 1)
+    )
+  
+  return(round(cramer, 3))
+}
 ```
 
 <div class = "col2">
@@ -233,16 +234,30 @@ pref_konzern <- sjt.xtab(konzern_liga$Spieler, konzern_liga$Fraktion,
 `r pref_konzern$knitr`
 </div>
 
+Sieht ganz so aus: Bei einem n von jeweils 70 kommen signifikante Zusammenhänge *(p 
+`r if (chisq.test(chisq_runner)$p.value < 0.001) {"< 0.001"} else {round(chisq.test(chisq_runner)$p.value, 3)}`
+)* heraus, mit Effektgrößen von `r cramer(chisq_runner)` auf Runner- und `r cramer(chisq_konzern)` auf Konzernseite. Das ist ziemlich solide; wer im einzelnen unsere lokalen Criminals, Newsteams oder urbanen Planer sind, lässt sich aus den Tabellen entnehmen. Die untere Zahl steht jeweils für die erwartete Spielhäufigkeit, wenn wir eben keine Präferenzen hätten.
+
 
 ## Siege
 
 #### Welcome to Corp Town
 
+Ist unsere Netrunner Meta ein anarchistisches Valhalla oder ein kapitalistischer Alptraum?
+
 ```{r Corp_vs_Runner}
 liga %>% 
   group_by(Seite) %>% 
-  summarize(Siege = sum(Punkte)/2)
+  summarize("Siege"      = sum(Punkte)/2,
+            "in Prozent" = percent((sum(Punkte)/2)/n(), 1)) %>% 
+  knitr::kable()
+
+siege <- ftable(table(as.character(liga$Punkte), liga$Seite))
 ```
+
+...hat grad jemand *Brave New World* gesagt?  
+Gleiches Spiel wie bei den Präferenzen: Ein Chi-Square Test ergibt ein p von 
+`r if (chisq.test(siege)$p.value < 0.001) {"< 0.001"} else {round(chisq.test(siege)$p.value, 3)}` mit einer Effektgröße von `r cramer(siege)`. I, for one, welcome our new corporate overlords.
 
 #### Brauchen wir eine bedingungslose Plascreteversorgung?
 
@@ -283,8 +298,7 @@ Nunja. Weyland tut, was Weyland tut, aber ansonsten scheint es nur den ein oder 
 Geht wieder los mit Daten angucken:
 
 ```{r Spieldauer_tbl}
-dauer <- liga %>% 
-  filter(Spieler != "Jannis") %>% 
+dauer <- liga %>%
   group_by(Spieler) %>% 
   summarize("Min / Runde"  = round(mean(Dauer / Runden, na.rm = T), 2), 
             "Dauer (Min.)" = round(mean(Dauer, na.rm = T), 0))
@@ -319,7 +333,7 @@ Ist noch eher suboptimal; da halt immer zwei Leute ein Spiel spielen liegen jewe
 1. Runden/Dauer nach Spieler (**Konzern**)  
 2. Runden/Dauer nach Spieler (**Runner**)  
 
-```{r, Runden_Dauer, echo = F}
+```{r, Runden_Dauer}
   liga %>% 
     filter(is.na(Runs)) %>% 
     ggplot(aes(x = Dauer, y = Runden, color = Spieler)) +
@@ -333,9 +347,8 @@ Ist noch eher suboptimal; da halt immer zwei Leute ein Spiel spielen liegen jewe
 
 ### Runden und Runs
 
-```{r, Runden_Runs, echo = F}
-  liga %>%
-    filter(Seite == "Runner") %>%
+```{r, Runden_Runs}
+  runner_liga %>%
     ggplot(aes(x = Runden, y = Runs, color = Fraktion)) +
       geom_point(size = 4, color = "black") +
       geom_point(size = 3) +
