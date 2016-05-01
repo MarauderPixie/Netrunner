@@ -205,11 +205,11 @@ Disclaimer: p-Werte! Sind sie nicht einfach herzallerliebst? Man muss unsere alb
 Haben wir in unserer Liga Leute, die bestimmte Fraktionen besonders gerne (nach Häufigkeit) spielen?
 
 ```{r Spielerpräferenz}
-pref_runner  <- sjt.xtab(runner_liga$Spieler, runner_liga$Fraktion, 
+pref_runner  <- sjt.xtab(runner_liga$Spieler, runner_liga$Fraktion, title = "Runner",
                          showExpected = T, showLegend = T, highlightTotal = T,
                          no.output = T, useViewer = F)
 
-pref_konzern <- sjt.xtab(konzern_liga$Spieler, konzern_liga$Fraktion,
+pref_konzern <- sjt.xtab(konzern_liga$Spieler, konzern_liga$Fraktion, title = "Konzerne",
                          showExpected = T, showLegend = T, highlightTotal = T,
                          no.output = T, useViewer = F)
 
@@ -271,7 +271,8 @@ sieg_tbl <- liga %>% filter(Seite == "Konzern", Punkte == 2)
     cosmetics + theme(legend.position = "none")
 
 chisq_sieg <- sjt.xtab(sieg_tbl$Siegbedingung, sieg_tbl$Fraktion,
-                       showExpected = T,  no.output = T, useViewer = F)
+                       showExpected = T, highlightTotal = T,
+                       no.output = T, useViewer = F)
 ```
 
 Sieht eigentlich ganz gesund aus; Konzerne gewinnen öfter durch Punkte. Schauen wir uns das mal genauer an:
