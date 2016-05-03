@@ -262,7 +262,7 @@ Gleiches Spiel wie bei den Präferenzen: Ein Chi-Square Test ergibt *p
 #### Brauchen wir eine bedingungslose Plascreteversorgung?
 
 ```{r Siegbedingung}
-sieg_tbl <- liga %>% filter(Seite == "Konzern", Punkte == 2)
+sieg_tbl <- konzern_liga %>% filter(Punkte == 2)
 
   ggplot(sieg_tbl, aes(x = Siegbedingung, fill = Siegbedingung)) +
     geom_bar(color = "black") +
@@ -320,6 +320,54 @@ tadaa_aov(model, liga, print = "markdown")
 ```
 
 Stellt sich raus: scrollen Sie weiter, es gibt nichts zu sehen.  
+
+### Wird länger nachgedacht, je weiter das Spiel ist?
+
+Bei reiner Spieldauer ist also nichts zu holen, aber Bodo hatte eine ziemlich kluge Idee: Wenn die Spiele länger dauern, dann eventuell, weil mehr (sozusagen) auf dem Spiel steht, also beide z.B. bei Matchpoint liegen. Die Frage lautet also:  
+
+> Nimmt die durchschnittliche Dauer pro Zug zu, je länger das Spiel selber dauert?
+
+Dazu können wir uns zwei Prädiktoren angucken: die **Spieldauer** pro ganzem Spiel und die **Anzahl der Runden** pro Spiel; das auch jeweils einzeln und in Kombination. In einem weiteren Schritt können wir das dann auch noch um die einzelnen Spielenden erweitern.  
+
+#### Zugdauer / Spieldauer
+
+Hier zeigt sich ein relativ deutliches Bild:
+
+```{r Zug/Dauer}
+ggplot(liga, aes(x = Dauer, y = Schnitt_Zug)) + 
+  geom_point(color = "#00e673") + 
+  geom_smooth(method = "lm", se = T, color = "#006666") +
+  labs(x = "Gesamtdauer pro Spiel (Min.)", y = "mittlere Dauer pro Zug (Min.)") +
+  cosmetics
+```
+
+Unser r liegt bei `r round(cor(liga$Dauer, liga$Schnitt_Zug, use = "complete.obs"), 2)`, das ist fast schon ein starker Zusammenhang. Eine Regression ergibt Folgendes:
+
+```{r Zug/Dauer-lm}
+model_dauer <- summary(lm(Schnitt_Zug ~ Dauer, liga))
+
+model_dauer
+```
+
+Is grad nich besonders anschaulich, aber stehen spannende Sachen drin. Der p-Wert für den Zusammenhang mit der Gesamtdauer liegt bei `r if (model_dauer$coefficients[2, 4] < 0.001) {"< 0.001"} else {round(model_dauer$model_dauer$coefficients[2, 4], 2)}` und das angepasste $R^2$ bei `r round(model_dauer$adj.r.squared, 2)`, was auch durchaus solide ist.  
+Aber Vorsicht: Das heißt **nicht**, dass die durschnittliche Zugdauer zunimmt, je länger das Spiel dauert, sondern nur, dass die Züge in längeren Spielen **generell** länger sind, was wiederum wenig überraschend ist.  
+
+An dieser Stelle lässt sich also nichts holen. Weiter gehts:
+
+#### Zugdauer / Anzahl Runden
+
+Spiele dauern also lange, wenn die Züge lange dauern. Thanks, Captain Obvious.  
+Wie sieht das also aus, wenn wir die Zugdauer auf die Anzahl an Runden pro Spiel beziehen?
+
+```{r Zug/Runden}
+ggplot(liga, aes(x = Runden, y = Schnitt_Zug)) + 
+  geom_point(color = "#00e673") + 
+  geom_smooth(method = "lm", se = T, color = "#006666") +
+  labs(x = "Runden pro Spiel", y = "mittlere Dauer pro Zug (Min.)") +
+  cosmetics
+```
+
+Sieht eher ernüchternd aus; das r liegt in diesem Fall bei schlappen `r round(cor(liga$Runden, liga$Schnitt_Zug, use = "complete.obs"), 2)`, das ist eigentlich kaum der Rede wert. Allerdings...
 
 *Fortsetzung folgt*
 
