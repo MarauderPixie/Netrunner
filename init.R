@@ -16,7 +16,9 @@
     library(formattable)  # lots of tables here, might as well make 'm pretty
 
 # Daten einlesen
-    liga  <- gs_title("Netrunner Liga") %>% gs_read()
+    liga  <- gs_title("Netrunner Liga") %>% 
+      gs_read() %>% 
+      mutate("Schnitt_Zug" = (Dauer / Runden))
     score <- gs_title("Netrunner Highscore") %>% 
               gs_read() %>% 
               filter(Fraktion != "Neutral", Spieler != "Jan (TO)")
