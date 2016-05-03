@@ -18,6 +18,22 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
 
 # Spielwiese
 
+### data manipulation & exploration
+
+```{r, manipulation, echo = T}
+liga <- liga %>% 
+  mutate("Schnitt_Zug" = (Dauer / Runden))
+
+
+ggplot(liga, aes(x = Dauer, y = Schnitt_Zug)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = F) +
+  scale_color_brewer(palette = "Set1") + 
+  theme_tufte()
+```
+
+### Interaktive Plots
+
 ```{r, fig.height=18, message=F, warning=F, chunky-chunk, echo=F}
   library(viridisLite)
 
