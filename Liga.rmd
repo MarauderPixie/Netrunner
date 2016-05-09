@@ -369,6 +369,27 @@ ggplot(liga, aes(x = Runden, y = Schnitt_Zug)) +
 
 Sieht eher ernüchternd aus; das r liegt in diesem Fall bei schlappen `r round(cor(liga$Runden, liga$Schnitt_Zug, use = "complete.obs"), 2)`, das ist eigentlich kaum der Rede wert. Allerdings...
 
+#### Zugdauer / Anzahl Runden pro Person
+
+...wollten wir ja noch mal nachschauen, ob unsere Spielenden da nicht irgendeinen Einfluss haben. Für die Spieldauer können wir uns das sparen, aber für die Anzahl Runden könnte das interessant sein:
+
+```{r Zug/Runden-Spieler}
+ggplot(liga, aes(x = Runden, y = Schnitt_Zug, color = Spieler)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = F) +
+  labs(x = "Runden pro Spiel", y = "mittlere Dauer pro Zug (Min.)") +
+  scale_color_gdocs() +
+  cosmetics
+```
+
+Hübsches Chaos, nicht wahr? Und stellt sich raus: wir haben offenbar mehr oder weniger 2 Arten von Spielern:  
+
+1. Diejenigen, deren Züge **länger** sind, je länger das Spiel dauert  
+  *(Falk, Tobias, Kai und zu einem vernachlässigbaren Teil Johannes)*
+2. Diejenigen deren Züge **kürzer** sind, je länger das Spiel dauert  
+  *(Bodo, Bjarne, Josh und ebenfalls vernachlässigbar Paul)*  
+
+
 *Fortsetzung folgt*
 
 
