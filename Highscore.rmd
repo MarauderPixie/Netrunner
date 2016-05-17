@@ -83,7 +83,6 @@ Durch klicken auf die Namen in der Legende und in der oberen Leiste bekommt man 
 
 ## Siege nach Fraktion
 
-<div class="col2">
 ### Konzerne
 
 ```{r, Fraktionsliste_Konzerne}
@@ -99,8 +98,6 @@ Durch klicken auf die Namen in der Legende und in der oberen Leiste bekommt man 
     knitr::kable()
 ```
 
-<br />
-
 ### Runner
 
 ```{r, Fraktionsliste_Runner}
@@ -115,7 +112,7 @@ Durch klicken auf die Namen in der Legende und in der oberen Leiste bekommt man 
     arrange(desc(Ratio)) %>% 
     knitr::kable()
 ```
-</div>
+
 
 ## Spielhäufigkeiten
 
@@ -190,9 +187,11 @@ chisq_sieg <- sjt.xtab(konzern_score$Fraktion, konzern_score$Siegbedingung,
                        no.output = T, useViewer = F)
 ```
 
+<div align = "center">
 `r chisq_sieg$knitr`
+</div>
 
-Nicht nur, dass Jinteki (!) mehr Flatlines als reguläre Siege hat, nein, sogar Haas-Bioroid hat schon den ein oder anderen Flatline bewerkstelligt. Unsere Meta ist kein gemütlicher Ort für Runner...
+Nicht nur, dass Jinteki (!) mehr Flatlines als reguläre Siege hat[^1], nein, sogar Haas-Bioroid hat schon den ein oder anderen Flatline bewerkstelligt. Unsere Meta ist kein gemütlicher Ort für Runner...
 
 #### Und in bunt:
 
@@ -209,3 +208,5 @@ konzern_score %>%
       # scale_y_continuous(labels = percent) +
       kon_fill + cosmetics
 ```
+
+[^1]: Ist für Jinteki jetzt nicht *soo* ungewöhnlich, aber bei den Häufigkeiten sehen wir ja, dass hauptsächlich RP, Palana und IG gespielt werden. Also IDs, die nicht unbedingt den Flatline als Plan A haben.
