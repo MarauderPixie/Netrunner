@@ -93,3 +93,39 @@ ggplot(score, aes(x = Spieler, fill = Seite)) +
   geom_bar(aes(y = (..count..)/sum(..count..)), color = "black") +
   coord_flip()
 ```
+
+## Siege nach Fraktion
+
+### Konzerne
+
+<div align="center">
+```{r, Fraktionsliste_Konzerne}
+  score %>% 
+    filter(Seite == "Konzern") %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+</div>
+
+### Runner
+
+<div align="center">
+```{r, Fraktionsliste_Runner}
+  score %>% 
+    filter(Seite == "Runner") %>% 
+    group_by(Fraktion) %>% 
+    summarize("Spiele" = n(),
+              "Siege" = sum(Punkte)/2,
+              "Ratio" = percent((sum(Punkte)/2)/Spiele, 1)) %>%
+    arrange(Spiele) %>% 
+    arrange(desc(Siege)) %>%
+    arrange(desc(Ratio)) %>% 
+    knitr::kable()
+```
+</div>
