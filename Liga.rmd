@@ -148,7 +148,7 @@ ggplot(runner_liga, aes(x = Spieler, y = Runs, color = Spieler)) +
   geom_point(position = "jitter") +
   stat_summary(fun.y = "mean", fun.ymax = "mean", fun.ymin = "mean", 
                colour = "black", size = 0.5, geom = "errorbar") +
-  geom_hline(yintercept = mean(liga$Runs, na.rm = T), size = 1, color = "gray") +
+  geom_hline(yintercept = mean(runner_liga$Runs, na.rm = T), size = 1, color = "gray") +
   labs(x = NULL, y = "Runs") + 
   scale_color_brewer(palette = "Set1") +
   cosmetics + theme(legend.position = "none")
