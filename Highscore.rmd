@@ -34,6 +34,26 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
       check.rows = F, format = "pandoc"))
 ```
 
+## Spielübersicht
+
+"Übersicht". x)
+
+```{r Spieluebersicht}
+as.data.frame.matrix(crossprod(table(score$Spiel, score$Spieler))) %>% 
+  gather(Spieler, Spiele, Bjarne, Bodo, Boray, Falk, Jan,
+         Johannes, Josh, `Josh R.`, Kai, Ole, Paul, Tobias) %>% 
+  mutate(Gegner = rep(c("Bjarne", "Bodo", "Boray", "Falk", "Jan",
+                        "Johannes", "Josh", "Josh R.", 
+                        "Kai", "Ole", "Paul", "Tobias"), 12)) %>% 
+  filter(Spieler != Gegner, Spiele != 0) %>% 
+  ggplot(., aes(x = Spieler, y = Gegner, fill = Spiele)) + 
+    geom_tile(color = "white", size = 0.5) +
+    geom_text(aes(label = Spiele), color = "white") +
+    labs(x = NULL, y = NULL) +
+    scale_fill_viridis(option = "B") +
+    cosmetics + theme(legend.position = "top")
+```
+
 ## Siege pro Woche pro Spieler (pro ID)
 
 Durch klicken auf die Namen in der Legende und in der oberen Leiste bekommt man das etwas übersichtlicher; an brauchbaren Defaults arbeite ich noch...
@@ -137,4 +157,55 @@ Durch klicken auf die Namen in der Legende und in der oberen Leiste bekommt man 
       cosmetics +
       theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
+```
+
+
+## Präferenzen
+
+Wer spielt was am liebsten? Ne richtige Analyse ist grad nicht machbar (die Neuen haben noch zu wenig Spiele... :D), aber man kann durchaus Trends erkennen.  
+Die blau/grüne Zahl gibt an, wie oft eine Fraktion gespielt würde, wenn keine Präferenz vorläge.
+
+```{r Praeferenzen}
+pref_runner  <- sjt.xtab(runner_score$Spieler, runner_score$Fraktion, title = "Runner",
+                         showExpected = T, showSummary = F, highlightTotal = T,
+                         no.output = T, useViewer = F)
+
+pref_konzern <- sjt.xtab(konzern_score$Spieler, konzern_score$Fraktion, title = "Konzerne",
+                         showExpected = T, showSummary = F, highlightTotal = T,
+                         no.output = T, useViewer = F)
+```
+
+<div class = "col2">
+`r pref_runner$knitr` <br />
+`r pref_konzern$knitr`
+</div>
+
+
+## A Plascrete in your deck keeps the Flatline in check. Oder so.
+Kuschel-Corps oder Butchershops?
+
+```{r Siegbedingungen_Kons}
+chisq_sieg <- sjt.xtab(konzern_score$Fraktion, konzern_score$Siegbedingung,
+                       title = "Konzernsiege", showExpected = T, highlightTotal = T,
+                       no.output = T, useViewer = F)
+```
+
+`r chisq_sieg$knitr`
+
+Nicht nur, dass Jinteki (!) mehr Flatlines als reguläre Siege hat, nein, sogar Haas-Bioroid hat schon den ein oder anderen Flatline bewerkstelligt. Unsere Meta ist kein gemütlicher Ort für Runner...
+
+#### Und in bunt:
+
+```{r Siegbedingungen_Kons_plot}
+konzern_score %>% 
+  filter(!is.na(Siegbedingung)) %>% 
+  ggplot(., aes(x = Fraktion, group = Siegbedingung)) + 
+    geom_bar(position = "dodge", color = "black", fill = c(
+      "#341145", "#864EA2", "#990000", "#ff4c4c", 
+      "#B29600", "#ffe34c", "#2a3517", "#768858")) +
+      labs(y = "Siege", x = NULL) +
+      annotate("text", x = 3.75, y = 27, size = 5,
+               label = "hell = Punktsieg \ndunkel = Flatline") +
+      # scale_y_continuous(labels = percent) +
+      kon_fill + cosmetics
 ```
