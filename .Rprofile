@@ -1,5 +1,5 @@
 ## Print this on start so I know it's loaded.
-## cat("Loading custom .Rprofile")  
+cat("Loading custom .Rprofile")  
 
 
 ### Startup
@@ -10,7 +10,7 @@ startup <- function(){
 
   msg1 <- sprintf("Oh, it's you again. Hi! \nThis is %s.
                   \n%s \nLet's crunch some numbers!",
-                  version$version.string,
+                  version$version.string, "(", version$nickname, ")",
                   ddate)
   cat(msg1, "\n")
 }
