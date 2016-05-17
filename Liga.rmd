@@ -244,6 +244,7 @@ Sieht ganz so aus: Bei einem n von jeweils 70 kommen signifikante Zusammenhänge
 #### Welcome to Corp Town
 
 Ist unsere Netrunner Meta ein anarchistisches Valhalla oder ein kapitalistischer Alptraum?
+**WICHTIG:** Nochmal zurück in die 5te Klasse; Dreisatz üben! 
 
 ```{r Corp_vs_Runner}
 liga %>% 
