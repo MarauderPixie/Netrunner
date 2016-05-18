@@ -21,6 +21,7 @@
       mutate("Schnitt_Zug" = (Dauer / Runden))
     score <- gs_title("Netrunner Highscore") %>% 
               gs_read() %>% 
+              mutate(Punkte = car::recode(Punkte, "0 = 'Verloren'; 2 = 'Gewonnen'")) %>% 
               filter(Fraktion != "Neutral", Spieler != "Jan (TO)")
     # liga  <- read_csv("./Liga.csv")
     
