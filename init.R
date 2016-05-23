@@ -21,7 +21,7 @@
       mutate("Schnitt_Zug" = (Dauer / Runden))
     score <- gs_title("Netrunner Highscore") %>% 
               gs_read() %>% 
-              mutate(Punkte = car::recode(Punkte, "0 = 'Verloren'; 2 = 'Gewonnen'")) %>% 
+              mutate(Ausgang = car::recode(Punkte, "0 = 'Verloren'; 2 = 'Gewonnen'")) %>% 
               filter(Fraktion != "Neutral", Spieler != "Jan (TO)")
     # liga  <- read_csv("./Liga.csv")
     
@@ -47,7 +47,7 @@
     
     
 # plot cosmetics
-cosmetics <- theme_few() +
+cosmetics <- theme_hc() +
              theme(title = element_text(size = 14),
                    axis.text    = element_text(size = 12),
                    legend.title = element_text(size = 12),
