@@ -54,11 +54,15 @@ as.data.frame.matrix(crossprod(table(score$Spiel, score$Spieler))) %>%
     cosmetics + theme(legend.position = "top")
 ```
 
+
+## Hier waren mal fancy bar charts
+
+```{r WochenspielerIDsiege, eval = F}
 ## Siege pro Woche pro Spieler (pro ID)
 
 Durch klicken auf die Namen in der Legende und in der oberen Leiste bekommt man das etwas übersichtlicher; an brauchbaren Defaults arbeite ich noch...
 
-```{r WochenspielerIDsiege, eval = F}
+
   score %>%
     group_by(Kalenderwoche, Spieler) %>% 
     summarize("Wins" = sum(Punkte)/2,
@@ -165,7 +169,7 @@ ggplot(wins, aes(x = Spieler, color = Seite)) +
 
 ```{r, IDs, echo = F}
   ggplot(score, aes(x = Fraktion, fill = Fraktion)) +
-    geom_bar(color = "black") +
+    geom_bar(color = "black", alpha = 0.8) +
     labs(x = "", y = "Spiele") +
     facet_grid(. ~ Seite, scales = "free_x") +
     faction_fill +
