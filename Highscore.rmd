@@ -69,6 +69,8 @@ Durch klicken auf die Namen in der Legende und in der oberen Leiste bekommt man 
 
 ## Siege nach Seite
 
+### Allgemein
+
 ```{r, Seitenliste}
   score %>% 
     group_by(Seite) %>% 
@@ -80,6 +82,49 @@ Durch klicken auf die Namen in der Legende und in der oberen Leiste bekommt man 
     arrange(desc(Ratio)) %>% 
     knitr::kable()
 ```
+
+### Pro Spieler
+
+```{r SeiteproSpieler}
+wins <- score %>% 
+  group_by(Seite, Spieler) %>% 
+  summarize(Spiele  = n(),
+            Siege   = sum(Punkte)/2,
+            Prozent = round(Siege / Spiele * 100, 1)) %>% 
+  mutate(Prozent = ifelse(Seite == "Konzern", Prozent * -1, Prozent * 1))
+
+
+
+ggplot(wins, aes(x = Spieler, color = Seite)) +
+  geom_linerange(data = wins[wins$Seite == "Runner", ],
+                 aes(ymin = 10, ymax = 10 + Prozent), size = 12, alpha = 0.8) +
+  
+  geom_linerange(data = wins[wins$Seite == "Konzern", ],
+                 aes(ymin = -10, ymax = -10 + Prozent), size = 12, alpha = 0.8) +
+  
+  geom_label(aes(x = Spieler, y = 0, label = Spieler, family = "sans"), 
+             inherit.aes = F, size = 5, label.padding = unit(0.0, "lines"), 
+             label.size = 0, label.r = unit(0.0, "lines"), color = "black") +
+  
+  scale_y_continuous(breaks = c(c(-100, -80, -60, -40, -20, 0) + -10, 
+                                c(0, 20, 40, 60, 80, 100) + 10),
+                     labels = c("100%", "80%", "60%", "40%", "20%", "0%",
+                                "0%", "20%", "40%", "60%", "80%", "100%")) +
+  
+  labs(x = NULL, y = NULL, title = "Siege pro Spieler pro Seite") +
+  
+  scale_color_manual(name = "", values = c(Konzern = "#3288bd", Runner = "#d53e4f"),
+                     labels = c("Konzern", "Runner")) +
+  
+  theme_hc() + coord_flip() + 
+  theme(axis.text.y   = element_blank(), panel.grid.major.x = element_line(color = "gray"),
+        axis.ticks.y  = element_blank(), panel.grid.major.y = element_blank(),
+        legend.position = "top", title = element_text(size = 14), axis.text = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.text  = element_text(size = 10),
+        strip.text   = element_text(size = 14))
+```
+
 
 ## Siege nach Fraktion
 
