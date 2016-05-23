@@ -47,7 +47,7 @@ as.data.frame.matrix(crossprod(table(score$Spiel, score$Spieler))) %>%
                         "Kai", "Ole", "Paul", "Tobias"), 12)) %>% 
   filter(Spieler != Gegner, Spiele != 0) %>% 
   ggplot(., aes(x = Spieler, y = Gegner, fill = Spiele)) + 
-    geom_tile(color = "white", size = 0.5) +
+    geom_tile(color = "white", size = 0.5, alpha = 0.8) +
     geom_text(aes(label = Spiele), color = "white") +
     labs(x = NULL, y = NULL) +
     scale_fill_viridis(option = "B") +
@@ -183,7 +183,7 @@ ggplot(wins, aes(x = Spieler, color = Seite)) +
   score %>% 
     filter(Seite == "Konzern") %>% 
     ggplot(aes(x = ID, fill = Fraktion)) +
-      geom_bar(color = "black") +
+      geom_bar(color = "black", alpha = 0.8) +
       labs(x = "", y = "Spiele", legend = "") +
       facet_grid(. ~ Fraktion, scales = "free") +
       kon_fill +
@@ -196,7 +196,7 @@ ggplot(wins, aes(x = Spieler, color = Seite)) +
   score %>% 
     filter(Seite == "Runner") %>% 
     ggplot(aes(x = ID, fill = Fraktion)) +
-      geom_bar(color = "black") +
+      geom_bar(color = "black", alpha = 0.8) +
       labs(x = "", y = "Spiele") +
       facet_grid(. ~ Fraktion, scales = "free") +
       run_fill +
@@ -250,7 +250,7 @@ konzern_score %>%
   ggplot(., aes(x = Fraktion, group = Siegbedingung)) + 
     geom_bar(position = "dodge", color = "black", fill = c(
       "#341145", "#864EA2", "#990000", "#ff4c4c", 
-      "#B29600", "#ffe34c", "#2a3517", "#768858")) +
+      "#B29600", "#ffe34c", "#2a3517", "#768858"), alpha = 0.8) +
       labs(y = "Siege", x = NULL) +
       annotate("text", x = 3.75, y = 27, size = 5,
                label = "hell = Punktsieg \ndunkel = Flatline") +
