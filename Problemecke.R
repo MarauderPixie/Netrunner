@@ -30,9 +30,36 @@ sjt.df(plays, describe = F)
 
   # Problem: Kon und Runner ergeben zusammen(!) 100% 
   ggplot(score, aes(x = Fraktion, fill = Fraktion)) +
-    geom_bar(aes(y = (..count..) / sum(..count..) * 100),
+    geom_bar(aes(y = (..count..) / sum(..count..)),
              color = "black", alpha = 0.8) +
     labs(x = "", y = "Spiele") +
     facet_grid(. ~ Seite, scales = "free_x") +
+    scale_y_continuous(labels = percent) + 
     faction_fill +
     cosmetics + theme(legend.position = "none")
+  
+  # Beide Seiten sind ihre eigenen 100%:
+  score %>% 
+    count(Seite, Fraktion) %>% 
+    mutate(p = round(n / sum(n), 2)) %>% 
+    ggplot(., aes(x = Fraktion, y = p, fill = Fraktion)) +
+      geom_bar(color = "black", alpha = 0.8, stat = "identity") + 
+      labs(x = "", y = "Spiele") +
+      facet_grid(. ~ Seite, scales = "free_x") +
+      scale_y_continuous(labels = percent) + 
+      faction_fill +
+      cosmetics + theme(legend.position = "none")
+  
+  # Stellt sich raus: Wenn die facets ihre eigenen 100% darstellen, 
+  # sieht die Verteilung genau so aus wie bei absoluten Zahlen m()
+  konzern_score %>% 
+    count(Fraktion, ID) %>% 
+    mutate(p = round(n / sum(n), 2)) %>% 
+    ggplot(., aes(x = ID, y = p, fill = Fraktion)) +
+      geom_bar(color = "black", alpha = 0.8, stat = "identity") + 
+      labs(x = "", y = "Spiele") +
+      facet_grid(. ~ Fraktion, scales = "free") +
+      scale_y_continuous(labels = percent) + 
+      kon_fill + cosmetics + 
+      theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
+            legend.position = "none")
