@@ -90,7 +90,7 @@ liga %>%
 
 ```{r, IDs}
   ggplot(liga, aes(x = Fraktion, fill = Fraktion)) +
-    geom_bar(color = "black") +
+    geom_bar(color = "black", alpha = 0.6) +
     labs(x = "", y = "Spiele") +
     facet_grid(. ~ Seite, scales = "free_x") +
     scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", "gold1", 
@@ -105,7 +105,7 @@ liga %>%
   liga %>% 
     filter(Seite == "Konzern") %>% 
     ggplot(aes(x = ID, fill = Fraktion)) +
-      geom_bar(color = "black") +
+      geom_bar(color = "black", alpha = 0.6) +
       labs(x = "", y = "Spiele", legend = "") +
       facet_grid(. ~ Fraktion, scales = "free") +
       scale_fill_manual(values = c("darkorchid4", "red", "gold1", "darkolivegreen")) +
@@ -118,7 +118,7 @@ liga %>%
   liga %>% 
     filter(Seite == "Runner") %>% 
     ggplot(aes(x = ID, fill = Fraktion)) +
-      geom_bar(color = "black") +
+      geom_bar(color = "black", alpha = 0.6) +
       labs(x = "", y = "Spiele") +
       facet_grid(. ~ Fraktion, scales = "free") +
       scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
@@ -183,10 +183,12 @@ Das ergibt einen seltsamen Dichteplot, der erst sinnvoll ist, sobald einiges an 
 
 ```{r runs_server}
 runner_liga %>%
-  gather(Systeme, Runzahl, Archiv, `R&D`, HQ, Remote) %>% 
-  ggplot(., aes(x = Spieler, y = Systeme, fill = Runzahl)) + 
+  gather(Systeme, Sysruns, Archiv, `R&D`, HQ, Remote) %>%
+  group_by(Spieler, Systeme) %>% 
+  summarize(Sysruns = sum(Sysruns, na.rm = T)) %>% 
+  ggplot(aes(x = Spieler, y = Systeme, fill = Sysruns)) + 
     geom_tile(color = "white", size = 0.4) +
-    labs(title = "Runs pro Spieler und System",
+    labs(title = "Summe der Runs aller Spiele \n pro Spieler und System",
          x = NULL, y = NULL) +
     scale_fill_viridis(option = "D") +
     cosmetics + 
@@ -206,12 +208,12 @@ Haben wir in unserer Liga Leute, die bestimmte Fraktionen besonders gerne (nach 
 
 ```{r Spielerpräferenz}
 pref_runner  <- sjt.xtab(runner_liga$Spieler, runner_liga$Fraktion, title = "Runner",
-                         showExpected = T, showLegend = T, highlightTotal = T,
-                         no.output = T, useViewer = F)
+                         show.exp = T, show.legend = T, emph.total = T,
+                         no.output = T, use.viewer = F)
 
 pref_konzern <- sjt.xtab(konzern_liga$Spieler, konzern_liga$Fraktion, title = "Konzerne",
-                         showExpected = T, showLegend = T, highlightTotal = T,
-                         no.output = T, useViewer = F)
+                         show.exp = T, show.legend = T, emph.total = T,
+                         no.output = T, use.viewer = F)
 
 chisq_runner  <- table(runner_liga$Spieler, runner_liga$Fraktion)
 chisq_konzern <- table(konzern_liga$Spieler, konzern_liga$Fraktion)
@@ -266,21 +268,22 @@ Gleiches Spiel wie bei den Präferenzen: Ein Chi-Square Test ergibt *p
 sieg_tbl <- konzern_liga %>% filter(Punkte == 2)
 
   ggplot(sieg_tbl, aes(x = Siegbedingung, fill = Siegbedingung)) +
-    geom_bar(color = "black") +
+    geom_bar(color = "black", alpha = 0.6) +
     labs(y = "Siege") +
     scale_fill_brewer(palette = "Set1") +
     cosmetics + theme(legend.position = "none")
 
 chisq_sieg <- sjt.xtab(sieg_tbl$Siegbedingung, sieg_tbl$Fraktion,
-                       showExpected = T, highlightTotal = T,
-                       no.output = T, useViewer = F)
+                       show.exp = T, emph.total = T,
+                       no.output = T, use.viewer = F)
 ```
 
 Sieht eigentlich ganz gesund aus; Konzerne gewinnen öfter durch Punkte. Schauen wir uns das mal genauer an:
 
 ```{r chisq_sieg_plot}
 ggplot(sieg_tbl, aes(x = Siegbedingung, fill = Fraktion)) +
-  geom_bar(aes(y = (..count..)/sum(..count..)), position = "dodge", color = "black") +
+  geom_bar(aes(y = (..count..)/sum(..count..)), position = "dodge", 
+           color = "black", alpha = 0.6) +
   labs(y = "Siege (%)") +
   scale_y_continuous(labels = percent) +
   kon_fill + cosmetics
