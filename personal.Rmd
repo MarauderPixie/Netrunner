@@ -1,0 +1,54 @@
+---
+title: "Personal Performance"
+author: "Tobias Anton"
+date: "`r ddateR::poee()`"
+output:
+  rmdformats::html_clean:
+    css: style.css
+    fig_width: 10
+    dpi: 360
+    highlight: tango
+    theme: spacelab
+    self_contained: no
+    lib_dir: "assets"
+---
+
+```{r, message=F, warning=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = F, fig.path = "highscore-plots/", warning = F, message = F)
+
+    library(dplyr)        # für einfacheren Umgang mit Dataframes (wie z.B. ngo)
+    library(ggplot2)      # auch Daten wollen hübsch sein
+    library(tidyr)        # schnell und einfach Dataframes manipulieren; kann gather()
+    library(broom)        # macht mit tidy() sowas wie lm() und t.test() lesbarer
+    library(RColorBrewer) # hübsche Daten noch hübscher machen
+    library(googlesheets) # importing ALL the sheets!
+    library(ggthemes)     # making them pretty plots even prettier
+    library(viridis)      # best color palette, hands down
+    library(rmdformats)   # look at them beautiful templates!
+    library(sjPlot)       # a little bit analysis
+
+    tobi <- gs_title("jinteki.net") %>% gs_read() %>% 
+      mutate(Points = car::recode(Game, "'Loose' = 0; 'Win' = 1"))
+```
+
+```{r tbl}
+tobi %>% 
+  group_by(Seite, Faction, ID, Platform) %>% 
+  summarize("Games" = n(),
+            "Wins" = sum(Points),
+            "Perc" = round(Wins / Games * 100, 2)) %>% 
+  knitr::kable()
+```
+
+
+```{r sjtbl, eval = F}
+sjtbl <- sjt.xtab(
+  tobi$ID, tobi$Game, 
+  show.exp = T, emph.total = T, show.row.prc = T,
+  use.viewer = F, no.output = T
+)
+
+<div align = "center">
+`r sjtbl$knitr`
+</div>
+```
