@@ -55,7 +55,7 @@ as.data.frame.matrix(crossprod(table(score$Spiel, score$Spieler))) %>%
 ```
 
 
-## Hier waren mal fancy bar charts
+## Hier waren mal fancy line charts
 
 ```{r WochenspielerIDsiege, eval = F}
 ## Siege pro Woche pro Spieler (pro ID)
@@ -97,8 +97,6 @@ wins <- score %>%
             Prozent = round(Siege / Spiele * 100, 1)) %>% 
   mutate(Prozent = ifelse(Seite == "Konzern", Prozent * -1, Prozent * 1))
 
-
-
 ggplot(wins, aes(x = Spieler, color = Seite)) +
   geom_linerange(data = wins[wins$Seite == "Runner", ],
                  aes(ymin = 10, ymax = 10 + Prozent), size = 12, alpha = 0.8) +
@@ -123,7 +121,8 @@ ggplot(wins, aes(x = Spieler, color = Seite)) +
   theme_hc() + coord_flip() + 
   theme(axis.text.y   = element_blank(), panel.grid.major.x = element_line(color = "gray"),
         axis.ticks.y  = element_blank(), panel.grid.major.y = element_blank(),
-        legend.position = "top", title = element_text(size = 14), axis.text = element_text(size = 12),
+        legend.position = "top", title = element_text(size = 14), 
+        axis.text    = element_text(size = 12),
         legend.title = element_text(size = 12),
         legend.text  = element_text(size = 10),
         strip.text   = element_text(size = 14))
@@ -169,11 +168,10 @@ ggplot(wins, aes(x = Spieler, color = Seite)) +
 
 ```{r, IDs, echo = F}
   ggplot(score, aes(x = Fraktion, fill = Fraktion)) +
-    geom_bar(color = "black", alpha = 0.7) +
+    geom_bar(color = faction_cols, alpha = 0.6) +
     labs(x = "", y = "Spiele") +
     facet_grid(. ~ Seite, scales = "free_x") +
-    faction_fill +
-    cosmetics +
+    faction_fill + cosmetics +
     theme(legend.position = "none")
 ```
   
@@ -183,7 +181,7 @@ ggplot(wins, aes(x = Spieler, color = Seite)) +
   score %>% 
     filter(Seite == "Konzern") %>% 
     ggplot(aes(x = ID, fill = Fraktion)) +
-      geom_bar(color = "black", alpha = 0.7) +
+      geom_bar(color = "black", alpha = 0.6) +
       labs(x = "", y = "Spiele", legend = "") +
       facet_grid(. ~ Fraktion, scales = "free") +
       kon_fill +
@@ -196,7 +194,7 @@ ggplot(wins, aes(x = Spieler, color = Seite)) +
   score %>% 
     filter(Seite == "Runner") %>% 
     ggplot(aes(x = ID, fill = Fraktion)) +
-      geom_bar(color = "black", alpha = 0.7) +
+      geom_bar(color = "black", alpha = 0.6) +
       labs(x = "", y = "Spiele") +
       facet_grid(. ~ Fraktion, scales = "free") +
       run_fill +
@@ -213,12 +211,12 @@ Die blau/grüne Zahl gibt an, wie oft eine Fraktion gespielt würde, wenn keine 
 
 ```{r Praeferenzen}
 pref_runner  <- sjt.xtab(runner_score$Spieler, runner_score$Fraktion, title = "Runner",
-                         showExpected = T, showSummary = F, highlightTotal = T,
-                         no.output = T, useViewer = F)
+                         show.exp = T, show.summary = F, emph.total = T,
+                         no.output = T, use.viewer = F)
 
 pref_konzern <- sjt.xtab(konzern_score$Spieler, konzern_score$Fraktion, title = "Konzerne",
-                         showExpected = T, showSummary = F, highlightTotal = T,
-                         no.output = T, useViewer = F)
+                         show.exp = T, show.summary = F, emph.total = T,
+                         no.output = T, use.viewer = F)
 ```
 
 <div class = "col2">
@@ -232,8 +230,8 @@ Kuschel-Corps oder Butchershops?
 
 ```{r Siegbedingungen_Kons}
 chisq_sieg <- sjt.xtab(konzern_score$Fraktion, konzern_score$Siegbedingung,
-                       title = "Konzernsiege", showExpected = T, highlightTotal = T,
-                       no.output = T, useViewer = F)
+                       title = "Konzernsiege", show.exp = T, emph.total = T,
+                       no.output = T, use.viewer = F)
 ```
 
 <div align = "center">
@@ -250,7 +248,7 @@ konzern_score %>%
   ggplot(., aes(x = Fraktion, group = Siegbedingung)) + 
     geom_bar(position = "dodge", color = "black", fill = c(
       "#341145", "#864EA2", "#990000", "#ff4c4c", 
-      "#B29600", "#ffe34c", "#2a3517", "#768858"), alpha = 0.7) +
+      "#B29600", "#ffe34c", "#2a3517", "#768858"), alpha = 0.6) +
       labs(y = "Siege", x = NULL) +
       annotate("text", x = 3.75, y = 27, size = 5,
                label = "hell = Punktsieg \ndunkel = Flatline") +
