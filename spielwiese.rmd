@@ -20,6 +20,8 @@ knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
 
 ### data manipulation & exploration
 
+Interaktion zw. Dauer und Durchschnitt/Zug? I don't even know anymore...
+
 ```{r, manipulation, echo = T}
 liga <- liga %>% 
   mutate("Schnitt_Zug" = (Dauer / Runden))
@@ -30,6 +32,16 @@ ggplot(liga, aes(x = Dauer, y = Schnitt_Zug)) +
   geom_smooth(method = "lm", se = F) +
   scale_color_brewer(palette = "Set1") + 
   theme_tufte()
+```
+
+LogReg von Anzahl Runs auf Siege:
+
+```{r logreg, echo = T}
+runr_lga <- runner_liga %>% mutate(Ausgang = factor(Ausgang, levels = c(0, 1)))
+
+model <- glm(Ausgang ~ Runs, data = runner_liga, family = binomial)
+
+summary(model)
 ```
 
 ### Interaktive Plots
