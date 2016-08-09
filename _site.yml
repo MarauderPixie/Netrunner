@@ -1,0 +1,12 @@
+name: "HB City Grid"
+navbar:
+  title: "HB City Grid"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Liga"
+      href: Liga.html
+    - text: "Arena Highscore"
+      href: Highscore.html
+    - text: "Runner Profiles"
+      href: personal.html
