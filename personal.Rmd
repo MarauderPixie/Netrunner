@@ -3,10 +3,10 @@ title: "Personal Performance"
 author: "Tobias Anton"
 date: "`r ddateR::poee()`"
 output:
-  rmdformats::html_clean:
+  html_document:
     css: style.css
     fig_width: 10
-    dpi: 360
+    dpi: 640
     highlight: tango
     theme: spacelab
     self_contained: no
@@ -32,13 +32,16 @@ knitr::opts_chunk$set(echo = F, fig.path = "highscore-plots/", warning = F, mess
     
     paul <- gs_title("jinteki.net") %>% gs_read(ws = 2) %>% 
       mutate(Points = car::recode(Game, "'Loss' = 0; 'Win' = 1"))
+    
+    falk <- gs_title("jinteki.net") %>% gs_read(ws = 3) %>% 
+      mutate(Points = car::recode(Game, "'Loss' = 0; 'Win' = 1"))
 ```
 
 # Tobi
 
 ```{r tobi_tbl}
 tobi %>% 
-  group_by(Seite, Faction, ID) %>% 
+  group_by(Side, Faction, ID) %>% 
   summarize("Games" = n(),
             "Wins" = sum(Points),
             "Perc" = round(Wins / Games * 100, 2)) %>% 
@@ -59,11 +62,25 @@ sjtbl <- sjt.xtab(
 ```
 
 
+
 # Paul
 
 ```{r paul_tbl}
 paul %>% 
-  group_by(Seite, Faction, ID) %>% 
+  group_by(Side, Faction, ID) %>% 
+  summarize("Games" = n(),
+            "Wins" = sum(Points),
+            "Perc" = round(Wins / Games * 100, 2)) %>% 
+  knitr::kable()
+```
+
+
+
+# Falk
+
+```{r falk_tbl}
+falk %>% 
+  group_by(Side, Faction, ID) %>% 
   summarize("Games" = n(),
             "Wins" = sum(Points),
             "Perc" = round(Wins / Games * 100, 2)) %>% 

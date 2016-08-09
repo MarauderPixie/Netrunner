@@ -3,10 +3,10 @@ title: "Highscoreliste Highlander Games Bremen"
 author: "Tobias Anton"
 date: "`r ddateR::poee()`"
 output:
-  rmdformats::html_clean:
+  html_document:
     css: style.css
     fig_width: 10
-    dpi: 360
+    dpi: 540
     highlight: tango
     theme: spacelab
     self_contained: no
@@ -99,10 +99,10 @@ wins <- score %>%
 
 ggplot(wins, aes(x = Spieler, color = Seite)) +
   geom_linerange(data = wins[wins$Seite == "Runner", ],
-                 aes(ymin = 10, ymax = 10 + Prozent), size = 12, alpha = 0.8) +
+                 aes(ymin = 10, ymax = 10 + Prozent), size = 9, alpha = 0.8) +
   
   geom_linerange(data = wins[wins$Seite == "Konzern", ],
-                 aes(ymin = -10, ymax = -10 + Prozent), size = 12, alpha = 0.8) +
+                 aes(ymin = -10, ymax = -10 + Prozent), size = 9, alpha = 0.8) +
   
   geom_label(aes(x = Spieler, y = 0, label = Spieler, family = "sans"), 
              inherit.aes = F, size = 5, label.padding = unit(0.0, "lines"), 
