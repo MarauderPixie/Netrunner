@@ -54,7 +54,7 @@
     
 # plot cosmetics
 cosmetics <- theme_hc() +
-             theme(title = element_text(size = 14),
+             theme(title        = element_text(size = 14),
                    axis.text    = element_text(size = 12),
                    legend.title = element_text(size = 12),
                    legend.text  = element_text(size = 10),
