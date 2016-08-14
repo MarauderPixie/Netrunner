@@ -1,8 +1,21 @@
 ---
-title: "Index"
-author: "Tobias Anton"
-date: "9 August 2016"
-output: html_document
+title: "Welcome to the HB City Grid"
+output:
+  html_document:
+    self_contained: no
+    lib_dir: "assets"  
+    css: style.css
+    fig_width: 10
+    dpi: 540
+    highlight: tango
+    theme: spacelab
 ---
 
-Hello Website!
+## The Netrunner Meta of Bremen
+
+**HB** are the initials of *"Hansestadt Bremen"* (*hanseatic city of Bremen*) in Germany. Any similarities to fictional persons, places or institutions are unintended and no clones nor boiroids were harmed during the creation[^1] of this website.
+
+Our little ***Android: Netrunner*** meta agreed upon logging some of their runs and agendas, which then gets analyzed.  
+The purpose of this site is to display the results and provide some feedback to the players regarding their performance.
+
+[^1]: Sadly, the same can not be guaranteed when it comes to the collection of the data.
