@@ -1,6 +1,5 @@
 ---
 title: "Netrunnerliga Bremen"
-author: "Tobias Anton"
 date: "`r ddateR::poee()`"
 output:
   html_document:
@@ -38,13 +37,13 @@ Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Be
                     style = x ~ style(color = ifelse(x <= 4, "red", 
                                               ifelse(x >= 7, "green", "gray")))
                     )),
-      check.rows = F, format = "pandoc")
+      check.rows = F, format = "markdown")
 ```
-
 
 ## Spiel"übersicht"
 
-Sieht zur Zeit *(Prickle-Prickle, 6th Day of Discord)* noch etwas schräg aus...
+Sieht zur Zeit *(Prickle-Prickle, 6th Day of Discord)* noch etwas schräg aus.
+Update *(Sweetmorn, 7th Day of Bureaucracy)*: bzw. gar nicht. Techniker ist informiert.
 
 ```{r Spiele, eval=FALSE, include=FALSE}
 games <- liga %>% 
@@ -58,15 +57,14 @@ games <- as.data.frame.matrix(!!crossprod(games))
 # games <- games %>% mutate(vs = rownames(.))
 
 yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
-                                   x ~ icontext(ifelse(x, "ok", "remove")))
+                   x ~ icontext(ifelse(x, "ok", "remove")))
 
-    format_table(games, 
-      list(Bjarne = yesno, Bodo = yesno, Falk = yesno,
-           Jan = yesno, Johannes = yesno, Josh = yesno,
-           Kai = yesno, Paul = yesno, Tobias = yesno), 
-      check.rows = T, align = "c", format = "markdown")
+format_table(games, 
+             list(Bjarne = yesno, Bodo = yesno, Falk = yesno,
+                  Jan = yesno, Johannes = yesno, Josh = yesno,
+                  Kai = yesno, Paul = yesno, Tobias = yesno), 
+             check.rows = T, align = "c", format = "markdown")
 ```
-
 
 ## Spielhäufigkeiten
 

@@ -1,6 +1,5 @@
 ---
 title: "Highscoreliste Highlander Games Bremen"
-author: "Tobias Anton"
 date: "`r ddateR::poee()`"
 output:
   html_document:

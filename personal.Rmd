@@ -1,6 +1,5 @@
 ---
-title: "Personal Performance"
-author: "Tobias Anton"
+title: "Runner Profiles"
 date: "`r ddateR::poee()`"
 output:
   html_document:
