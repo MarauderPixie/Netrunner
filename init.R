@@ -32,6 +32,19 @@
     
     runner_liga  <- liga %>% filter(Seite == "Runner")
     konzern_liga <- liga %>% filter(Seite == "Konzern")
+ 
+       
+# Gegnerspalten hinzufügen
+    rl <- runner_liga  %>% select(ID)
+    colnames(rl) <- "Gegner"
+    ll <- konzern_liga %>% select(ID)
+    colnames(ll) <- "Gegner"
+    
+    runner_liga  <- cbind(runner_liga, ll)
+    konzern_liga <- cbind(konzern_liga, rl)
+    
+    rm(rl, ll)
+    
     
 # Farben definieren
     # mit APEX und Shapern
