@@ -31,39 +31,35 @@ Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Be
               Agendapunkte = sum(Agendapunkte),
               Punkte       = sum(Punkte)) %>%
     arrange(desc(Punkte), desc(Agendapunkte)) %>% 
-    format_table(list(
-                  Agendapunkte = color_tile("white", "lightgray"),
-                  Spiele = formatter("span",
-                    style = x ~ style(color = ifelse(x <= 4, "red", 
-                                              ifelse(x >= 7, "green", "gray")))
-                    )),
-      check.rows = F, format = "markdown")
+    format_table(
+      list(Agendapunkte = color_tile("white", "lightgray"),
+                 Spiele = formatter("span", style = x ~ style(
+                                      color = ifelse(x <= 4, "red", 
+                                              ifelse(x >= 7, "green", "gray"))))
+           ),
+      align = "l", check.rows = F, format = "markdown")
 ```
 
-## Spiel"übersicht"
+## Spielübersicht
 
-Sieht zur Zeit *(Prickle-Prickle, 6th Day of Discord)* noch etwas schräg aus.
-Update *(Sweetmorn, 7th Day of Bureaucracy)*: bzw. gar nicht. Techniker ist informiert.
+Wer hat schon gespielt? Welche Spiele stehen noch aus? Vorschläge, das übersichtlicher zu gestalten?
 
-```{r Spiele, eval=FALSE, include=FALSE}
+```{r Spiele}
 games <- liga %>% 
-  filter(Saison == 2, Runde == 1) %>% 
-  select(Spiel, Spieler)
+ filter(Runde == 1) %>% 
+ select(Spiel, Spieler)
 
 games <- table(games$Spiel, games$Spieler)
-
 games <- as.data.frame.matrix(!!crossprod(games))
-
-# games <- games %>% mutate(vs = rownames(.))
 
 yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
                    x ~ icontext(ifelse(x, "ok", "remove")))
 
 format_table(games, 
-             list(Bjarne = yesno, Bodo = yesno, Falk = yesno,
-                  Jan = yesno, Johannes = yesno, Josh = yesno,
-                  Kai = yesno, Paul = yesno, Tobias = yesno), 
-             check.rows = T, align = "c", format = "markdown")
+             list(Boray = yesno, Falk = yesno, Jan = yesno, 
+                  Johannes = yesno, Josh = yesno, Ole = yesno, 
+                  Paul = yesno), 
+             row.names = T, align = "c")
 ```
 
 ## Spielhäufigkeiten
@@ -75,8 +71,7 @@ format_table(games,
     geom_bar(color = "black", alpha = 0.6) +
     labs(x = "", y = "Spiele") +
     facet_grid(. ~ Seite, scales = "free_x") +
-    scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", "gold1", 
-                                 "darkgray", "chartreuse3", "darkolivegreen")) +
+    scale_fill_manual(values = faction_cols) +
     cosmetics +
     theme(legend.position = "none")
 ```
@@ -84,26 +79,24 @@ format_table(games,
 ### nach ID
 
 ```{r, IDs_Konzern}
-  liga %>% 
-    filter(Seite == "Konzern") %>% 
+  konzern_liga %>%
     ggplot(aes(x = ID, fill = Fraktion)) +
       geom_bar(color = "black", alpha = 0.6) +
       labs(x = "", y = "Spiele", legend = "") +
       facet_grid(. ~ Fraktion, scales = "free") +
-      scale_fill_manual(values = c("darkorchid4", "red", "gold1", "darkolivegreen")) +
+      scale_fill_manual(values = kon_cols) +
       cosmetics +
       theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
 ```
 
 ```{r, IDs_Runner}
-  liga %>% 
-    filter(Seite == "Runner") %>% 
+  runner_liga %>% 
     ggplot(aes(x = ID, fill = Fraktion)) +
       geom_bar(color = "black", alpha = 0.6) +
       labs(x = "", y = "Spiele") +
       facet_grid(. ~ Fraktion, scales = "free") +
-      scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
+      scale_fill_manual(values = run_cols) +
       cosmetics +
       theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
