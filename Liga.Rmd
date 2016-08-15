@@ -127,6 +127,23 @@ ggplot(runner_liga, aes(x = Spieler, y = Runs, color = Spieler)) +
   cosmetics + theme(legend.position = "none")
 ```
 
+#### Mehr vom Gleichen, nur anders
+
+So mit Mouse-Over-Informationen und allem. Bin aber noch am rumprobieren.
+
+```{r, Runs_Spieler_rbokeh}
+mittelrun <- runner_liga %>% group_by(Spieler) %>% summarize(Mittel = mean(Runs))
+
+figure(title = "Runs pro Spieler", ylab = "Runs", xlab = NULL, tools = NULL,
+       xgrid = F, ygrid = F, legend_location = NULL) %>% 
+  ly_lines(x = Spieler, y = mean(runner_liga$Runs), data = runner_liga,
+           color = "gray", alpha = 0.8) %>% 
+  ly_points(Spieler, Runs, data = runner_liga, 
+            hover = "@Runs Runs als @ID gegen @Gegner_ID",
+            glyph = "diamond", color = Fraktion, size = 15) %>% 
+  ly_points(Spieler, Mittel, data = mittelrun, glyph = "x", color = Spieler, size = 20)
+```
+
 ### Runs auf Systeme
 
 ```{r runs_server}
