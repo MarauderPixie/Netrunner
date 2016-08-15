@@ -56,14 +56,15 @@
     kon_fill     <- scale_fill_manual(values = c("darkorchid4", "red", "gold1", "darkolivegreen"))
     run_fill     <- scale_fill_manual(values = c("darkorange", "deepskyblue3", "chartreuse3"))
     
-    faction_color <- scale_color_manual(values = c())
-    
     
     kon_cols     <- c('#68228B', '#FF0000', '#FFD700', '#556B2F')
     run_cols     <- c("#FF8C00", "#009ACD", "#66CD00")
     
-    faction_cols <- c("#240b30", "#7f0000", "#7f6b00", "#2a3517",
-                      "#7f4600", "#004d66", "#336600")
+    faction_cols <- c("#FF8C00", "#009ACD", '#68228B', # '#FF0000', 
+                      '#FFD700', "#66CD00", '#556B2F')
+      
+#      c("#240b30", "#7f0000", "#7f6b00", # "#2a3517",
+#                      "#7f4600", "#004d66", "#336600")
 
     
 # plot cosmetics
