@@ -167,7 +167,7 @@ ggplot(wins, aes(x = Spieler, color = Seite)) +
 
 ```{r, IDs, echo = F}
   ggplot(score, aes(x = Fraktion, fill = Fraktion)) +
-    geom_bar(color = faction_cols, alpha = 0.6) +
+    geom_bar(color = "black", alpha = 0.6) +
     labs(x = "", y = "Spiele") +
     facet_grid(. ~ Seite, scales = "free_x") +
     faction_fill + cosmetics +
