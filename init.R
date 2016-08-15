@@ -14,6 +14,7 @@
     # library(plotly)       # them interactive plots!
     library(stringr)      # just because
     library(formattable)  # lots of tables here, might as well make 'm pretty
+    library(rbokeh)       # when creating a website, why not use html widgets?
 
 # Daten einlesen
     liga  <- gs_title("Netrunner Liga") %>% 
@@ -35,10 +36,10 @@
  
        
 # Gegnerspalten hinzufügen
-    rl <- runner_liga  %>% select(ID)
-    colnames(rl) <- "Gegner"
-    ll <- konzern_liga %>% select(ID)
-    colnames(ll) <- "Gegner"
+    rl <- runner_liga  %>% select(Spieler, ID)
+    colnames(rl) <- c("Gegner_Spieler", "Gegner_ID")
+    ll <- konzern_liga %>% select(Spieler, ID)
+    colnames(ll) <- c("Gegner_Spieler", "Gegner_ID")
     
     runner_liga  <- cbind(runner_liga, ll)
     konzern_liga <- cbind(konzern_liga, rl)
