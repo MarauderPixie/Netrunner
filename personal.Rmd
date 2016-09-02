@@ -2,18 +2,12 @@
 title: "Runner Profiles"
 date: "`r ddateR::poee()`"
 output:
-  html_document:
-    css: style.css
-    fig_width: 10
-    dpi: 640
-    highlight: tango
-    theme: spacelab
-    self_contained: no
-    lib_dir: "assets"
+  html_document
 ---
 
-```{r, message=F, warning=FALSE, include=FALSE}
-knitr::opts_chunk$set(echo = F, fig.path = "highscore-plots/", warning = F, message = F)
+```{r, init, echo = F, warning = F, message = F}
+knitr::opts_chunk$set(fig.path = "assets/personal-plots/",
+                      echo = F, warning = F, message = F)
 
     library(dplyr)        # für einfacheren Umgang mit Dataframes (wie z.B. ngo)
     library(ggplot2)      # auch Daten wollen hübsch sein
