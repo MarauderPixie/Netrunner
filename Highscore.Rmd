@@ -17,13 +17,13 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
 ```{r, Die_Liste}
   score %>% 
     group_by(Spieler) %>% 
-    summarize("Spiele" = n(),
-              "Siege"  = sum(Punkte)/2,
-              "Ratio"  = percent((sum(Punkte)/2)/Spiele, 1)) %>%
+    summarize(Spiele = n(),
+              Siege  = sum(Punkte)/2,
+              Ratio  = percent((sum(Punkte)/2)/Spiele, 1)) %>%
     arrange(desc(Ratio), desc(Siege), Spiele) %>% 
     format_table(list(
       Spiele = color_tile("white", "lightgreen"),
-      check.rows = F, format = "pandoc"))
+      align = "l", check.rows = F, format = "markdown"))
 ```
 
 ## Spielübersicht
