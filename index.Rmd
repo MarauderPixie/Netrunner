@@ -7,9 +7,11 @@ output:
 
 ## The Netrunner Meta of Bremen
 
-**HB** are the initials of *"Hansestadt Bremen"* (*hanseatic city of Bremen*) in Germany. Any similarities to fictional persons, places or institutions are unintended and no clones nor boiroids were harmed during the creation[^1] of this website.
+**HB** are the initials of *"Hansestadt Bremen"*[^1] in Germany. Any similarities to fictional persons, places or institutions are unintended and no clones nor boiroids were harmed during the creation[^2] of this website.
 
-Our little ***Android: Netrunner*** meta agreed upon logging some of their runs and agendas, which then gets analyzed.  
+Our little ***Android: Netrunner*** meta agreed upon logging some of their runs and agendas for further analysis.  
 The purpose of this site is to display the results and provide some feedback to the players regarding their performance.
 
-[^1]: Sadly, the same can not be guaranteed when it comes to the collection of the data.
+
+[^1]: *hanseatic city of Bremen*
+[^2]: Sadly, the same can not be guaranteed when it comes to the collection of the data.
