@@ -18,7 +18,7 @@
     
     
 # knitr options setzen
-  knitr::opts_chunk$set(echo = F, warning = F, fig.align = "center", message = F)
+  knitr::opts_chunk$set(echo = F, warning = F, message = F, fig.align = "center")
 
 # Daten einlesen
   liga  <- gs_title("Netrunner Liga") %>% 
