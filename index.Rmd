@@ -1,7 +1,8 @@
 ---
 title: "Welcome to the HB City Grid"
 output:
-  html_document
+  html_document:
+    toc: false
 ---
 
 ## The Netrunner Meta of Bremen
