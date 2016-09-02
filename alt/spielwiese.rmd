@@ -1,0 +1,39 @@
+---
+title: "Spielwiese"
+author: "Tobias Anton"
+date: "11-11-11"
+output:
+  rmdformats::html_clean:
+  # html_document:
+    fig_width: 10
+    dpi: 360
+    highlight: tango
+    theme: spacelab
+---
+
+```{r, message=F, warning=FALSE, include=FALSE}
+source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
+knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
+```
+
+# Spielwiese
+
+### data manipulation & exploration
+
+```{r, manipulation, echo = T}
+games <- liga %>% 
+ filter(Runde == 1) %>% 
+ select(Spiel, Spieler)
+
+games <- table(games$Spiel, games$Spieler)
+games <- as.data.frame.matrix(!!crossprod(games))
+
+yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
+                   x ~ icontext(ifelse(x, "ok", "remove")))
+
+format_table(games, 
+             list(Boray = yesno, Falk = yesno, Jan = yesno, 
+                  Johannes = yesno, Josh = yesno, Ole = yesno, 
+                  Paul = yesno), 
+             check.rows = T, align = "c", format = "markdown")
+```
