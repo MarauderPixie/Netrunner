@@ -5,9 +5,9 @@ output:
   html_document
 ---
 
-```{r, message=F, warning=FALSE, include=FALSE}
+```{r, init, echo = F, warning = F, message = F}
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
-knitr::opts_chunk$set(fig.path = "highscore-plots/")
+knitr::opts_chunk$set(fig.path = "assets/highscore-plots/")
 ```
 
 # Arena Highscore-Liste
