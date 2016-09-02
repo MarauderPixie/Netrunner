@@ -16,10 +16,8 @@ output:
     toc: true
     toc_float: true
     self_contained: no
-    code_folding: hide
     lib_dir: "assets"  
     css: style.css
     fig_width: 10
     dpi: 540
-    highlight: tango
-    theme: spacelab
+    theme: flatly
