@@ -2,19 +2,12 @@
 title: "Netrunnerliga Bremen"
 date: "`r ddateR::poee()`"
 output:
-  html_document:
-    self_contained: no
-    lib_dir: "assets"  
-    css: style.css
-    fig_width: 10
-    dpi: 540
-    highlight: tango
-    theme: spacelab
+  html_document
 ---
 
 ```{r, message=F, warning=FALSE, include=FALSE}
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
-knitr::opts_chunk$set(echo = F, fig.path = "liga-plots/", warning = F, message = F)
+knitr::opts_chunk$set(fig.path = "liga-plots/")
 ```
 
 # Saison 3
@@ -28,7 +21,7 @@ Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Be
     filter(Saison == 3) %>% 
     group_by(Spieler) %>% 
     summarize(Spiele       = n()/2,
-              Agendapunkte = sum(Agendapunkte),
+              Agendapunkte = sum(Agendapunkte, na.rm = T),
               Punkte       = sum(Punkte)) %>%
     arrange(desc(Punkte), desc(Agendapunkte)) %>% 
     format_table(
@@ -58,7 +51,7 @@ yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
 format_table(games, 
              list(Boray = yesno, Falk = yesno, Jan = yesno, 
                   Johannes = yesno, Josh = yesno, Ole = yesno, 
-                  Paul = yesno), 
+                  Paul = yesno, Tobias = yesno), 
              row.names = T, align = "c")
 ```
 

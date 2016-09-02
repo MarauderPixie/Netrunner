@@ -1,14 +1,7 @@
 ---
 title: "Welcome to the HB City Grid"
 output:
-  html_document:
-    self_contained: no
-    lib_dir: "assets"  
-    css: style.css
-    fig_width: 10
-    dpi: 540
-    highlight: tango
-    theme: spacelab
+  html_document
 ---
 
 ## The Netrunner Meta of Bremen

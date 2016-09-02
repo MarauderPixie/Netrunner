@@ -2,19 +2,12 @@
 title: "Highscoreliste Highlander Games Bremen"
 date: "`r ddateR::poee()`"
 output:
-  html_document:
-    css: style.css
-    fig_width: 10
-    dpi: 540
-    highlight: tango
-    theme: spacelab
-    self_contained: no
-    lib_dir: "assets"
+  html_document
 ---
 
 ```{r, message=F, warning=FALSE, include=FALSE}
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
-knitr::opts_chunk$set(echo = F, fig.path = "highscore-plots/", warning = F, message = F)
+knitr::opts_chunk$set(fig.path = "highscore-plots/")
 ```
 
 # Arena Highscore-Liste
