@@ -28,6 +28,9 @@ knitr::opts_chunk$set(fig.path = "assets/personal-plots/",
     
     falk <- gs_title("jinteki.net") %>% gs_read(ws = 3) %>% 
       mutate(Points = car::recode(Game, "'Loss' = 0; 'Win' = 1"))
+    
+    ole <- gs_title("jinteki.net") %>% gs_read(ws = 4) %>% 
+      mutate(Points = car::recode(Game, "'Loss' = 0; 'Win' = 1"))
 ```
 
 # Tobi
@@ -38,6 +41,7 @@ tobi %>%
   summarize("Games" = n(),
             "Wins" = sum(Points),
             "Perc" = round(Wins / Games * 100, 2)) %>% 
+  filter(Games >= 4) %>% 
   knitr::kable()
 ```
 
@@ -73,6 +77,19 @@ paul %>%
 
 ```{r falk_tbl}
 falk %>% 
+  group_by(Side, Faction, ID) %>% 
+  summarize("Games" = n(),
+            "Wins" = sum(Points),
+            "Perc" = round(Wins / Games * 100, 2)) %>% 
+  knitr::kable()
+```
+
+
+
+# Ole
+
+```{r ole_tbl}
+ole %>% 
   group_by(Side, Faction, ID) %>% 
   summarize("Games" = n(),
             "Wins" = sum(Points),
