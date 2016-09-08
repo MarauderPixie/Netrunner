@@ -8,6 +8,9 @@ output:
 ```{r, init, echo = F, warning = F, message = F}
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
 knitr::opts_chunk$set(fig.path = "assets/liga-plots/")
+
+  runner_liga  <- liga %>% filter(Seite == "Runner")
+  konzern_liga <- liga %>% filter(Seite == "Konzern")
 ```
 
 # Saison 3

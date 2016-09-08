@@ -1,0 +1,16 @@
+---
+title: "Netrunnerliga Bremen - Season 2"
+date: "`r ddateR::poee()`"
+output:
+  html_document
+---
+
+```{r, init, echo = F, warning = F, message = F}
+source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
+knitr::opts_chunk$set(fig.path = "assets/liga-plots/01")
+
+liga <- filter(liga, Saison == 2)
+
+  runner_liga  <- liga %>% filter(Seite == "Runner")
+  konzern_liga <- liga %>% filter(Seite == "Konzern")
+```
