@@ -8,10 +8,9 @@ output: html_document
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
 knitr::opts_chunk$set(fig.path = "assets/highscore-plots/Mumbad")
 
-score <- filter(score, Cycle == "Mumbad")
-
-  runner_score  <- score %>% filter(Seite == "Runner")
-  konzern_score <- score %>% filter(Seite == "Konzern")
+score         <- filter(score, Cycle == "Mumbad")
+runner_score  <- filter(runner_score, Cycle == "Mumbad")
+konzern_score <- filter(konzern_score, Cycle == "Mumbad")
 ```
 
 

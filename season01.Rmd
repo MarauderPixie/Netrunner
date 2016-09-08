@@ -9,8 +9,7 @@ output:
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
 knitr::opts_chunk$set(fig.path = "assets/liga-plots/01")
 
-liga <- filter(liga, Saison == 1)
-
-  runner_liga  <- liga %>% filter(Seite == "Runner")
-  konzern_liga <- liga %>% filter(Seite == "Konzern")
+liga         <- filter(liga, Saison == 1)
+runner_liga  <- filter(runner_liga, Saison == 1)
+konzern_liga <- filter(konzern_liga, Saison == 1)
 ```

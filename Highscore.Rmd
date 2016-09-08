@@ -8,9 +8,6 @@ output:
 ```{r, init, echo = F, warning = F, message = F}
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
 knitr::opts_chunk$set(fig.path = "assets/highscore-plots/")
-
-  runner_score  <- score %>% filter(Seite == "Runner")
-  konzern_score <- score %>% filter(Seite == "Konzern")
 ```
 
 # Arena Highscore-Liste
