@@ -8,6 +8,9 @@ output:
 ```{r, init, echo = F, warning = F, message = F}
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
 knitr::opts_chunk$set(fig.path = "assets/highscore-plots/")
+
+  runner_score  <- score %>% filter(Seite == "Runner")
+  konzern_score <- score %>% filter(Seite == "Konzern")
 ```
 
 # Arena Highscore-Liste
@@ -33,10 +36,10 @@ Während ein Ligaspiel aus zwei Runden besteht (jede/r SpielerIn je einmal Kon *
 ```{r Spieluebersicht}
 as.data.frame.matrix(crossprod(table(score$Spiel, score$Spieler))) %>% 
   gather(Spieler, Spiele, Bjarne, Bodo, Boray, Falk, Jan,
-         Johannes, Josh, `Josh R.`, Kai, Ole, Paul, Tobias) %>% 
-  mutate(Gegner = rep(c("Bjarne", "Bodo", "Boray", "Falk", "Jan",
-                        "Johannes", "Josh", "Josh R.", 
-                        "Kai", "Ole", "Paul", "Tobias"), 12)) %>% 
+         Johannes, Josh, `Josh R.`, Kai, Ole, Paul, Tobias, Ashkan) %>% 
+  mutate(Gegner = rep(c("Ashkan", "Bjarne", "Bodo", "Boray", "Falk", 
+                        "Jan", "Johannes", "Josh", "Josh R.", 
+                        "Kai", "Ole", "Paul", "Tobias"), 13)) %>% 
   filter(Spieler != Gegner, Spiele != 0) %>% 
   ggplot(., aes(x = Spieler, y = Gegner, fill = Spiele)) + 
     geom_tile(color = "white", size = 0.5, alpha = 0.9) +
@@ -236,7 +239,7 @@ Nicht nur, dass Jinteki (!) mehr Flatlines als reguläre Siege hat[^1], nein, so
 
 ```{r Siegbedingungen_Kons_plot}
 konzern_score %>% 
-  filter(!is.na(Siegbedingung)) %>% 
+  filter(!is.na(Siegbedingung), Siegbedingung != "Concession") %>% 
   ggplot(., aes(x = Fraktion, group = Siegbedingung)) + 
     geom_bar(position = "dodge", color = "black", fill = c(
       "#341145", "#864EA2", "#990000", "#ff4c4c", 
