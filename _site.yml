@@ -3,12 +3,30 @@ navbar:
   title: "HB City Grid"
   left:
     - text: "Home"
+      icon: ion-aperture
       href: index.html
     - text: "Liga"
+      icon: ion-ios-pulse-strong
       href: Liga.html
+      menu:
+      - text: "Season 1"
+        href: season01.html
+      - text: "Season 2"
+        href: season02.html
+      - text: "Season 3"
+        href: season03.html
     - text: "Arena Highscore"
+      icon: ion-ios-pulse
       href: Highscore.html
+      menu:
+      - text: "Mumbad Cycle"
+        href: Mumbad.html
+      - text: "Flashpoint Cycle"
+        href: Flashpoint.html
+      - text: "All records"
+        href: Highscore.html
     - text: "Runner Profiles"
+      icon: ion-ionic
       href: personal.html
       
 output:

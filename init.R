@@ -27,17 +27,11 @@
     
   score <- gs_title("Netrunner Highscore") %>% 
     gs_read() %>% 
-    mutate(Ausgang = car::recode(Punkte, "0 = 'Verloren'; 2 = 'Gewonnen'")) %>% 
+    mutate(Ausgang = car::recode(Punkte, "0 = 'Verloren'; 2 = 'Gewonnen'"),
+           Cycle   = car::recode(Kalenderwoche, "lo:4 = 'San San';
+                                 5:30 = 'Mumbad'; 31:hi = 'Flashpoint'")) %>% 
     filter(Fraktion != "Neutral", Spieler != "Jan (TO)")
-    
-    
-# Runner / Konzern Aufteilung
-  runner_score  <- score %>% filter(Seite == "Runner")
-  konzern_score <- score %>% filter(Seite == "Konzern")
-    
-  runner_liga  <- liga %>% filter(Seite == "Runner")
-  konzern_liga <- liga %>% filter(Seite == "Konzern")
- 
+
        
 # Gegnerspalten hinzufügen
   rl <- runner_liga  %>% select(Spieler, ID)
