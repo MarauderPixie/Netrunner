@@ -7,7 +7,6 @@ navbar:
       href: index.html
     - text: "Liga"
       icon: ion-ios-pulse-strong
-      href: Liga.html
       menu:
       - text: "Season 1"
         href: season01.html
@@ -17,7 +16,6 @@ navbar:
         href: season03.html
     - text: "Arena Highscore"
       icon: ion-ios-pulse
-      href: Highscore.html
       menu:
       - text: "Mumbad Cycle"
         href: Mumbad.html

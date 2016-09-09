@@ -64,7 +64,8 @@ format_table(games,
     geom_bar(color = "black", alpha = 0.6) +
     labs(x = "", y = "Spiele") +
     facet_grid(. ~ Seite, scales = "free_x") +
-    scale_fill_manual(values = faction_cols) +
+    scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", 
+                                 "gold1", "darkgray", "chartreuse3", "darkolivegreen")) +
     cosmetics +
     theme(legend.position = "none")
 ```
@@ -89,7 +90,7 @@ format_table(games,
       geom_bar(color = "black", alpha = 0.6) +
       labs(x = "", y = "Spiele") +
       facet_grid(. ~ Fraktion, scales = "free") +
-      scale_fill_manual(values = run_cols) +
+      scale_fill_manual(values = c("#FF8C00", "#009ACD", "darkgray", "#66CD00")) +
       cosmetics +
       theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
