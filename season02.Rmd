@@ -7,9 +7,144 @@ output:
 
 ```{r, init, echo = F, warning = F, message = F}
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
-knitr::opts_chunk$set(fig.path = "assets/liga-plots/01")
+knitr::opts_chunk$set(fig.path = "assets/liga-plots/02")
 
-liga         <- filter(liga, Saison == 2)
-runner_liga  <- filter(runner_liga, Saison == 2)
-konzern_liga <- filter(konzern_liga, Saison == 2)
+liga_02         <- filter(liga, Saison == 2)
+runner_liga_02  <- filter(runner_liga, Saison == 2)
+konzern_liga_02 <- filter(konzern_liga, Saison == 2)
+```
+
+
+## Punktestand
+
+Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Bei weniger als 50%, erscheint ne rote.  
+
+```{r, Punktestand}
+  liga_02 %>%
+    group_by(Spieler) %>% 
+    summarize(Spiele       = n()/2,
+              Agendapunkte = sum(Agendapunkte, na.rm = T),
+              Punkte       = sum(Punkte)) %>%
+    arrange(desc(Punkte), desc(Agendapunkte)) %>% 
+    format_table(
+      list(Agendapunkte = color_tile("white", "lightgray"),
+                 Spiele = formatter("span", style = x ~ style(
+                                      color = ifelse(x <= 4, "red", 
+                                              ifelse(x >= 7, "green", "gray"))))
+           ),
+      align = "l", check.rows = F, format = "markdown")
+```
+
+## Spielübersicht
+
+Wer hat schon gespielt? Welche Spiele stehen noch aus? Vorschläge, das übersichtlicher zu gestalten?
+
+```{r Spiele}
+games <- liga_02 %>% 
+ filter(Runde == 1) %>% 
+ select(Spiel, Spieler)
+
+games <- table(games$Spiel, games$Spieler)
+games <- as.data.frame.matrix(!!crossprod(games))
+
+yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
+                   x ~ icontext(ifelse(x, "ok", "remove")))
+
+format_table(games, 
+             list(Bjarne = yesno, Bodo = yesno, Falk = yesno, 
+                  Jan = yesno, Johannes = yesno, Josh = yesno, 
+                  Kai = yesno, Paul = yesno, Tobias = yesno), 
+             row.names = T, align = "c")
+```
+
+## Spielhäufigkeiten
+
+### nach Fraktion
+
+```{r, IDs}
+  ggplot(liga_02, aes(x = Fraktion, fill = Fraktion)) +
+    geom_bar(color = "black", alpha = 0.6) +
+    labs(x = "", y = "Spiele") +
+    facet_grid(. ~ Seite, scales = "free_x") +
+    scale_fill_manual(values = faction_cols) +
+    cosmetics +
+    theme(legend.position = "none")
+```
+  
+### nach ID
+
+```{r, IDs_Konzern}
+  konzern_liga_02 %>%
+    ggplot(aes(x = ID, fill = Fraktion)) +
+      geom_bar(color = "black", alpha = 0.6) +
+      labs(x = "", y = "Spiele", legend = "") +
+      facet_grid(. ~ Fraktion, scales = "free") +
+      scale_fill_manual(values = kon_cols) +
+      cosmetics +
+      theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
+            legend.position = "none")
+```
+
+```{r, IDs_Runner}
+  runner_liga_02 %>% 
+    ggplot(aes(x = ID, fill = Fraktion)) +
+      geom_bar(color = "black", alpha = 0.6) +
+      labs(x = "", y = "Spiele") +
+      facet_grid(. ~ Fraktion, scales = "free") +
+      scale_fill_manual(values = run_cols) +
+      cosmetics +
+      theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
+            legend.position = "none")
+```
+
+
+## Runs
+
+### Runs pro Spieler
+
+Der graue Balken ist die durchschnittliche Anzahl Runs über alle Spieler hinweg und die schwarzen Balken sind entsprechend der Durchschnitt der jeweiligen Person.
+
+```{r, Runs_Spieler}
+runner_liga_02 %>% filter(!is.na(Runs)) %>% 
+ggplot(., aes(x = Spieler, y = Runs, color = Spieler)) +
+  geom_point(position = "jitter") +
+  stat_summary(fun.y = "mean", fun.ymax = "mean", fun.ymin = "mean", 
+               colour = "black", size = 0.5, geom = "errorbar") +
+  geom_hline(yintercept = mean(runner_liga_02$Runs, na.rm = T), size = 1, color = "gray") +
+  labs(x = NULL, y = "Runs") + 
+  scale_color_brewer(palette = "Set1") +
+  cosmetics + theme(legend.position = "none")
+```
+
+#### Mehr vom Gleichen, nur anders
+
+So mit Mouse-Over-Informationen und allem. Bin aber noch am rumprobieren.
+
+```{r, Runs_Spieler_rbokeh}
+mittelrun_02 <- runner_liga_02 %>% group_by(Spieler) %>% summarize(Mittel = mean(Runs, na.rm = T))
+
+figure(title = "Runs pro Spieler", ylab = "Runs", xlab = NULL, tools = NULL,
+       xgrid = F, ygrid = F, legend_location = NULL) %>% 
+  ly_lines(x = Spieler, y = mean(runner_liga_02$Runs, na.rm = T), data = runner_liga_02,
+           color = "gray", alpha = 0.8) %>% 
+  ly_points(Spieler, Runs, data = runner_liga_02, 
+            hover = "@Runs Runs als @ID gegen @Gegner_ID",
+            glyph = "diamond", color = Fraktion, size = 15) %>% 
+  ly_points(Spieler, Mittel, data = mittelrun_02, glyph = "x", color = Spieler, size = 20)
+```
+
+### Runs auf Systeme
+
+```{r runs_server}
+runner_liga_02 %>%
+  gather(Systeme, Sysruns, Archiv, `R&D`, HQ, Remote) %>%
+  group_by(Spieler, Systeme) %>% 
+  summarize(Sysruns = sum(Sysruns, na.rm = T)) %>% 
+  ggplot(aes(x = Spieler, y = Systeme, fill = Sysruns)) + 
+    geom_tile(color = "white", size = 0.8) +
+    labs(title = "Summe der Runs aller Spiele pro Spieler und System",
+         x = NULL, y = NULL) +
+    scale_fill_viridis(option = "D") +
+    cosmetics + 
+    theme(legend.position = "bottom")
 ```
