@@ -6,34 +6,49 @@ output:
   rmdformats::html_clean:
   # html_document:
     fig_width: 10
-    dpi: 360
+    dpi: 520
     highlight: tango
-    theme: spacelab
+    theme: flatly
 ---
 
 ```{r, message=F, warning=FALSE, include=FALSE}
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
 knitr::opts_chunk$set(echo = F, fig.path = "plots/", warning = F, message = F)
+
+liga_03         <- filter(liga, Saison == 3)
+runner_liga_03  <- filter(runner_liga, Saison == 3)
+konzern_liga_03 <- filter(konzern_liga, Saison == 3)
 ```
 
-# Spielwiese
+# data manipulation & exploration
 
-### data manipulation & exploration
+## cluster analysis
 
 ```{r, manipulation, echo = T}
-games <- liga %>% 
- filter(Runde == 1) %>% 
- select(Spiel, Spieler)
+# lets try cluster analysis!
 
-games <- table(games$Spiel, games$Spieler)
-games <- as.data.frame.matrix(!!crossprod(games))
+cls <- runner_liga_03 %>% select(Archiv, `R&D`, HQ, Remote) %>% scale()
 
-yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
-                   x ~ icontext(ifelse(x, "ok", "remove")))
+fit <- kmeans(cls, 4)
 
-format_table(games, 
-             list(Boray = yesno, Falk = yesno, Jan = yesno, 
-                  Johannes = yesno, Josh = yesno, Ole = yesno, 
-                  Paul = yesno), 
-             check.rows = T, align = "c", format = "markdown")
+aggregate(cls, by = list(fit$cluster), FUN = mean)
+
+cls <- data.frame(cls, fit$cluster)
+
+library(cluster) 
+clusplot(cls, fit$cluster, color=TRUE, shade=TRUE, 
+  	labels=2, lines=0)
+
+```
+
+## Ole's accesses idee
+
+```{r, accesses}
+data <- data.frame(Faction = c("Shaper", "Shaper", "Criminals", "Criminals", "Anarchs", "Anarchs"),
+                   HQ      = c("1,2,1", "0,1,1,0", 
+                               "0,1,1,2,2", "0,2,2,0,0,1,3",
+                               "0,1", "1,0,0"),
+                   RnD     = c("0,1,1,2,2", "0,2,2,0,0,1,3",
+                               "0,1", "1,0,0",
+                               "1,2,1", "0,1,1,0"))
 ```
