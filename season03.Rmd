@@ -51,8 +51,8 @@ yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
                    x ~ icontext(ifelse(x, "ok", "remove")))
 
 format_table(games, 
-             list(Boray = yesno, Falk = yesno, Jan = yesno, 
-                  Johannes = yesno, Josh = yesno, Ole = yesno, 
+             list(Aschkan = yesno, Boray = yesno, Falk = yesno, Jan = yesno, 
+                  Johannes = yesno, Josh = yesno, Kai = yesno, Ole = yesno, 
                   Paul = yesno, Tobias = yesno), 
              row.names = T, align = "c")
 ```
@@ -66,7 +66,8 @@ format_table(games,
     geom_bar(color = "black", alpha = 0.6) +
     labs(x = "", y = "Spiele") +
     facet_grid(. ~ Seite, scales = "free_x") +
-    scale_fill_manual(values = faction_cols) +
+    scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", 
+                                 "gold1", "darkgray", "chartreuse3", "darkolivegreen")) +
     cosmetics +
     theme(legend.position = "none")
 ```
@@ -91,7 +92,8 @@ format_table(games,
       geom_bar(color = "black", alpha = 0.6) +
       labs(x = "", y = "Spiele") +
       facet_grid(. ~ Fraktion, scales = "free") +
-      scale_fill_manual(values = run_cols) +
+      scale_fill_manual(values = c("darkorange", "deepskyblue3",
+                                   "darkgray", "chartreuse3")) +
       cosmetics +
       theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
@@ -111,7 +113,7 @@ ggplot(runner_liga_03, aes(x = Spieler, y = Runs, color = Spieler)) +
                colour = "black", size = 0.5, geom = "errorbar") +
   geom_hline(yintercept = mean(runner_liga_03$Runs, na.rm = T), size = 1, color = "gray") +
   labs(x = NULL, y = "Runs") + 
-  scale_color_brewer(palette = "Set1") +
+  # scale_color_brewer(palette = "Set1") +
   cosmetics + theme(legend.position = "none")
 ```
 
@@ -132,9 +134,9 @@ figure(title = "Runs pro Spieler", ylab = "Runs", xlab = NULL, tools = NULL,
   ly_points(Spieler, Mittel, data = mittelrun_03, glyph = "x", color = Spieler, size = 20)
 ```
 
-### Runs auf Systeme
+### Runs auf Systeme pro Spieler
 
-```{r runs_server}
+```{r runs_server_player}
 runner_liga_03 %>%
   gather(Systeme, Sysruns, Archiv, `R&D`, HQ, Remote) %>%
   group_by(Spieler, Systeme) %>% 
@@ -146,4 +148,50 @@ runner_liga_03 %>%
     scale_fill_viridis(option = "D") +
     cosmetics + 
     theme(legend.position = "bottom")
+```
+
+### Runs auf Systeme pro Fraktion
+
+Waffelplots! 
+
+```{r runs_server_faction}
+hq <- runner_liga_03 %>% 
+  select(Fraktion, HQ) %>% 
+  group_by(Fraktion) %>% 
+  summarize(Runs = sum(HQ, na.rm = T)) %>% 
+  spread(Fraktion, Runs)
+
+rnd <- runner_liga_03 %>% 
+  select(Fraktion, `R&D`) %>% 
+  group_by(Fraktion) %>% 
+  summarize(Runs = sum(`R&D`, na.rm = T)) %>% 
+  spread(Fraktion, Runs)
+
+archive <- runner_liga_03 %>% 
+  select(Fraktion, Archiv) %>% 
+  group_by(Fraktion) %>% 
+  summarize(Runs = sum(Archiv, na.rm = T)) %>% 
+  spread(Fraktion, Runs)
+
+remote <- runner_liga_03 %>% 
+  select(Fraktion, Remote) %>% 
+  group_by(Fraktion) %>% 
+  summarize(Runs = sum(Remote, na.rm = T)) %>% 
+  spread(Fraktion, Runs)
+
+
+iron(
+  waffle(hq, rows = 5, size = 0.5, title = "Runs auf HQ", pad = 8,
+         xlab = paste("1 Waffel = 1 Run; n =", rowSums(hq)),
+         colors = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")),
+  waffle(rnd, rows = 5, size = 0.5, title = "Runs auf R&D", pad = 0,
+         xlab = paste("1 Waffel = 1 Run; n =", rowSums(rnd)),
+         colors = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")),
+  waffle(archive, rows = 5, size = 0.5, title = "Runs auf Archive", pad = 20,
+         xlab = paste("1 Waffel = 1 Run; n =", rowSums(archive)),
+         colors = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")),
+  waffle(remote, rows = 5, size = 0.5, title = "Runs auf Remotes", pad = 8,
+         xlab = paste("1 Waffel = 1 Run; n =", rowSums(remote)),
+         colors = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3"))
+)
 ```
