@@ -15,6 +15,7 @@
   library(stringr)      # just because
   library(formattable)  # lots of tables here, might as well make 'm pretty
   library(rbokeh)       # when creating a website, why not use html widgets?
+  library(waffle)       # WAFFLES!!
     
     
 # knitr options setzen
