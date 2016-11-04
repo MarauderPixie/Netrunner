@@ -161,23 +161,29 @@ hq <- runner_liga_03 %>%
   summarize(Runs = sum(HQ, na.rm = T)) %>% 
   spread(Fraktion, Runs)
 
+# for percentages, rather than absolutes
+# hq <- round(hq/rowSums(hq)*100)
+
 rnd <- runner_liga_03 %>% 
   select(Fraktion, `R&D`) %>% 
   group_by(Fraktion) %>% 
   summarize(Runs = sum(`R&D`, na.rm = T)) %>% 
   spread(Fraktion, Runs)
+# rnd <- round(rnd/rowSums(rnd)*100)
 
 archive <- runner_liga_03 %>% 
   select(Fraktion, Archiv) %>% 
   group_by(Fraktion) %>% 
   summarize(Runs = sum(Archiv, na.rm = T)) %>% 
   spread(Fraktion, Runs)
+# archive <- round(archive/rowSums(archive)*100)
 
 remote <- runner_liga_03 %>% 
   select(Fraktion, Remote) %>% 
   group_by(Fraktion) %>% 
   summarize(Runs = sum(Remote, na.rm = T)) %>% 
   spread(Fraktion, Runs)
+# remote <- round(remote/rowSums(remote)*100)
 
 
 iron(
