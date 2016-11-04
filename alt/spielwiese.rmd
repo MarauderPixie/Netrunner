@@ -52,3 +52,60 @@ data <- data.frame(Faction = c("Shaper", "Shaper", "Criminals", "Criminals", "An
                                "0,1", "1,0,0",
                                "1,2,1", "0,1,1,0"))
 ```
+
+## Spielübersicht plot.ly
+
+```{r, plotlybersicht}
+## demo code
+library(dplyr)
+library(reshape2)
+library(plotly)
+
+p <- volcano %>%
+  melt() %>% 
+  ggplot(aes(Var1, Var2, fill = value)) + geom_tile()
+  
+ggplotly(p)
+##  ##  ##  ##  ##  ##
+
+ply <- as.data.frame.matrix(crossprod(table(score$Spiel, score$Spieler))) %>% 
+  gather(Spieler, Spiele, Andi, Aschkan, Bjarne, Bodo, Boray, Falk, Jan,
+         Johannes, Josh, `Josh R.`, Kai, Ole, Paul, Tobias) %>% 
+  mutate(Gegner = rep(unique(Spieler), length(unique(Spieler)))) %>% 
+  filter(Spieler != Gegner, Spiele != 0) %>% 
+  ggplot(., aes(x = Spieler, y = Gegner, fill = Spiele)) + geom_tile()
+    geom_tile(color = "white", size = 0.5, alpha = 0.9)
+```
+
+## Highcharterei
+
+```{r highcharterei}
+library(highcharter)
+
+# highchart() %>% 
+#   hc_yAxis(categories = step3$Gegensatz) %>% 
+#   hc_add_series(data = step3$Studieren, type = "line", name = "Studieren") %>% 
+#   hc_add_series(data = step3$Lernen, type = "line", name = "Lernen") %>% 
+#   hc_add_series(data = step3$`forschendes Lernen`, type = "line", 
+#                 name = "forschendes Lernen") %>% 
+#   hc_add_series(data = step3$`forschendes Studieren`, type = "line", 
+#                 name = "forschendes Studieren") %>% 
+#   hc_add_series(data = step3$`forschungsorientiertes Lernen`, type = "line", 
+#                 name = "forschungsorientiertes Lernen") %>% 
+#   hc_add_series(data = step3$`forschungsbasiertes Lernen`, type = "line", 
+#                 name = "forschungsbasiertes Lernen") %>% 
+#   hc_title(text = "Mittlere Einschätzung der Konstrukte ") %>% 
+#   hc_legend(layout = "vertical", verticalAlign = "top", align = "right")
+# 
+# hchart(step2, "line", x = Gegensatz, y = Wert, group = Konstrukt) %>% 
+#   hc_legend(layout = "vertical", verticalAlign = "top", align = "right")
+
+
+# simpel
+hchart(runner_liga_03, "point", x = Spieler, y = Runs)
+
+# komplex
+highchart() %>% 
+  hc_xAxis(categories = runner_liga_03$Spieler) %>% 
+  hc_add_series(data = runner_liga_03$Runs, type = "point", name = "Runs")
+```
