@@ -14,7 +14,39 @@ konzern_score <- filter(konzern_score, Cycle == "Flashpoint")
 ```
 
 
-# Wins per player by side
+# Leaderboard & Played Games
+
+## Highscore
+
+```{r, Flashpoint_Liste}
+  score %>% 
+    group_by(Spieler) %>% 
+    summarize(Spiele = n(),
+              Siege  = sum(Punkte)/2,
+              Ratio  = percent((sum(Punkte)/2)/Spiele, 1)) %>%
+    arrange(desc(Ratio), desc(Siege), Spiele) %>% 
+    format_table(list(
+      Spiele = color_tile("white", "lightgreen"),
+      align = "l", check.rows = F, format = "markdown"))
+```
+
+## Attempted Security Breaches
+
+```{r, Flashpoint_Spieluebersicht}
+as.data.frame.matrix(crossprod(table(score$Spiel, score$Spieler))) %>% 
+  gather(Spieler, Spiele, Andi, Aschkan, Boray, 
+         Falk, Jan, Josh, Kai, Ole, Paul, Tobias) %>% 
+  mutate(Gegner = rep(unique(Spieler), length(unique(Spieler)))) %>% 
+  filter(Spieler != Gegner, Spiele != 0) %>% 
+  ggplot(., aes(x = Spieler, y = Gegner, fill = Spiele)) + 
+    geom_tile(color = "white", size = 0.5, alpha = 0.9) +
+    geom_text(aes(label = Spiele), color = "gray") +
+    labs(x = NULL, y = NULL) +
+    scale_fill_viridis(option = "B") +
+    cosmetics + theme(legend.position = "top")
+```
+
+## Wins per player by side
 
 ```{r SeiteproSpieler}
 wins <- score %>% 
