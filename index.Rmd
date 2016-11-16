@@ -13,5 +13,5 @@ Our little ***Android: Netrunner*** meta agreed upon logging some of their runs 
 The purpose of this site is to display the results and provide some feedback to the players regarding their performance.
 
 
-[^1]: *hanseatic city of Bremen*
+[^1]: *Hanseatic City of Bremen*
 [^2]: Sadly, the same can not be guaranteed when it comes to the collection of the data.
