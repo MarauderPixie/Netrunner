@@ -1,5 +1,5 @@
 ## Print this on start so I know it's loaded.
-cat("Loading custom .Rprofile")  
+cat("Loading custom .Rprofile \n \n")  
 
 
 ### Startup
@@ -8,10 +8,9 @@ startup <- function(){
   date_string <- Sys.Date()
   ddate       <- ddateR::poee()
 
-  msg1 <- sprintf("Oh, it's you again. Hi! \nThis is %s.
+  msg1 <- sprintf("Oh, it's you again. \nThis is %s.
                   \n%s \nLet's crunch some numbers!",
-                  version$version.string, "(", version$nickname, ")",
-                  ddate)
+                  version$version.string, ddate)
   cat(msg1, "\n")
 }
 
