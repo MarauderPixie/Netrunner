@@ -37,6 +37,8 @@ Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Be
 
 ## Spielübersicht
 
+### Checkliste
+
 Wer hat schon gespielt? Welche Spiele stehen noch aus? Vorschläge, das übersichtlicher zu gestalten?
 
 ```{r Spiele}
@@ -57,17 +59,63 @@ format_table(games,
              row.names = T, align = "c")
 ```
 
+### Siege pro Spieler pro Seite
+
+Da die Anzahl der Spiele bei allen ungefähr gleich ist (s.o.), sind prozentuelle Angaben bestimmt völlig ausreichend.
+
+```{r SeiteproSpieler}
+wins <- liga_03 %>% 
+  group_by(Seite, Spieler) %>% 
+  summarize(Spiele  = n(),
+            Siege   = sum(Punkte)/3,
+            Prozent = round(Siege / Spiele * 100, 1)) %>% 
+  mutate(Prozent = ifelse(Seite == "Konzern", Prozent * -1, Prozent * 1))
+
+ggplot(wins, aes(x = Spieler, color = Seite)) +
+  geom_linerange(data = wins[wins$Seite == "Runner", ],
+                 aes(ymin = 10, ymax = 10 + Prozent), size = 9, alpha = 0.7) +
+  
+  geom_linerange(data = wins[wins$Seite == "Konzern", ],
+                 aes(ymin = -10, ymax = -10 + Prozent), size = 9, alpha = 0.7) +
+  
+  geom_label(aes(x = Spieler, y = 0, label = Spieler, family = "sans"), 
+             inherit.aes = F, size = 5, label.padding = unit(0.0, "lines"), 
+             label.size = 0, label.r = unit(0.0, "lines"), color = "black") +
+  
+  scale_y_continuous(breaks = c(c(-100, -80, -60, -40, -20, 0) + -10, 
+                                c(0, 20, 40, 60, 80, 100) + 10),
+                     labels = c("100%", "80%", "60%", "40%", "20%", "0%",
+                                "0%", "20%", "40%", "60%", "80%", "100%")) +
+  
+  labs(x = NULL, y = NULL, title = "Siege pro Spieler pro Seite") +
+  
+  scale_color_manual(name = "", values = c(Konzern = "#3288bd", Runner = "#d53e4f"),
+                     labels = c("Konzern", "Runner")) +
+  
+  theme_hc() + coord_flip() + 
+  theme(axis.text.y   = element_blank(), panel.grid.major.x = element_line(color = "gray"),
+        axis.ticks.y  = element_blank(), panel.grid.major.y = element_blank(),
+        legend.position = "top", title = element_text(size = 14), 
+        axis.text    = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.text  = element_text(size = 10),
+        strip.text   = element_text(size = 14))
+```
+
+
 ## Spielhäufigkeiten
 
 ### nach Fraktion
 
 ```{r, IDs}
-  ggplot(liga_03, aes(x = Fraktion, fill = Fraktion)) +
-    geom_bar(color = "black", alpha = 0.6) +
+  ggplot(liga_03, aes(x = Fraktion, fill = Fraktion, color = Fraktion)) +
+    geom_bar(alpha = 0.4) +
     labs(x = "", y = "Spiele") +
     facet_grid(. ~ Seite, scales = "free_x") +
     scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", 
                                  "gold1", "darkgray", "chartreuse3", "darkolivegreen")) +
+    scale_color_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", 
+                                  "gold1", "darkgray", "chartreuse3", "darkolivegreen")) +
     cosmetics +
     theme(legend.position = "none")
 ```
@@ -76,11 +124,12 @@ format_table(games,
 
 ```{r, IDs_Konzern}
   konzern_liga_03 %>%
-    ggplot(aes(x = ID, fill = Fraktion)) +
-      geom_bar(color = "black", alpha = 0.6) +
+    ggplot(aes(x = ID, fill = Fraktion, color = Fraktion)) +
+      geom_bar(alpha = 0.4) +
       labs(x = "", y = "Spiele", legend = "") +
       facet_grid(. ~ Fraktion, scales = "free") +
       scale_fill_manual(values = kon_cols) +
+      scale_color_manual(values = kon_cols) +
       cosmetics +
       theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
@@ -88,12 +137,12 @@ format_table(games,
 
 ```{r, IDs_Runner}
   runner_liga_03 %>% 
-    ggplot(aes(x = ID, fill = Fraktion)) +
-      geom_bar(color = "black", alpha = 0.6) +
+    ggplot(aes(x = ID, fill = Fraktion, color = Fraktion)) +
+      geom_bar(alpha = 0.6) +
       labs(x = "", y = "Spiele") +
       facet_grid(. ~ Fraktion, scales = "free") +
-      scale_fill_manual(values = c("darkorange", "deepskyblue3",
-                                   "darkgray", "chartreuse3")) +
+      scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
+      scale_color_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
       cosmetics +
       theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
@@ -154,7 +203,7 @@ runner_liga_03 %>%
 
 Waffelplots! 
 
-```{r runs_server_faction}
+```{r runs_server_faction, eval = F}
 hq <- runner_liga_03 %>% 
   select(Fraktion, HQ) %>% 
   group_by(Fraktion) %>% 
