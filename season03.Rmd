@@ -171,16 +171,16 @@ ggplot(runner_liga_03, aes(x = Spieler, y = Runs, color = Spieler)) +
 So mit Mouse-Over-Informationen und allem. Bin aber noch am rumprobieren.
 
 ```{r, Runs_Spieler_rbokeh}
-mittelrun_03 <- runner_liga_03 %>% group_by(Spieler) %>% summarize(Mittel = mean(Runs))
+mittelrun_03 <- runner_liga_03 %>% group_by(Spieler) %>% summarize(Mittel = mean(Runs, na.rm = T))
 
 figure(title = "Runs pro Spieler", ylab = "Runs", xlab = NULL, tools = NULL,
-       xgrid = F, ygrid = F, legend_location = NULL) %>% 
+       xgrid = F, ygrid = F, legend_location = NULL, width = 800) %>% 
   ly_lines(x = Spieler, y = mean(runner_liga_03$Runs), data = runner_liga_03,
            color = "gray", alpha = 0.8) %>% 
   ly_points(Spieler, Runs, data = runner_liga_03, 
             hover = "@Runs Runs als @ID gegen @Gegner_ID",
             glyph = "diamond", color = Fraktion, size = 15) %>% 
-  ly_points(Spieler, Mittel, data = mittelrun_03, glyph = "x", color = Spieler, size = 20)
+  ly_points(Spieler, Mittel, data = mittelrun_03, glyph = "x", color = "black", size = 20)
 ```
 
 ### Runs auf Systeme pro Spieler
@@ -249,4 +249,40 @@ iron(
          xlab = paste("1 Waffel = 1 Run; n =", rowSums(remote)),
          colors = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3"))
 )
+```
+
+## Kräfteverhältnis
+
+### Runner vs. Corp
+
+```{r r_vs_c}
+runner_liga %>% 
+  mutate(Punkte = recode(Punkte, `2` = 1, `3` = 1, `0` = 0)) %>% 
+  group_by(Fraktion, Gegner_Fraktion) %>% 
+  summarize(Siege  = sum(Punkte, na.rm = T) / n() * 100) %>% 
+  ggplot(aes(x = Fraktion, y = Gegner_Fraktion, fill = Siege)) + 
+    geom_tile(color = "white", size = 0.8) +
+    scale_fill_viridis(option = "D") +
+    labs(title = "Siege der Runnerfraktionen über die Konzerne",
+         subtitle = "Angabe in Prozent", y = "Konzerne", x = "Runnerfraktionen") +
+    cosmetics + 
+    theme(legend.position = "top")
+```
+
+### Corp vs. Runner
+
+Das gleiche als Negativ, sozusagen.
+
+```{r c_vs_r}
+konzern_liga %>% 
+  mutate(Punkte = recode(Punkte, `2` = 1, `3` = 1, `0` = 0)) %>% 
+  group_by(Fraktion, Gegner_Fraktion) %>% 
+  summarize(Siege  = sum(Punkte, na.rm = T) / n() * 100) %>% 
+  ggplot(aes(x = Fraktion, y = Gegner_Fraktion, fill = Siege)) + 
+    geom_tile(color = "white", size = 0.8) +
+    scale_fill_viridis(option = "D") +
+    labs(title = "Siege der Konzerne über die Runnerfraktionen",
+         subtitle = "Angabe in Prozent", x = "Konzerne", y = "Runnerfraktionen") +
+    cosmetics + 
+    theme(legend.position = "bottom")
 ```
