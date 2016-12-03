@@ -43,15 +43,17 @@
  
        
 # Gegnerspalten hinzufügen
-  rl <- runner_liga  %>% select(Spieler, ID)
-    colnames(rl) <- c("Gegner_Spieler", "Gegner_ID")
-  ll <- konzern_liga %>% select(Spieler, ID)
-    colnames(ll) <- c("Gegner_Spieler", "Gegner_ID")
+  rl <- runner_liga  %>% select(Spieler, Fraktion, ID)
+    colnames(rl) <- c("Gegner_Spieler", "Gegner_Fraktion", "Gegner_ID")
+  ll <- konzern_liga %>% select(Spieler, Fraktion, ID)
+    colnames(ll) <- c("Gegner_Spieler", "Gegner_Fraktion", "Gegner_ID")
     
   runner_liga  <- cbind(runner_liga, ll)
   konzern_liga <- cbind(konzern_liga, rl)
     
   rm(rl, ll)
+  
+  liga <- rbind(runner_liga, konzern_liga)
     
     
 # Farben definieren
