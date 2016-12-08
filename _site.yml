@@ -6,7 +6,7 @@ navbar:
       icon: ion-aperture
       href: index.html
     - text: "Liga"
-      icon: ion-ios-pulse-strong
+      icon: fa-heartbeat
       menu:
       - text: "Season 1"
         href: season01.html
@@ -15,7 +15,7 @@ navbar:
       - text: "Season 3"
         href: season03.html
     - text: "Arena Highscore"
-      icon: ion-ios-pulse
+      icon: fa-cubes
       menu:
       - text: "Mumbad Cycle"
         href: Mumbad.html
@@ -23,6 +23,13 @@ navbar:
         href: Flashpoint.html
       - text: "All records"
         href: Highscore.html
+    - text: "Analyse"
+      icon: fa-flask
+      menu:
+      - text: "Last Season"
+        href: ana_last.html
+      - text: "All Data"
+        href: ana_all.html
     - text: "Runner Profiles"
       icon: ion-ionic
       href: personal.html
