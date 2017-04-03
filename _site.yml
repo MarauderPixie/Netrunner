@@ -14,15 +14,8 @@ navbar:
         href: season02.html
       - text: "Season 3"
         href: season03.html
-    - text: "Arena Highscore"
-      icon: fa-cubes
-      menu:
-      - text: "Mumbad Cycle"
-        href: Mumbad.html
-      - text: "Flashpoint Cycle"
-        href: Flashpoint.html
-      - text: "All records"
-        href: Highscore.html
+      - text: "Season 4"
+        href: season04.html
     - text: "Analyse"
       icon: fa-flask
       menu:
