@@ -9,9 +9,13 @@ output:
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
 knitr::opts_chunk$set(fig.path = "assets/liga-plots/01")
 
-liga_01         <- filter(liga, Saison == 1)
-runner_liga_01  <- filter(runner_liga, Saison == 1)
-konzern_liga_01 <- filter(konzern_liga, Saison == 1)
+liga    <- readRDS("./Liga.rds")
+runner  <- readRDS("./Runner.rds")
+konzern <- readRDS("./Konzern.rds")
+
+liga_01    <- filter(liga, Saison == 1)
+runner_01  <- filter(runner, Saison == 1)
+konzern_01 <- filter(konzern, Saison == 1)
 ```
 
 ## Punktestand
@@ -66,32 +70,32 @@ format_table(games,
     facet_grid(. ~ Seite, scales = "free_x") +
     scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", 
                                  "gold1", "darkgray", "chartreuse3", "darkolivegreen")) +
-    cosmetics +
+    
     theme(legend.position = "none")
 ```
   
 ### nach ID
 
 ```{r, IDs_Konzern}
-  konzern_liga_01 %>%
+  konzern_01 %>%
     ggplot(aes(x = ID, fill = Fraktion)) +
       geom_bar(color = "black", alpha = 0.6) +
       labs(x = "", y = "Spiele", legend = "") +
       facet_grid(. ~ Fraktion, scales = "free") +
       scale_fill_manual(values = kon_cols) +
-      cosmetics +
+      
       theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
 ```
 
 ```{r, IDs_Runner}
-  runner_liga_01 %>% 
+  runner_01 %>% 
     ggplot(aes(x = ID, fill = Fraktion)) +
       geom_bar(color = "black", alpha = 0.6) +
       labs(x = "", y = "Spiele") +
       facet_grid(. ~ Fraktion, scales = "free") +
       scale_fill_manual(values = c("#FF8C00", "#009ACD", "darkgray", "#66CD00")) +
-      cosmetics +
+      
       theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
             legend.position = "none")
 ```
@@ -104,37 +108,21 @@ format_table(games,
 Der graue Balken ist die durchschnittliche Anzahl Runs über alle Spieler hinweg und die schwarzen Balken sind entsprechend der Durchschnitt der jeweiligen Person.
 
 ```{r, Runs_Spieler}
-ggplot(runner_liga_01, aes(x = Spieler, y = Runs, color = Spieler)) +
+ggplot(runner_01, aes(x = Spieler, y = Runs, color = Spieler)) +
   geom_point(position = "jitter") +
   stat_summary(fun.y = "mean", fun.ymax = "mean", fun.ymin = "mean", 
                colour = "black", size = 0.5, geom = "errorbar") +
-  geom_hline(yintercept = mean(runner_liga_01$Runs, na.rm = T), size = 1, color = "gray") +
+  geom_hline(yintercept = mean(runner_01$Runs, na.rm = T), size = 1, color = "gray") +
   labs(x = NULL, y = "Runs") + 
   scale_color_brewer(palette = "Set1") +
-  cosmetics + theme(legend.position = "none")
+   theme(legend.position = "none")
 ```
 
-#### Mehr vom Gleichen, nur anders
-
-So mit Mouse-Over-Informationen und allem. Bin aber noch am rumprobieren.
-
-```{r, Runs_Spieler_rbokeh}
-mittelrun_01 <- runner_liga_01 %>% group_by(Spieler) %>% summarize(Mittel = mean(Runs))
-
-figure(title = "Runs pro Spieler", ylab = "Runs", xlab = NULL, tools = NULL,
-       xgrid = F, ygrid = F, legend_location = NULL) %>% 
-  ly_lines(x = Spieler, y = mean(runner_liga_01$Runs), data = runner_liga_01,
-           color = "gray", alpha = 0.8) %>% 
-  ly_points(Spieler, Runs, data = runner_liga_01, 
-            hover = "@Runs Runs als @ID gegen @Gegner_ID",
-            glyph = "diamond", color = Fraktion, size = 15) %>% 
-  ly_points(Spieler, Mittel, data = mittelrun_01, glyph = "x", color = Spieler, size = 20)
-```
 
 ### Runs auf Systeme
 
 ```{r runs_server}
-runner_liga_01 %>%
+runner_01 %>%
   gather(Systeme, Sysruns, Archiv, `R&D`, HQ, Remote) %>%
   group_by(Spieler, Systeme) %>% 
   summarize(Sysruns = sum(Sysruns, na.rm = T)) %>% 
@@ -143,6 +131,6 @@ runner_liga_01 %>%
     labs(title = "Summe der Runs aller Spiele pro Spieler und System",
          x = NULL, y = NULL) +
     scale_fill_viridis(option = "D") +
-    cosmetics + 
+     
     theme(legend.position = "bottom")
 ```
