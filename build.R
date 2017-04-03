@@ -1,6 +1,10 @@
 #! /usr/bin/env Rscript
 rmarkdown::render_site(input = ".")
 
+# execute init.R
+# source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
+# ...or, don't
+
 # Collect output files
 
 out_docs   <- paste0("./_site/", c(list.files(path = "_site/", pattern = "*.html")))
