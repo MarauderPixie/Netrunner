@@ -62,7 +62,7 @@ data.frame(
     scale_fill_manual(values = all_colors) +
     scale_color_manual(values = all_colors) +
     labs(x = "", y = "Spiele") +
-    facet_wrap(~Seite, scales = "free_x", ncol = 4) +
+    facet_wrap(~Seite, scales = "free_x", ncol = 2) +
     theme(legend.position = "none")
 ```
 
@@ -87,7 +87,7 @@ ggplot(s4, aes(x = Runner_ID,
   scale_fill_manual(values = run_colors) +
   scale_color_manual(values = run_colors) +
   labs(x = "", y = "Spiele") +
-  facet_wrap(~Runner_Fraktion, scales = "free_x") +
+  facet_wrap(~Runner_Fraktion, scales = "free_x", ncol = 4) +
   theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
         legend.position = "none")
 ```
