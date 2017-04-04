@@ -52,13 +52,6 @@ ftable(table(s4$Konzern_Player, s4$Runner_Player))
 ### nach Fraktion
 
 ```{r Fraktionen}
-# define colors:
-all_colors <- c("darkorange", "deepskyblue3", "darkorchid4", "red", 
-                "gold1", "darkgray", "chartreuse3", "darkolivegreen")
-kon_colors <- c("darkorchid4", "red", "gold1", "darkolivegreen")
-run_colors <- c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")
-
-# plot Factions:
 data.frame(
     Seite    = c(rep("Konzern", length(s4$Konzern_Player)), 
                  rep("Runner", length(s4$Runner_Player))),
