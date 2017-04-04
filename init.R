@@ -4,9 +4,9 @@ library(broom)
 # library(plotly)     
 # library(highcharter)
 library(sjPlot)
-library(pixiedust)
-library(formattable)
-library(waffle)
+# library(pixiedust)
+# library(formattable)
+# library(waffle)
 library(viridis)
 
 
@@ -18,14 +18,14 @@ theme_set(theme_tut())
   
 
 ## define colors
-faction_fill <- scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", 
-                                             "gold1", "chartreuse3", "darkolivegreen"))
-kon_fill     <- scale_fill_manual(values = c("darkorchid4", "red", "gold1", "darkolivegreen"))
-run_fill     <- scale_fill_manual(values = c("darkorange", "deepskyblue3", "chartreuse3"))
+all_colors <- c("darkorange", "deepskyblue3", "darkorchid4", "red", 
+                "gold1", "darkgray", "chartreuse3", "darkolivegreen")
+kon_colors <- c("darkorchid4", "red", "gold1", "darkolivegreen")
+run_colors <- c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")
   
+## by hexcode  
+# kon_cols     <- c('#68228B', '#FF0000', '#FFD700', '#556B2F')
+# run_cols     <- c("#FF8C00", "#009ACD", "#66CD00")
   
-kon_cols     <- c('#68228B', '#FF0000', '#FFD700', '#556B2F')
-run_cols     <- c("#FF8C00", "#009ACD", "#66CD00")
-  
-faction_cols <- c("#FF8C00", "#009ACD", '#68228B', '#FF0000', 
-                  '#FFD700', "#66CD00", '#556B2F')
+# faction_cols <- c("#FF8C00", "#009ACD", '#68228B', '#FF0000', 
+#                   '#FFD700', "#66CD00", '#556B2F')
