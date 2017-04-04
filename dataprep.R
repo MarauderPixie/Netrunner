@@ -8,7 +8,9 @@ library(broom)
 
 
 ## read and manipulate data
-forms <- gs_title("Ligaresponses") %>% 
+## warnings for multiple column names get suppressed since they get changed immediately afterwards
+forms <- suppressWarnings(
+  gs_title("Ligaresponses") %>% 
   gs_read() %>% 
   transmute(
     # Spiel            = rep(1:length(X16), each = 2),
@@ -35,6 +37,7 @@ forms <- gs_title("Ligaresponses") %>%
     Sieger_Spieler       = ifelse(Sieger_Seite == "Runner", 
                                   Runner_Player, Konzern_Player)
   )
+)
 
 
 ## save to file
