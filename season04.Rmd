@@ -9,103 +9,41 @@ output:
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
 knitr::opts_chunk$set(fig.path = "assets/liga-plots/04")
 
-liga    <- readRDS("./Liga.rds")
-runner  <- readRDS("./Runner.rds")
-konzern <- readRDS("./Konzern.rds")
-
-liga_04    <- filter(liga, Saison == 4)
-runner_04  <- filter(runner, Saison == 4)
-konzern_04 <- filter(konzern, Saison == 4)
+s4 <- readRDS("./data/Liga.rds")
 ```
 
-
-## Punktestand
-
-Wer mehr als 80% seiner Spiele schon hinter sich hat, bekommt ne grüne Zahl. Bei weniger als 50%, erscheint ne rote.  
-
-```{r, Punktestand}
-  liga_04 %>% 
-    group_by(Spieler) %>% 
-    summarize(Spiele       = n()/2,
-              Agendapunkte = sum(Agendapunkte, na.rm = T),
-              Punkte       = sum(Punkte)) %>%
-    arrange(desc(Punkte), desc(Agendapunkte)) %>% 
-    format_table(
-      list(Agendapunkte = color_tile("white", "lightgray"),
-                 Spiele = formatter("span", style = x ~ style(
-                                      color = ifelse(x <= 4, "red", 
-                                              ifelse(x >= 7, "green", "gray"))))
-           ),
-      align = "l", check.rows = F, format = "markdown")
+```
+# sample code from old page
+liga_04 %>% 
+  group_by(Spieler) %>% 
+  summarize(Spiele       = n()/2,
+            Agendapunkte = sum(Agendapunkte, na.rm = T),
+            Punkte       = sum(Punkte)) %>%
+  arrange(desc(Punkte), desc(Agendapunkte)) %>% 
+  format_table(
+    list(Agendapunkte = color_tile("white", "lightgray"),
+               Spiele = formatter("span", style = x ~ style(
+                                    color = ifelse(x <= 4, "red", 
+                                                   ifelse(x >= 7, "green", "gray"))))
+         ),
+    align = "l", check.rows = F, format = "markdown")
 ```
 
-## Spielübersicht
+```{r Punktestand}
+# try to replicate with new structure
+## this gives accurate table of standings
+s4 %>% 
+  gather(Seite, Spieler, Konzern_Player, Runner_Player) %>% 
+  mutate(Punkte = ifelse(Sieger_Spieler == Spieler, 3, 0)) %>% 
+  group_by(Spieler) %>% 
+  summarise(Spiele       = n() / 2,
+            Agendapunkte = sum(Runner_Agendapunkte + Konzern_Agendapunkte),
+            Gesamtpunkte = sum(Punkte)) %>% 
+  arrange(desc(Gesamtpunkte), desc(Agendapunkte)) %>% 
+  knitr::kable()
 
-### Checkliste
-
-Wer hat schon gespielt? Welche Spiele stehen noch aus? Vorschläge, das übersichtlicher zu gestalten?
-
-**Hinweis:** Bis alle mal gespielt haben bleibt es hier erstmal leer.
-
-```{r Spiele, eval=F}
-games <- liga_04 %>% 
- filter(Runde == 1) %>% 
- select(Spiel, Spieler)
-
-games <- table(games$Spiel, games$Spieler)
-games <- as.data.frame.matrix(!!crossprod(games))
-
-yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
-                   x ~ icontext(ifelse(x, "ok", "remove")))
-
-format_table(games, 
-             list(Aschkan = yesno, Boray = yesno, Falk = yesno, Jan = yesno, 
-                  Johannes = yesno, Josh = yesno, Kai = yesno, Ole = yesno, 
-                  Paul = yesno, Tobias = yesno), 
-             row.names = T, align = "c")
-```
-
-### Siege pro Spieler pro Seite
-
-Da die Anzahl der Spiele bei allen ungefähr gleich ist (s.o.), sind prozentuelle Angaben bestimmt völlig ausreichend.
-
-```{r SeiteproSpieler}
-wins <- liga_04 %>% 
-  group_by(Seite, Spieler) %>% 
-  summarize(Spiele  = n(),
-            Siege   = sum(Punkte)/3,
-            Prozent = round(Siege / Spiele * 100, 1)) %>% 
-  mutate(Prozent = ifelse(Seite == "Konzern", Prozent * -1, Prozent * 1))
-
-ggplot(wins, aes(x = Spieler, color = Seite)) +
-  geom_linerange(data = wins[wins$Seite == "Runner", ],
-                 aes(ymin = 10, ymax = 10 + Prozent), size = 9, alpha = 0.7) +
-  
-  geom_linerange(data = wins[wins$Seite == "Konzern", ],
-                 aes(ymin = -10, ymax = -10 + Prozent), size = 9, alpha = 0.7) +
-  
-  geom_label(aes(x = Spieler, y = 0, label = Spieler, family = "sans"), 
-             inherit.aes = F, size = 5, label.padding = unit(0.0, "lines"), 
-             label.size = 0, label.r = unit(0.0, "lines"), color = "black") +
-  
-  scale_y_continuous(breaks = c(c(-100, -80, -60, -40, -20, 0) + -10, 
-                                c(0, 20, 40, 60, 80, 100) + 10),
-                     labels = c("100%", "80%", "60%", "40%", "20%", "0%",
-                                "0%", "20%", "40%", "60%", "80%", "100%")) +
-  
-  labs(x = NULL, y = NULL, title = "Siege pro Spieler pro Seite") +
-  
-  scale_color_manual(name = "", values = c(Konzern = "#3288bd", Runner = "#d53e4f"),
-                     labels = c("Konzern", "Runner")) +
-  
-  coord_flip() + 
-  theme(axis.text.y   = element_blank(), panel.grid.major.x = element_line(color = "gray"),
-        axis.ticks.y  = element_blank(), panel.grid.major.y = element_blank(),
-        legend.position = "top", title = element_text(size = 14), 
-        axis.text    = element_text(size = 12),
-        legend.title = element_text(size = 12),
-        legend.text  = element_text(size = 10),
-        strip.text   = element_text(size = 14))
+## this gives accurate table of played games
+ftable(table(s4$Konzern_Player, s4$Runner_Player))
 ```
 
 
@@ -113,44 +51,53 @@ ggplot(wins, aes(x = Spieler, color = Seite)) +
 
 ### nach Fraktion
 
-```{r, IDs}
-  ggplot(liga_04, aes(x = Fraktion, fill = Fraktion, color = Fraktion)) +
-    geom_bar(alpha = 0.4) +
+```{r Fraktionen}
+# define colors:
+all_colors <- c("darkorange", "deepskyblue3", "darkorchid4", "red", 
+                "gold1", "darkgray", "chartreuse3", "darkolivegreen")
+kon_colors <- c("darkorchid4", "red", "gold1", "darkolivegreen")
+run_colors <- c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")
+
+# plot Factions:
+data.frame(
+    Seite    = c(rep("Konzern", length(s4$Konzern_Player)), 
+                 rep("Runner", length(s4$Runner_Player))),
+    Fraktion = c(s4$Konzern_Fraktion, s4$Runner_Fraktion)
+) %>% 
+  ggplot(aes(x = Fraktion, fill = Fraktion, color = Fraktion)) +
+    geom_bar(alpha = .4) +
+    scale_fill_manual(values = all_colors) +
+    scale_color_manual(values = all_colors) +
     labs(x = "", y = "Spiele") +
-    facet_grid(. ~ Seite, scales = "free_x") +
-    scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", 
-                                 "gold1", "darkgray", "chartreuse3", "darkolivegreen")) +
-    scale_color_manual(values = c("darkorange", "deepskyblue3", "darkorchid4", "red", 
-                                  "gold1", "darkgray", "chartreuse3", "darkolivegreen")) +
+    facet_wrap(~Seite, scales = "free_x", ncol = 4) +
     theme(legend.position = "none")
 ```
-  
+
 ### nach ID
 
-```{r, IDs_Konzern}
-  konzern_04 %>%
-    ggplot(aes(x = ID, fill = Fraktion, color = Fraktion)) +
-      geom_bar(alpha = 0.4) +
-      labs(x = "", y = "Spiele", legend = "") +
-      facet_grid(. ~ Fraktion, scales = "free") +
-      scale_fill_manual(values = kon_cols) +
-      scale_color_manual(values = kon_cols) +
-      theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
-            legend.position = "none")
+```{r IDs_Konzern}
+ggplot(s4, aes(x = Konzern_ID, 
+                  fill = Konzern_Fraktion, color = Konzern_Fraktion)) +
+  geom_bar(alpha = 0.4) +
+  scale_fill_manual(values = kon_colors) +
+  scale_color_manual(values = kon_colors) +
+  labs(x = "", y = "Spiele") +
+  facet_wrap(~Konzern_Fraktion, scales = "free_x", ncol = 4) +
+  theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
+        legend.position = "none")
 ```
 
-```{r, IDs_Runner}
-  runner_04 %>% 
-    ggplot(aes(x = ID, fill = Fraktion, color = Fraktion)) +
-      geom_bar(alpha = 0.6) +
-      labs(x = "", y = "Spiele") +
-      facet_grid(. ~ Fraktion, scales = "free") +
-      scale_fill_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
-      scale_color_manual(values = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")) +
-      theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
-            legend.position = "none")
+```{r IDs_Runner}
+ggplot(s4, aes(x = Runner_ID, 
+                  fill = Runner_Fraktion, color = Runner_Fraktion)) +
+  geom_bar(alpha = 0.4) +
+  scale_fill_manual(values = run_colors) +
+  scale_color_manual(values = run_colors) +
+  labs(x = "", y = "Spiele") +
+  facet_wrap(~Runner_Fraktion, scales = "free_x") +
+  theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
+        legend.position = "none")
 ```
-
 
 ## Runs
 
@@ -158,119 +105,13 @@ ggplot(wins, aes(x = Spieler, color = Seite)) +
 
 Der graue Balken ist die durchschnittliche Anzahl Runs über alle Spieler hinweg und die schwarzen Balken sind entsprechend der Durchschnitt der jeweiligen Person.
 
-```{r, Runs_Spieler}
-ggplot(runner_04, aes(x = Spieler, y = Runs, color = Spieler)) +
-  geom_point(position = "jitter") +
+```{r Runs_Spieler}
+ggplot(s4, aes(x = Runner_Player, y = Runs, color = Runner_Player)) +
+  geom_hline(yintercept = mean(s4$Runs, na.rm = T), 
+             size = 1, color = "gray") +
   stat_summary(fun.y = "mean", fun.ymax = "mean", fun.ymin = "mean", 
                colour = "black", size = 0.5, geom = "errorbar") +
-  geom_hline(yintercept = mean(runner_04$Runs, na.rm = T), size = 1, color = "gray") +
+  geom_jitter() +
   labs(x = NULL, y = "Runs") + 
-  # scale_color_brewer(palette = "Set1") +
   theme(legend.position = "none")
-```
-
-
-### Runs auf Systeme pro Spieler
-
-```{r runs_server_player}
-runner_04 %>%
-  gather(Systeme, Sysruns, Archiv, `R&D`, HQ, Remote) %>%
-  group_by(Spieler, Systeme) %>% 
-  summarize(Sysruns = sum(Sysruns, na.rm = T)) %>% 
-  ggplot(aes(x = Spieler, y = Systeme, fill = Sysruns)) + 
-    geom_tile(color = "white", size = 0.8) +
-    labs(title = "Summe der Runs aller Spiele pro Spieler und System",
-         x = NULL, y = NULL) +
-    scale_fill_viridis(option = "D") +
-  theme(legend.position = "bottom")
-```
-
-### Runs auf Systeme pro Fraktion
-
-Waffelplots! 
-
-```{r runs_server_faction, eval = T}
-hq <- runner_04 %>% 
-  select(Fraktion, HQ) %>% 
-  group_by(Fraktion) %>% 
-  summarize(Runs = sum(HQ, na.rm = T)) %>% 
-  spread(Fraktion, Runs)
-
-# for percentages, rather than absolutes
-hq <- round(hq/rowSums(hq)*100)
-
-rnd <- runner_04 %>% 
-  select(Fraktion, `R&D`) %>% 
-  group_by(Fraktion) %>% 
-  summarize(Runs = sum(`R&D`, na.rm = T)) %>% 
-  spread(Fraktion, Runs)
-rnd <- round(rnd/rowSums(rnd)*100)
-
-archive <- runner_04 %>% 
-  select(Fraktion, Archiv) %>% 
-  group_by(Fraktion) %>% 
-  summarize(Runs = sum(Archiv, na.rm = T)) %>% 
-  spread(Fraktion, Runs)
-archive <- round(archive/rowSums(archive)*100)
-
-remote <- runner_04 %>% 
-  select(Fraktion, Remote) %>% 
-  group_by(Fraktion) %>% 
-  summarize(Runs = sum(Remote, na.rm = T)) %>% 
-  spread(Fraktion, Runs)
-remote <- round(remote/rowSums(remote)*100)
-
-
-iron(
-  waffle(hq, rows = 5, size = 6, title = "Runs auf HQ", pad = 5,
-         xlab = paste("1 Waffel = 1%; n =", sum(runner_04$HQ, na.rm = T)),
-         colors = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3"),
-         use_glyph = "heartbeat", glyph_size = 5),
-  waffle(rnd, rows = 5, size = 6, title = "Runs auf R&D", pad = 5,
-         xlab = paste("1 Waffel = 1%; n =", sum(runner_04$`R&D`, na.rm = T)),
-         colors = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3"), 
-         use_glyph = "heartbeat", glyph_size = 5),
-  waffle(archive, rows = 5, size = 6, title = "Runs auf Archive", pad = 5,
-         xlab = paste("1 Waffel = 1%; n =", sum(runner_04$Archiv, na.rm = T)),
-         colors = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3"), 
-         use_glyph = "heartbeat", glyph_size = 5),
-  waffle(remote, rows = 5, size = 6, title = "Runs auf Remotes", pad = 5,
-         xlab = paste("1 Waffel = 1%; n =", sum(runner_04$Remote, na.rm = T)),
-         colors = c("darkorange", "deepskyblue3", "darkgray", "chartreuse3"), 
-         use_glyph = "heartbeat", glyph_size = 5)
-)
-```
-
-## Kräfteverhältnis
-
-### Runner vs. Corp
-
-```{r r_vs_c}
-runner_04 %>% 
-  mutate(Punkte = recode(Punkte, `2` = 1, `3` = 1, `0` = 0)) %>% 
-  group_by(Fraktion, Gegner_Fraktion) %>% 
-  summarize(Siege  = sum(Punkte, na.rm = T) / n() * 100) %>% 
-  ggplot(aes(x = Fraktion, y = Gegner_Fraktion, fill = Siege)) + 
-    geom_tile(color = "white", size = 0.8) +
-    scale_fill_viridis(option = "D") +
-    labs(title = "Siege der Runnerfraktionen über die Konzerne",
-         subtitle = "Angabe in Prozent", y = "Konzerne", x = "Runnerfraktionen") +
-    theme(legend.position = "bottom")
-```
-
-### Corp vs. Runner
-
-Das gleiche als Negativ, sozusagen.
-
-```{r c_vs_r}
-konzern_04 %>% 
-  mutate(Punkte = recode(Punkte, `2` = 1, `3` = 1, `0` = 0)) %>% 
-  group_by(Fraktion, Gegner_Fraktion) %>% 
-  summarize(Siege  = sum(Punkte, na.rm = T) / n() * 100) %>% 
-  ggplot(aes(x = Fraktion, y = Gegner_Fraktion, fill = Siege)) + 
-    geom_tile(color = "white", size = 0.8) +
-    scale_fill_viridis(option = "D") +
-    labs(title = "Siege der Konzerne über die Runnerfraktionen",
-         subtitle = "Angabe in Prozent", x = "Konzerne", y = "Runnerfraktionen") +
-    theme(legend.position = "bottom")
 ```

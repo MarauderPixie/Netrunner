@@ -13,7 +13,7 @@ library(viridis)
 ## set options and stuff
 knitr::opts_chunk$set(echo = F, warning = F, message = F, fig.align = "center")
 
-source("./theme_tut.R")
+source("./assets/theme_tut.R")
 theme_set(theme_tut())
   
 

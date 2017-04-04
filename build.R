@@ -1,9 +1,8 @@
 #! /usr/bin/env Rscript
 rmarkdown::render_site(input = ".")
 
-# execute init.R
-# source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
-# ...or, don't
+# execute dataprep.R once to get most recent data
+source(paste0(Sys.getenv("PROJECT_HOME"), "./dataprep.R"))
 
 # Collect output files
 
