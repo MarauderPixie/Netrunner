@@ -15,6 +15,8 @@ s4 <- readRDS("./data/Liga.rds")
 
 ## Punktestand
 
+**Hinweis:** Die Punkte für erreichte Achievements sind noch nicht berücksichtigt.
+
 ```{r Punktestand}
 # try to replicate with new structure
 ## this gives accurate table of standings
@@ -52,6 +54,40 @@ format_table(games,
                   ),
              row.names = T, align = "c"
              )
+```
+
+## Siege pro Seite pro Spieler
+
+```{r SeiteproSpieler}
+siege <- s4 %>% 
+  gather(Seite, Spieler, Konzern_Player, Runner_Player) %>% 
+  mutate(Punkte = ifelse(Sieger_Spieler == Spieler, 3, 0)) %>% 
+  group_by(Seite, Spieler) %>% 
+  summarise(Spiele  = n(),
+            Siege   = sum(Punkte) / 3,
+            Prozent = round(Siege / Spiele * 100, 1)) %>% 
+  ungroup() %>% 
+  group_by(Spieler) %>% 
+  mutate(Midperc = mean(Prozent),
+         Prozent = ifelse(Seite == "Konzern_Player", Prozent * -1, Prozent * 1),
+         Seite   = recode(Seite, 
+                          "Konzern_Player" = "Konzern", 
+                          "Runner_Player" = "Runner"))
+
+  
+ggplot(siege, aes(x = reorder(Spieler, Midperc), color = Seite)) +
+  geom_linerange(data = siege[siege$Seite == "Runner", ],
+                 aes(ymin = 14, ymax = 14 + Prozent), size = 9, alpha = 0.8) +
+  geom_linerange(data = siege[siege$Seite == "Konzern", ],
+                 aes(ymin = -14, ymax = -14 + Prozent), size = 9, alpha = 0.8) +
+  geom_label(aes(x = Spieler, y = 0, label = Spieler),
+             inherit.aes = F, size = 5, color = "black") +
+  labs(x = NULL, y = NULL, title = "Siege pro Spieler pro Seite") +
+  scale_color_manual(values = c("#3288bd", "#d53e4f")) +
+  scale_y_continuous(breaks = c(c(-100, -50, 0) + -14, c(0, 50, 100) + 14),
+                     labels = c("100%", "50%", "0%", "0%", "50%", "100%")) +
+  coord_flip() +
+  theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
 ```
 
 
