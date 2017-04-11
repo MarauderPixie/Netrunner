@@ -9,24 +9,19 @@ output:
 knitr::opts_chunk$set(fig.path = "assets/personal-plots/",
                       echo = F, warning = F, message = F)
 
-    library(dplyr)        # für einfacheren Umgang mit Dataframes (wie z.B. ngo)
-    library(ggplot2)      # auch Daten wollen hübsch sein
-    library(tidyr)        # schnell und einfach Dataframes manipulieren; kann gather()
+    library(tidyverse)
     library(broom)        # macht mit tidy() sowas wie lm() und t.test() lesbarer
-    library(RColorBrewer) # hübsche Daten noch hübscher machen
     library(googlesheets) # importing ALL the sheets!
-    library(ggthemes)     # making them pretty plots even prettier
     library(viridis)      # best color palette, hands down
-    library(rmdformats)   # look at them beautiful templates!
     library(sjPlot)       # a little bit analysis
 
     tobi <- gs_title("jinteki.net") %>% gs_read(ws = 1) %>% 
       mutate(Points = car::recode(Game, "'Loose' = 0; 'Win' = 1"))
     
-    paul <- gs_title("jinteki.net") %>% gs_read(ws = 2) %>% 
+    paul <- gs_title("jinteki.net") %>% gs_read(ws = 3) %>% 
       mutate(Points = car::recode(Game, "'Loss' = 0; 'Win' = 1"))
     
-    falk <- gs_title("jinteki.net") %>% gs_read(ws = 3) %>% 
+    falk <- gs_title("jinteki.net") %>% gs_read(ws = 2) %>% 
       mutate(Points = car::recode(Game, "'Loss' = 0; 'Win' = 1"))
     
     ole <- gs_title("jinteki.net") %>% gs_read(ws = 4) %>% 
