@@ -1,11 +1,11 @@
 ## toolbox readyfication
 library(tidyverse)
 library(broom)
-# library(plotly)     
+# library(plotly)
 # library(highcharter)
 library(sjPlot)
 # library(pixiedust)
-# library(formattable)
+library(formattable)
 # library(waffle)
 library(viridis)
 
