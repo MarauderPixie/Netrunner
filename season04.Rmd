@@ -12,22 +12,8 @@ knitr::opts_chunk$set(fig.path = "assets/liga-plots/04")
 s4 <- readRDS("./data/Liga.rds")
 ```
 
-```
-# sample code from old page
-liga_04 %>% 
-  group_by(Spieler) %>% 
-  summarize(Spiele       = n()/2,
-            Agendapunkte = sum(Agendapunkte, na.rm = T),
-            Punkte       = sum(Punkte)) %>%
-  arrange(desc(Punkte), desc(Agendapunkte)) %>% 
-  format_table(
-    list(Agendapunkte = color_tile("white", "lightgray"),
-               Spiele = formatter("span", style = x ~ style(
-                                    color = ifelse(x <= 4, "red", 
-                                                   ifelse(x >= 7, "green", "gray"))))
-         ),
-    align = "l", check.rows = F, format = "markdown")
-```
+
+## Punktestand
 
 ```{r Punktestand}
 # try to replicate with new structure
@@ -41,9 +27,31 @@ s4 %>%
             Gesamtpunkte = sum(Punkte)) %>% 
   arrange(desc(Gesamtpunkte), desc(Agendapunkte)) %>% 
   knitr::kable()
+```
 
+## Gespielte Matches
+
+```{r Spiele}
 ## this gives accurate table of played games
-ftable(table(s4$Konzern_Player, s4$Runner_Player))
+# ftable(table(s4$Konzern_Player, s4$Runner_Player))
+
+# try to reproduce fancy table from old seasons, but dynamically
+yesno <- formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
+                   x ~ icontext(ifelse(x, "ok", "remove")))
+
+games <- as.data.frame.matrix(
+  !!table(s4$Konzern_Player, s4$Runner_Player)
+  )
+
+format_table(games,
+             # this needs a more adaptive solution...
+             list(Aschkan = yesno, Boray = yesno, Falk = yesno, Jan    = yesno, 
+                  Josh    = yesno, Kai   = yesno, Paul = yesno, Stefan = yesno,
+                  Tobi    = yesno
+                  # Ole = yesno, Johannes = yesno
+                  ),
+             row.names = T, align = "c"
+             )
 ```
 
 
