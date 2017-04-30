@@ -139,11 +139,11 @@ ggplot(s4, aes(x = Runner_ID,
         legend.position = "none")
 ```
 
-# Gespielte IDs pro Spieler
+## Gespielte IDs pro Spieler
 
-## Konzerne
+### Konzerne
 
-```{r IDs_Konzern}
+```{r played_Konzern, fig.height=7}
 as.data.frame(
   table(s4$Konzern_ID, 
         s4$Konzern_Player)
@@ -158,9 +158,9 @@ as.data.frame(
     theme(legend.position = "none")
 ```
 
-## Runner
+### Runner
 
-```{r IDs_Runner}
+```{r played_Runner, fig.height=7}
 as.data.frame(
   table(s4$Runner_ID, 
         s4$Runner_Player)

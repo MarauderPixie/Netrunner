@@ -2,7 +2,7 @@
 rmarkdown::render_site(input = ".")
 
 # execute dataprep.R once to get most recent data
-source(paste0(Sys.getenv("PROJECT_HOME"), "./dataprep.R"))
+# source(paste0(Sys.getenv("PROJECT_HOME"), "./dataprep.R"))
 
 # Collect output files
 
