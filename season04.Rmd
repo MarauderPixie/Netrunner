@@ -139,6 +139,42 @@ ggplot(s4, aes(x = Runner_ID,
         legend.position = "none")
 ```
 
+# Gespielte IDs pro Spieler
+
+## Konzerne
+
+```{r IDs_Konzern}
+as.data.frame(
+  table(s4$Konzern_ID, 
+        s4$Konzern_Player)
+) %>% 
+  mutate(Freq = recode(Freq, `1` = 1, `2` = 1, `0` = 0)) %>% 
+  ggplot(aes(x = Var2, y = Var1, fill = Freq)) +
+  # geom_tile(color = "black", size = .3, alpha = .7) +
+    geom_tile(color = "white", size = 1, alpha = .7) +
+    scale_fill_gradient(low = "white", high = "#0062FF") +
+    scale_x_discrete(position = "top") +
+    labs(x = NULL, y = NULL) +
+    theme(legend.position = "none")
+```
+
+## Runner
+
+```{r IDs_Runner}
+as.data.frame(
+  table(s4$Runner_ID, 
+        s4$Runner_Player)
+) %>% 
+  mutate(Freq = recode(Freq, `1` = 1, `2` = 1, `0` = 0)) %>% 
+  ggplot(aes(x = Var2, y = Var1, fill = Freq)) +
+  # geom_tile(color = "black", size = .3, alpha = .7) +
+    geom_tile(color = "white", size = 1, alpha = .7) +
+    scale_fill_gradient(low = "white", high = "#0062FF") +
+    scale_x_discrete(position = "top") +
+    labs(x = NULL, y = NULL) +
+    theme(legend.position = "none")
+```
+
 ## Runs
 
 ### Runs pro Spieler
