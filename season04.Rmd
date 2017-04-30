@@ -1,6 +1,6 @@
 ---
 title: "Netrunnerliga Bremen - Season 4"
-date: "`r ddateR::poee()`"
+date: "`r paste('letzte Aktualisierung:', Sys.Date())`"
 output:
   html_document
 ---
@@ -26,7 +26,10 @@ s4 %>%
   group_by(Spieler) %>% 
   summarise(Spiele       = n() / 2,
             Agendapunkte = sum(Runner_Agendapunkte + Konzern_Agendapunkte),
-            Gesamtpunkte = sum(Punkte)) %>% 
+            Siegpunkte   = sum(Punkte),
+            IDs          = length(unique(Konzern_ID[Seite == "Konzern_Player"])) +
+                            length(unique(Runner_ID[Seite == "Runner_Player"])),
+            Gesamtpunkte = sum(Punkte) + IDs) %>% 
   arrange(desc(Gesamtpunkte), desc(Agendapunkte)) %>% 
   knitr::kable()
 ```
@@ -49,8 +52,8 @@ format_table(games,
              # this needs a more adaptive solution...
              list(Aschkan = yesno, Boray = yesno, Falk = yesno, Jan    = yesno, 
                   Josh    = yesno, Kai   = yesno, Paul = yesno, Stefan = yesno,
-                  Tobi    = yesno
-                  # Ole = yesno, Johannes = yesno
+                  Tobi    = yesno, Johannes = yesno
+                  # Ole = yesno
                   ),
              row.names = T, align = "c"
              )
@@ -82,7 +85,7 @@ ggplot(siege, aes(x = reorder(Spieler, Midperc), color = Seite)) +
                  aes(ymin = -14, ymax = -14 + Prozent), size = 9, alpha = 0.8) +
   geom_label(aes(x = Spieler, y = 0, label = Spieler),
              inherit.aes = F, size = 5, color = "black") +
-  labs(x = NULL, y = NULL, title = "Siege pro Spieler pro Seite") +
+  labs(x = NULL, y = NULL) +
   scale_color_manual(values = c("#3288bd", "#d53e4f")) +
   scale_y_continuous(breaks = c(c(-100, -50, 0) + -14, c(0, 50, 100) + 14),
                      labels = c("100%", "50%", "0%", "0%", "50%", "100%")) +
