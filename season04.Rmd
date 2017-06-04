@@ -9,7 +9,9 @@ output:
 source(paste0(Sys.getenv("PROJECT_HOME"), "./init.R"))
 knitr::opts_chunk$set(fig.path = "assets/liga-plots/04")
 
-s4 <- readRDS("./data/Liga.rds")
+s4 <- readRDS("./data/Liga.rds") %>% 
+  filter(Konzern_Player != "Stefan",
+         Runner_Player  != "Stefan")
 ```
 
 
@@ -144,35 +146,51 @@ ggplot(s4, aes(x = Runner_ID,
 ### Konzerne
 
 ```{r played_Konzern, fig.height=7}
-as.data.frame(
+kon_plays <- as.data.frame(
   table(s4$Konzern_ID, 
-        s4$Konzern_Player)
+        s4$Konzern_Player,
+        s4$Konzern_Fraktion)
 ) %>% 
-  mutate(Freq = recode(Freq, `1` = 1, `2` = 1, `0` = 0)) %>% 
-  ggplot(aes(x = Var2, y = Var1, fill = Freq)) +
-  # geom_tile(color = "black", size = .3, alpha = .7) +
-    geom_tile(color = "white", size = 1, alpha = .7) +
-    scale_fill_gradient(low = "white", high = "#0062FF") +
-    scale_x_discrete(position = "top") +
-    labs(x = NULL, y = NULL) +
-    theme(legend.position = "none")
+  filter(Freq != 0) 
+# mutate to NA war gut bevor labels kamen; mit labels unnötig
+  # mutate(Freq = recode(Freq, `1` = 1, `2` = 1, `0` = 0)) %>% 
+  # mutate(Freq = ifelse(Freq == 1, 1, NA)) 
+
+ggplot(kon_plays, aes(x = Var2, y = Var1, fill = Var3)) +
+# geom_tile(color = "black", size = .3, alpha = .7) +
+  geom_tile(color = "white", size = 1, alpha = .7) +
+  geom_label(data = subset(kon_plays, Freq > 1), aes(label = paste0(Freq, "x")), 
+             size = 4, color = "black", fill = "white", alpha = .7) +
+# scale_fill_gradient(low = "white", high = "#0062FF", midpoint = 0.5) +
+  scale_fill_manual(values = kon_colors) +
+  scale_x_discrete(position = "top") +
+  labs(x = NULL, y = NULL) +
+  theme(legend.position = "none")
 ```
 
 ### Runner
 
 ```{r played_Runner, fig.height=7}
-as.data.frame(
+run_plays <- as.data.frame(
   table(s4$Runner_ID, 
-        s4$Runner_Player)
+        s4$Runner_Player,
+        s4$Runner_Fraktion)
 ) %>% 
-  mutate(Freq = recode(Freq, `1` = 1, `2` = 1, `0` = 0)) %>% 
-  ggplot(aes(x = Var2, y = Var1, fill = Freq)) +
-  # geom_tile(color = "black", size = .3, alpha = .7) +
-    geom_tile(color = "white", size = 1, alpha = .7) +
-    scale_fill_gradient(low = "white", high = "#0062FF") +
-    scale_x_discrete(position = "top") +
-    labs(x = NULL, y = NULL) +
-    theme(legend.position = "none")
+  filter(Freq != 0) 
+# mutate to NA war gut bevor labels kamen; mit labels unnötig
+  # mutate(Freq = recode(Freq, `1` = 1, `2` = 1, `0` = 0)) %>% 
+  # mutate(Freq = ifelse(Freq == 1, 1, NA)) %>% 
+  
+ggplot(run_plays, aes(x = Var2, y = Var1, fill = Var3)) +
+# geom_tile(color = "black", size = .3, alpha = .7) +
+  geom_tile(color = "white", size = 1, alpha = .7) +
+  geom_label(data = subset(run_plays, Freq > 1), aes(label = paste0(Freq, "x")), 
+             size = 4, color = "black", fill = "white", alpha = .7) +
+  # scale_fill_gradient(low = "white", high = "#0062FF") +
+  scale_fill_manual(values = run_colors) +
+  scale_x_discrete(position = "top") +
+  labs(x = NULL, y = NULL) +
+  theme(legend.position = "none")
 ```
 
 ## Runs
