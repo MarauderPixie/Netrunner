@@ -18,10 +18,11 @@ theme_set(theme_tut())
   
 
 ## define colors
-all_colors <- c("darkorange", "deepskyblue3", "darkorchid4", "red", 
-                "gold1", "darkgray", "chartreuse3", "darkolivegreen")
+# crim color was "deepskyblue3" before, anarchs was "darkorange", shapers "chartreuse3"
+all_colors <- c("#ff6600", "#0062FF", "darkorchid4", "red", 
+                "gold1", "darkgray", "#33cc33", "darkolivegreen")
 kon_colors <- c("darkorchid4", "red", "gold1", "darkolivegreen")
-run_colors <- c("darkorange", "deepskyblue3", "darkgray", "chartreuse3")
+run_colors <- c("#ff6600", "#0062FF", "darkgray", "#33cc33")
   
 ## by hexcode  
 # kon_cols     <- c('#68228B', '#FF0000', '#FFD700', '#556B2F')
