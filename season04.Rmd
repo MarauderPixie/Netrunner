@@ -87,7 +87,7 @@ ggplot(siege, aes(x = reorder(Spieler, Midperc), color = Seite)) +
                  aes(ymin = -14, ymax = -14 + Prozent), size = 9, alpha = 0.8) +
   geom_label(aes(x = Spieler, y = 0, label = Spieler),
              inherit.aes = F, size = 5, color = "black") +
-  labs(x = NULL, y = NULL) +
+  labs(x = NULL, y = NULL, color = "") +
   scale_color_manual(values = c("#3288bd", "#d53e4f")) +
   scale_y_continuous(breaks = c(c(-100, -50, 0) + -14, c(0, 50, 100) + 14),
                      labels = c("100%", "50%", "0%", "0%", "50%", "100%")) +
