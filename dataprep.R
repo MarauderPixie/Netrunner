@@ -13,6 +13,7 @@ forms <- suppressWarnings(
   gs_title("Ligaresponses") %>% 
   gs_read() %>% 
   transmute(
+    Saison           = ifelse(as.Date(Timestamp, format = "%d/%m/%Y") <= as.Date("2017-06-30"), 4, 5),
     # Spiel            = rep(1:length(X16), each = 2),
     # Runde            = rep(1:2, length(X17)),
     Konzern_Player   = Konzern,
