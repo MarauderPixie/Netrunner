@@ -16,6 +16,8 @@ navbar:
         href: season03.html
       - text: "Season 4"
         href: season04.html
+      - text: "Season 5"
+        href: season05.html
     - text: "Analyse"
       icon: fa-flask
       menu:
