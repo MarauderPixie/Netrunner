@@ -1,7 +1,11 @@
 ## Create data containing all seasons (old and new format)
 # rationale: it's easier to shape the old data like the new one
-alt <- readRDS("./data/Liga_alt.rds") %>% filter(Saison != 4)
-neu <- readRDS("./data/Liga.rds")
+alt <- readRDS("./data/Liga_alt.rds") %>% 
+  filter(Saison  != 4, 
+         Spieler != "Jannis") %>% 
+  mutate(Spieler = recode(Spieler, "Tobias" = "Tobi"))
+neu <- readRDS("./data/Liga.rds") %>% 
+  filter(Runner_Player != "Stefan", Konzern_Player != "Stefan")
 
 
 ## create two dfs (runner & corp), rename columns like in the new data,
