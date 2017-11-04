@@ -2,8 +2,11 @@
 # rationale: it's easier to shape the old data like the new one
 alt <- readRDS("./data/Liga_alt.rds") %>% 
   filter(Saison  != 4, 
-         Spieler != "Jannis") %>% 
-  mutate(Spieler = recode(Spieler, "Tobias" = "Tobi"))
+         Spieler != "Jannis", Gegner_Spieler != "Jannis") %>% 
+  mutate(Spieler = recode(Spieler, "Tobias" = "Tobi"),
+         ID      = recode(ID, "Chaostheorie" = "Chaos Theory"),
+         Gegner_Spieler = recode(Gegner_Spieler, "Tobias" = "Tobi"),
+         Siegbedingung  = recode(Siegbedingung, "Flatline" = "Flatline / Mill"))
 neu <- readRDS("./data/Liga.rds") %>% 
   filter(Runner_Player != "Stefan", Konzern_Player != "Stefan")
 
@@ -32,7 +35,9 @@ kon <- alt %>%
 alt2 <- left_join(run, kon, by = "index") %>% 
   mutate(
     Sieger_Seite   = ifelse(Punkte == 0, "Konzern", "Runner"),
-    Sieger_Spieler = ifelse(Punkte == 0, Konzern_Player, Runner_Player)
+    Sieger_Spieler = ifelse(Punkte == 0, Konzern_Player, Runner_Player),
+    Siegbedingung  = ifelse(is.na(alt$Siegbedingung[alt$Seite == "Konzern"]), 
+                            run$Siegbedingung, alt$Siegbedingung[alt$Seite == "Konzern"])
   ) %>% 
   select(-index, -Punkte, -Runde, - Schnitt_Zug, -Seite, -Spiel)
 
