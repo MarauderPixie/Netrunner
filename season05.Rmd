@@ -12,11 +12,12 @@ knitr::opts_chunk$set(fig.path = "assets/liga-plots/05")
 s5 <- readRDS("./data/Liga.rds") %>% filter(Saison == 5)
 ```
 
+## Übersicht {.tabset .tabset-fade .tabset-pills}
 
-## Punktestand
+### Punktestand
 
 **+++ DISCLAIMER +++**  
-Offensichtlich stimmt irgendwas mit den Agendapunkten nicht, ich finds aber auf die Schnelle nicht. :/
+Es stimmt(e) irgendwas mit den Agendapunkten nicht, sieht aber gut aus jetzt. 100%ig sicher bin ich aber noch nicht. :/
 
 ```{r Punktestand}
 # try to replicate with new structure
@@ -27,23 +28,18 @@ s5 %>%
   group_by(Spieler) %>% 
   summarise(
     Spiele       = n() / 2,
-    Agendapunkte = sum(Runner_Agendapunkte + Konzern_Agendapunkte),
-    Siegpunkte   = sum(Punkte),
-    IDs          = length(unique(Konzern_ID[Seite == "Konzern_Player"])) +
-                      length(unique(Runner_ID[Seite == "Runner_Player"])),
-    Gesamtpunkte = sum(Punkte) + IDs
+    Agendapunkte = sum(Runner_Agendapunkte[Seite == "Runner_Player"] + Konzern_Agendapunkte[Seite == "Konzern_Player"]),
+    Siegpunkte   = sum(Punkte)
+    # IDs          = length(unique(Konzern_ID[Seite == "Konzern_Player"])) +
+    #                   length(unique(Runner_ID[Seite == "Runner_Player"])),
+    # Gesamtpunkte = sum(Punkte) + IDs
   ) %>% 
-  # mutate(
-    # add points frm achievements by hand, like an animal
-    # Achievements = c(5, 2, 1, 4, 1, 4, 0, 4, 2),
-    # Gesamtpunkte = Gesamtpunkte + Achievements
-  # ) %>% 
-  arrange(desc(Gesamtpunkte), desc(Agendapunkte)) %>% 
+  arrange(desc(Siegpunkte), desc(Agendapunkte)) %>% 
   knitr::kable()
 ```
 
 
-## Gespielte Matches
+### Gespielte Matches
 
 ```{r Spiele}
 ## this gives accurate table of played games
@@ -68,7 +64,7 @@ format_table(games,
              )
 ```
 
-## Siege pro Seite pro Spieler
+### Siege pro Seite
 
 ```{r SeiteproSpieler}
 siege <- s5 %>% 
@@ -124,31 +120,33 @@ data.frame(
 
 ### nach ID
 
-```{r IDs_Konzern}
+<div class="col2">
+```{r IDs_Konzern, fig.height=10, fig.width=5}
 ggplot(s5, aes(x = Konzern_ID, 
                   fill = Konzern_Fraktion, color = Konzern_Fraktion)) +
   geom_bar(alpha = 0.4) +
   scale_fill_manual(values = kon_colors) +
   scale_color_manual(values = kon_colors) +
   labs(x = "", y = "Spiele") +
-  facet_wrap(~Konzern_Fraktion, scales = "free_x", ncol = 4) +
-  theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
-        legend.position = "none")
+  coord_flip() + 
+  facet_wrap(~Konzern_Fraktion, scales = "free_y", ncol = 1) +
+  theme(legend.position = "none")
 ```
-
-```{r IDs_Runner}
+<br />
+```{r IDs_Runner, fig.height=10, fig.width=5}
 ggplot(s5, aes(x = Runner_ID, 
                   fill = Runner_Fraktion, color = Runner_Fraktion)) +
   geom_bar(alpha = 0.4) +
   scale_fill_manual(values = run_colors) +
   scale_color_manual(values = run_colors) +
   labs(x = "", y = "Spiele") +
-  facet_wrap(~Runner_Fraktion, scales = "free_x", ncol = 4) +
-  theme(axis.text.x = element_text(angle = 25, hjust = 1, vjust = 1),
-        legend.position = "none")
+  coord_flip() + 
+  facet_wrap(~Runner_Fraktion, scales = "free_y", ncol = 1) +
+  theme(legend.position = "none")
 ```
+</div>
 
-## Gespielte IDs pro Spieler
+## Gespielte IDs pro Spieler {.tabset .tabset-fade}
 
 ### Konzerne
 
